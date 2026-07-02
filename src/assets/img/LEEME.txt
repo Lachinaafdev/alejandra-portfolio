@@ -1,0 +1,27 @@
+Sube aquí las imágenes de tus proyectos con estos nombres exactos:
+
+PORTADAS (aparecen en las tarjetas de la home):
+  trafic-pos-cover.jpg
+  agenda-digital-cover.jpg
+  design-system-cover.jpg
+
+GALERÍA DE CADA CASO (sección "En imágenes"):
+  trafic-pos-1.jpg        (journey map)
+  trafic-pos-2.jpg        (service blueprint)
+  trafic-pos-3.jpg        (flujo de cobro TPV/móvil)
+  agenda-digital-1.jpg    (segmentación en 4 grupos)
+  agenda-digital-2.jpg    (canales por segmento)
+  agenda-digital-3.jpg    (personalización Material/Tailwind)
+  design-system-1.jpg     (tokens)
+  design-system-2.jpg     (componentes en Figma)
+  design-system-3.jpg     (componente en Angular y MAUI)
+
+Formatos aceptados: .jpg, .png, .webp (recomendado: .webp comprimido).
+Si usas otro nombre o formato, actualiza la ruta en:
+  src/assets/i18n/es.json y en.json (llaves "cover" y "gallery")
+
+Mientras una imagen no exista, el sitio muestra un recuadro punteado
+con la ruta esperada — así sabes exactamente qué falta.
+
+IMPORTANTE: difumina datos confidenciales de Trafictours y agrega la
+nota "datos modificados por confidencialidad" donde aplique.

@@ -1,0 +1,281 @@
+{
+  "nav": {
+    "cases": "Case studies",
+    "about": "About",
+    "contact": "Contact",
+    "method": "Methodology"
+  },
+  "hero": {
+    "eyebrow": "Product Designer · Service Design · UX/UI · Angular",
+    "titleA": "I design products and services that connect",
+    "titleEm": "business with people",
+    "titleB": "— and I build them in code.",
+    "sub": "I'm Alejandra Fierro. From service blueprint to Angular component: I design with method, measure outcomes, and speak the developers' language.",
+    "facts": [
+      {
+        "value": "5+ years",
+        "label": "in digital product"
+      },
+      {
+        "value": "Figma → Angular · MAUI",
+        "label": "design that ships to production"
+      },
+      {
+        "value": "−20% · +40%",
+        "label": "measured results, not assumptions"
+      }
+    ]
+  },
+  "cases": {
+    "eyebrow": "Case studies",
+    "title": "Three tickets, three complete stories",
+    "cta": "View case →",
+    "next": "Next case",
+    "back": "← All cases",
+    "labels": {
+      "role": "Role",
+      "tools": "Tools",
+      "metric": "Key result",
+      "summary": "Summary",
+      "context": "Context",
+      "problem": "The problem",
+      "process": "My process",
+      "decision": "The key decision",
+      "results": "Results",
+      "learning": "What I'd do differently"
+    }
+  },
+  "about": {
+    "eyebrow": "About me",
+    "title": "A designer from the industry where service is everything",
+    "p1": "I grew professionally in Quintana Roo's tourism industry, where a broken process instantly becomes a bad travel experience. That's where I learned to design complete services — not just screens — and to validate every decision with data from real operations.",
+    "p2": "I studied Multiplatform Software Design at Universidad Tecnológica de Cancún, I mentor a group of interns, and I'm an active member of the 'Developers in Playa del Carmen' club. I'm interested in data analysis, design innovation, and sustainable design.",
+    "stack": [
+      "Figma & Design Systems",
+      "Service Design & Blueprints",
+      "Design Sprints",
+      "Angular · Angular Material",
+      "Tailwind CSS · Material Design",
+      ".NET · MAUI (collaboration)",
+      "Data analysis (growing)"
+    ]
+  },
+  "footer": {
+    "eyebrow": "Shall we work together?",
+    "titleA": "Let's design your users'",
+    "titleB": "next great journey.",
+    "location": "Puerto Morelos, Q. Roo, MX · Remote",
+    "rights": "© 2026 Alejandra Fierro"
+  },
+  "caseList": [
+    {
+      "slug": "trafic-pos",
+      "ticketNo": "CASE 01",
+      "title": "Trafic POS: redesigning tour sales at the point of sale",
+      "role": "Product Designer — project lead",
+      "period": "Jan 2022 – Nov 2022",
+      "tools": [
+        "Figma",
+        "Design Sprint",
+        "Service Blueprint",
+        "Journey Mapping"
+      ],
+      "metric": {
+        "value": "−20%",
+        "label": "capture errors in pre-sale products"
+      },
+      "tldr": "Tour sales relied on manual processes that caused capture errors and couldn't adapt to different commercial agreements with banks. I designed a complete POS — from service blueprint to validated prototype — that processes payments on Santander card terminals and mobile devices, cutting pre-sale errors by 20% and payment-type errors by 15%.",
+      "context": "Trafictours sells tours and experiences across Cancún and the Riviera Maya. Sales happen in very different settings: hotel desks, field representatives, and central offices, each with different banking agreements.",
+      "problem": "Billing was slow and error-prone, especially for \"pre-sale\" products and payment-type capture. Each commercial agreement with banks meant different rules the previous system didn't handle, and the cost showed up directly as corrections, refunds, and team time.",
+      "process": [
+        "Mapped the tour seller's complete journey to understand where errors happened and why.",
+        "Built the service blueprint of the operation: actors, systems, banking agreements, and failure points.",
+        "Facilitated a Design Sprint with sales and development to prototype the new checkout flow in one week.",
+        "Iterated the Figma prototype with real sellers, prioritizing capture speed and error prevention."
+      ],
+      "keyDecision": "The hardest decision was designing a single checkout flow that worked identically on physical Santander terminals and mobile devices. Instead of two separate interfaces, I defined one two-step confirmation pattern that validates product and payment type before processing — the same mental model for the seller regardless of channel.",
+      "results": [
+        "−20% capture errors on \"pre-sale\" products.",
+        "−15% payment-type capture errors.",
+        "Payments running on Santander terminals and mobile with a single flow.",
+        "Significantly faster billing process for the sales team."
+      ],
+      "learning": "Today I would bring finance teams in from week one: several banking rules surfaced late in the process and forced redesigns of already-validated screens.",
+      "cover": {
+        "src": "assets/img/trafic-pos-cover.jpg",
+        "alt": "POS main screen"
+      },
+      "gallery": [
+        {
+          "src": "assets/img/trafic-pos-1.jpg",
+          "caption": "Tour seller journey map"
+        },
+        {
+          "src": "assets/img/trafic-pos-2.jpg",
+          "caption": "Service blueprint of the operation"
+        },
+        {
+          "src": "assets/img/trafic-pos-3.jpg",
+          "caption": "Checkout flow on card terminal and mobile"
+        }
+      ]
+    },
+    {
+      "slug": "agenda-digital",
+      "ticketNo": "CASE 02",
+      "title": "Digital Agenda: segment to sell more and call less",
+      "role": "UX/UI Developer — design + Angular frontend",
+      "period": "Jan 2021 – Aug 2021",
+      "tools": [
+        "Angular",
+        ".NET 7",
+        "Material Design",
+        "Tailwind"
+      ],
+      "metric": {
+        "value": "40%",
+        "label": "of groups purchased a group service"
+      },
+      "tldr": "Customers had no clear way to manage the services they'd purchased, which flooded support channels and wasted cross-sell opportunities. I designed and built an Angular + .NET platform that segments users into 4 groups by travel preferences. Result: 40% of groups purchased additional services, average ticket went up, and clarification calls went down.",
+      "context": "Guests bought tourism service packages but had no visibility into what they'd purchased and no simple channel to add services. Everything went through phone calls.",
+      "problem": "High volume of inquiry and clarification calls, customers frustrated by lack of visibility, and a missed commercial opportunity: there was no digital channel to offer relevant services to each type of traveler.",
+      "process": [
+        "Analyzed purchase and behavior data to define 4 segments by travel preferences.",
+        "Designed specialized communication channels per segment, with tailored offers and language.",
+        "Built the frontend in Angular with Angular Material and Tailwind, customizable per team.",
+        "Applied Material Design principles so the agenda adapted to each group's identity."
+      ],
+      "keyDecision": "I chose to segment into exactly 4 groups — no more — because each additional segment multiplied the cost of maintaining specialized content and offers. Four was the point where personalization still felt relevant to the customer and remained operable for the business.",
+      "results": [
+        "40% of groups purchased an additional group service.",
+        "Increase in average ticket per customer.",
+        "Measurable reduction in inquiry and clarification calls.",
+        "Platform customizable by each team's characteristics."
+      ],
+      "learning": "The segmentation worked, but I would validate it with interviews on top of purchase data: one of the 4 segments turned out far less active than projected.",
+      "cover": {
+        "src": "assets/img/agenda-digital-cover.jpg",
+        "alt": "Digital Agenda dashboard"
+      },
+      "gallery": [
+        {
+          "src": "assets/img/agenda-digital-1.jpg",
+          "caption": "User segmentation into 4 groups"
+        },
+        {
+          "src": "assets/img/agenda-digital-2.jpg",
+          "caption": "Communication channels per segment"
+        },
+        {
+          "src": "assets/img/agenda-digital-3.jpg",
+          "caption": "Customization with Material Design and Tailwind"
+        }
+      ]
+    },
+    {
+      "slug": "design-system",
+      "ticketNo": "CASE 03",
+      "title": "A design system that speaks two languages: Figma and code",
+      "role": "Product Designer / Design Engineer",
+      "period": "Dec 2023 – Present",
+      "tools": [
+        "Figma",
+        "Angular",
+        ".NET MAUI",
+        "Design Tokens"
+      ],
+      "metric": {
+        "value": "2",
+        "label": "frameworks served by one system"
+      },
+      "tldr": "Teams were duplicating components across platforms and the UI was inconsistent between products. I built and documented a design system in Figma with direct integration into Angular and MAUI, aligned with the company's design principles. Today designers and developers consume the same source of truth.",
+      "context": "Trafictours maintains web products (Angular) and cross-platform apps (.NET MAUI). Each team solved UI on its own, plus projects with integrated AI models that needed consistent interfaces.",
+      "problem": "Duplicated, diverging components across platforms, constant friction between design and development, and time lost rebuilding the same thing in every framework.",
+      "process": [
+        "Audited the existing UI across all products: full inventory of components and their variants.",
+        "Defined tokens (color, typography, spacing) as a common layer between Figma, Angular, and MAUI.",
+        "Built the component library in Figma with variants and usage documentation.",
+        "Worked directly with development to map each component to its implementation in both frameworks."
+      ],
+      "keyDecision": "Instead of documenting the system \"from design to development\", I structured it around the tokens both frameworks could consume. That forced every visual decision to be named in a language Angular and MAUI understood equally — turning the system into a contract between teams, not a style manual.",
+      "results": [
+        "Reusable components running in Angular and MAUI from a single source.",
+        "Alignment with the company's design principles across all products.",
+        "Better collaboration between multidisciplinary design and development teams."
+      ],
+      "learning": "A design system without governance decays: the next stage I'd push for is a formal contribution and versioning process for components.",
+      "cover": {
+        "src": "assets/img/design-system-cover.jpg",
+        "alt": "Component library in Figma"
+      },
+      "gallery": [
+        {
+          "src": "assets/img/design-system-1.jpg",
+          "caption": "Color, typography and spacing tokens"
+        },
+        {
+          "src": "assets/img/design-system-2.jpg",
+          "caption": "Components with variants in Figma"
+        },
+        {
+          "src": "assets/img/design-system-3.jpg",
+          "caption": "Same component in Angular and MAUI"
+        }
+      ]
+    }
+  ],
+  "method": {
+    "eyebrow": "My AI methodology",
+    "title": "Designing with AI, not by AI",
+    "intro": "AI doesn't replace design judgment — it amplifies it. My process is not about letting AI design on its own: it starts with understanding the design problem, generating versions, and adjusting everything against a solid design system. That's how I ran the complete implementation of the new POS.",
+    "steps": [
+      {
+        "n": "01",
+        "title": "Foundation: the design system first",
+        "text": "Everything starts with understanding the design: tokens, components, and principles defined in Figma. That system is the standard every proposal is measured against — human or AI-generated.",
+        "tools": [
+          "Figma"
+        ]
+      },
+      {
+        "n": "02",
+        "title": "Exploration and versions with AI",
+        "text": "I generate multiple versions and directions with Claude Design, iterate fast, and adjust every proposal against the design system in Figma. AI proposes; design judgment decides.",
+        "tools": [
+          "Claude Design",
+          "Figma"
+        ]
+      },
+      {
+        "n": "03",
+        "title": "Images and visual assets",
+        "text": "I produce images with Gemini and refine them with styles, compositions, and graphic assets in Canva — always aligned with the product's visual identity.",
+        "tools": [
+          "Gemini",
+          "Canva"
+        ]
+      },
+      {
+        "n": "04",
+        "title": "Application testing",
+        "text": "I validate the application with real users and teams: flow testing, error capture, and adjustments before release. Whatever fails testing goes back to iteration.",
+        "tools": [
+          "User testing"
+        ]
+      },
+      {
+        "n": "05",
+        "title": "Adoption: training and rollout",
+        "text": "A system only works if everyone understands it. I design courses and documentation so other departments adopt the new system — the full implementation, as I did with the POS.",
+        "tools": [
+          "Documentation",
+          "Training"
+        ]
+      }
+    ]
+  },
+  "gallery": {
+    "title": "In pictures",
+    "missing": "Image pending — upload the file to"
+  }
+}

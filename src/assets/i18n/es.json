@@ -1,0 +1,281 @@
+{
+  "nav": {
+    "cases": "Casos",
+    "about": "Sobre mí",
+    "contact": "Contacto",
+    "method": "Metodología"
+  },
+  "hero": {
+    "eyebrow": "Product Designer · Service Design · UX/UI · Angular",
+    "titleA": "Diseño productos y servicios que conectan",
+    "titleEm": "el negocio con las personas",
+    "titleB": "— y los construyo en código.",
+    "sub": "Soy Alejandra Fierro. Del service blueprint al componente en Angular: diseño con método, mido resultados y hablo el idioma de los developers.",
+    "facts": [
+      {
+        "value": "5+ años",
+        "label": "en producto digital"
+      },
+      {
+        "value": "Figma → Angular · MAUI",
+        "label": "diseño que llega a producción"
+      },
+      {
+        "value": "−20% · +40%",
+        "label": "resultados medidos, no supuestos"
+      }
+    ]
+  },
+  "cases": {
+    "eyebrow": "Casos de estudio",
+    "title": "Tres boletos, tres historias completas",
+    "cta": "Ver caso →",
+    "next": "Siguiente caso",
+    "back": "← Todos los casos",
+    "labels": {
+      "role": "Rol",
+      "tools": "Herramientas",
+      "metric": "Resultado clave",
+      "summary": "Resumen",
+      "context": "Contexto",
+      "problem": "El problema",
+      "process": "Mi proceso",
+      "decision": "La decisión clave",
+      "results": "Resultados",
+      "learning": "Qué haría diferente"
+    }
+  },
+  "about": {
+    "eyebrow": "Sobre mí",
+    "title": "Diseñadora en la industria donde el servicio lo es todo",
+    "p1": "Crecí profesionalmente en el turismo de Quintana Roo, donde un mal proceso se traduce inmediatamente en una mala experiencia de viaje. Ahí aprendí a diseñar servicios completos — no solo pantallas — y a validar cada decisión con datos de la operación real.",
+    "p2": "Estudié Diseño de Software Multiplataforma en la Universidad Tecnológica de Cancún, mentoreo a un grupo de interns y participo activamente en el club 'Developers in Playa del Carmen'. Me interesan el análisis de datos, la innovación en diseño y el diseño sustentable.",
+    "stack": [
+      "Figma & Design Systems",
+      "Service Design & Blueprints",
+      "Design Sprints",
+      "Angular · Angular Material",
+      "Tailwind CSS · Material Design",
+      ".NET · MAUI (colaboración)",
+      "Análisis de datos (en crecimiento)"
+    ]
+  },
+  "footer": {
+    "eyebrow": "¿Trabajamos juntos?",
+    "titleA": "Diseñemos el siguiente",
+    "titleB": "buen viaje de tus usuarios.",
+    "location": "Puerto Morelos, Q. Roo · Remoto",
+    "rights": "© 2026 Alejandra Fierro"
+  },
+  "caseList": [
+    {
+      "slug": "trafic-pos",
+      "ticketNo": "CASO 01",
+      "title": "Trafic POS: rediseñar la venta de tours en el punto de venta",
+      "role": "Product Designer — líder del proyecto",
+      "period": "Ene 2022 – Nov 2022",
+      "tools": [
+        "Figma",
+        "Design Sprint",
+        "Service Blueprint",
+        "Journey Mapping"
+      ],
+      "metric": {
+        "value": "−20%",
+        "label": "errores de captura en pre-venta"
+      },
+      "tldr": "La operación de venta de tours dependía de procesos manuales que generaban errores de captura y no se adaptaba a los distintos acuerdos comerciales con bancos. Diseñé un POS completo — del service blueprint al prototipo validado — que procesa pagos en TPV Santander y dispositivos móviles, reduciendo errores de pre-venta 20% y errores de tipo de pago 15%.",
+      "context": "Trafictours comercializa tours y experiencias en Cancún y la Riviera Maya. La venta ocurre en escenarios muy distintos: módulos en hoteles, representantes en campo y oficinas centrales, cada uno con acuerdos bancarios diferentes.",
+      "problem": "El proceso de facturación era lento y propenso a errores humanos, especialmente en productos de \"pre-venta\" y en la captura del tipo de pago. Cada acuerdo comercial con bancos implicaba reglas distintas que el sistema anterior no contemplaba, y el costo se veía directamente en correcciones, reembolsos y tiempo del equipo.",
+      "process": [
+        "Mapeé el journey completo del vendedor de tours para entender dónde ocurrían los errores y por qué.",
+        "Construí el service blueprint de la operación: actores, sistemas, acuerdos bancarios y puntos de falla.",
+        "Facilité un Design Sprint con ventas y desarrollo para prototipar el nuevo flujo de cobro en una semana.",
+        "Iteré el prototipo en Figma con vendedores reales, priorizando velocidad de captura y prevención de errores."
+      ],
+      "keyDecision": "La decisión más difícil fue diseñar un solo flujo de cobro que funcionara igual en TPV físico Santander y en dispositivos móviles. En lugar de dos interfaces distintas, definí un patrón único de confirmación en dos pasos que valida producto y tipo de pago antes de procesar — la misma lógica mental para el vendedor sin importar el canal.",
+      "results": [
+        "−20% en errores de captura del producto \"pre-venta\".",
+        "−15% en errores de captura de tipo de pago.",
+        "Pagos operando en TPV Santander y móviles con un solo flujo.",
+        "Proceso de facturación significativamente más rápido para el equipo de ventas."
+      ],
+      "learning": "Hoy involucraría a los equipos de finanzas desde la primera semana: varias reglas bancarias aparecieron tarde en el proceso y obligaron a rediseñar pantallas ya validadas.",
+      "cover": {
+        "src": "assets/img/trafic-pos-cover.jpg",
+        "alt": "Pantalla principal del POS"
+      },
+      "gallery": [
+        {
+          "src": "assets/img/trafic-pos-1.jpg",
+          "caption": "Journey map del vendedor de tours"
+        },
+        {
+          "src": "assets/img/trafic-pos-2.jpg",
+          "caption": "Service blueprint de la operación"
+        },
+        {
+          "src": "assets/img/trafic-pos-3.jpg",
+          "caption": "Flujo de cobro en TPV y móvil"
+        }
+      ]
+    },
+    {
+      "slug": "agenda-digital",
+      "ticketNo": "CASO 02",
+      "title": "Agenda Digital: segmentar para vender más y llamar menos",
+      "role": "UX/UI Developer — diseño + frontend Angular",
+      "period": "Ene 2021 – Ago 2021",
+      "tools": [
+        "Angular",
+        ".NET 7",
+        "Material Design",
+        "Tailwind"
+      ],
+      "metric": {
+        "value": "40%",
+        "label": "de los grupos contrató un servicio grupal"
+      },
+      "tldr": "Los clientes no tenían forma clara de gestionar los servicios que compraban, lo que saturaba los canales de atención y desperdiciaba oportunidades de venta cruzada. Diseñé y desarrollé una plataforma en Angular + .NET que segmenta a los usuarios en 4 grupos por preferencias de viaje. Resultado: 40% de los grupos contrató servicios adicionales, subió el ticket promedio y bajaron las llamadas de aclaración.",
+      "context": "Los huéspedes compraban paquetes de servicios turísticos pero no tenían visibilidad de lo contratado ni un canal simple para agregar servicios. Todo pasaba por llamadas telefónicas.",
+      "problem": "Alto volumen de llamadas de consulta y aclaración, clientes frustrados por falta de visibilidad, y una oportunidad comercial perdida: no existía un canal digital para ofrecer servicios relevantes a cada tipo de viajero.",
+      "process": [
+        "Analicé datos de compra y comportamiento para definir 4 segmentos por preferencias de viaje.",
+        "Diseñé canales de comunicación especializados por segmento, con ofertas y lenguaje adaptados.",
+        "Desarrollé el frontend en Angular con Angular Material y Tailwind, personalizable por equipo.",
+        "Apliqué principios de Material Design para que la agenda se adaptara a la identidad de cada grupo."
+      ],
+      "keyDecision": "Elegí segmentar en exactamente 4 grupos — no más — porque cada segmento adicional multiplicaba el costo de mantener contenido y ofertas especializadas. Cuatro era el punto donde la personalización seguía siendo percibida como relevante por el cliente y operable por el negocio.",
+      "results": [
+        "40% de los grupos contrató un servicio grupal adicional.",
+        "Aumento del ticket promedio por cliente.",
+        "Reducción medible de llamadas de consulta y aclaración.",
+        "Plataforma personalizable por características de cada equipo."
+      ],
+      "learning": "La segmentación funcionó, pero la validaría antes con entrevistas además de datos de compra: uno de los 4 segmentos resultó mucho menos activo de lo proyectado.",
+      "cover": {
+        "src": "assets/img/agenda-digital-cover.jpg",
+        "alt": "Dashboard de la Agenda Digital"
+      },
+      "gallery": [
+        {
+          "src": "assets/img/agenda-digital-1.jpg",
+          "caption": "Segmentación de usuarios en 4 grupos"
+        },
+        {
+          "src": "assets/img/agenda-digital-2.jpg",
+          "caption": "Canales de comunicación por segmento"
+        },
+        {
+          "src": "assets/img/agenda-digital-3.jpg",
+          "caption": "Personalización con Material Design y Tailwind"
+        }
+      ]
+    },
+    {
+      "slug": "design-system",
+      "ticketNo": "CASO 03",
+      "title": "Un design system que habla dos idiomas: Figma y código",
+      "role": "Product Designer / Design Engineer",
+      "period": "Dic 2023 – Presente",
+      "tools": [
+        "Figma",
+        "Angular",
+        ".NET MAUI",
+        "Design Tokens"
+      ],
+      "metric": {
+        "value": "2",
+        "label": "frameworks servidos por un solo sistema"
+      },
+      "tldr": "Los equipos duplicaban componentes entre plataformas y la UI era inconsistente entre productos. Construí y documenté un design system en Figma con integración directa a Angular y MAUI, alineado a los principios de diseño de la empresa. Hoy diseñadores y developers consumen la misma fuente de verdad.",
+      "context": "Trafictours mantiene productos en web (Angular) y aplicaciones multiplataforma (.NET MAUI). Cada equipo resolvía la UI por su cuenta, además de proyectos con modelos de IA integrados que necesitaban interfaces consistentes.",
+      "problem": "Componentes duplicados y divergentes entre plataformas, fricción constante entre diseño y desarrollo, y tiempo perdido reconstruyendo lo mismo en cada framework.",
+      "process": [
+        "Auditoría de la UI existente en todos los productos: inventario de componentes y sus variantes.",
+        "Definición de tokens (color, tipografía, espaciado) como capa común entre Figma, Angular y MAUI.",
+        "Construcción de la librería de componentes en Figma con variantes y documentación de uso.",
+        "Trabajo directo con desarrollo para mapear cada componente a su implementación en ambos frameworks."
+      ],
+      "keyDecision": "En lugar de documentar el sistema \"desde diseño hacia desarrollo\", lo estructuré alrededor de los tokens que ambos frameworks podían consumir. Eso obligó a nombrar cada decisión visual en un lenguaje que Angular y MAUI entendieran por igual — y convirtió al sistema en un contrato entre equipos, no en un manual de estilo.",
+      "results": [
+        "Componentes reutilizables funcionando en Angular y MAUI desde una sola fuente.",
+        "Alineación con los principios de diseño de la empresa en todos los productos.",
+        "Mejor colaboración entre equipos multidisciplinarios de diseño y desarrollo."
+      ],
+      "learning": "Un design system sin gobernanza se degrada: la siguiente etapa que impulsaría es un proceso formal de contribución y versionado de componentes.",
+      "cover": {
+        "src": "assets/img/design-system-cover.jpg",
+        "alt": "Librería de componentes en Figma"
+      },
+      "gallery": [
+        {
+          "src": "assets/img/design-system-1.jpg",
+          "caption": "Tokens de color, tipografía y espaciado"
+        },
+        {
+          "src": "assets/img/design-system-2.jpg",
+          "caption": "Componentes con variantes en Figma"
+        },
+        {
+          "src": "assets/img/design-system-3.jpg",
+          "caption": "Mismo componente en Angular y MAUI"
+        }
+      ]
+    }
+  ],
+  "method": {
+    "eyebrow": "Mi metodología con IA",
+    "title": "Diseño con IA, no diseño por IA",
+    "intro": "La IA no reemplaza el criterio de diseño: lo amplifica. Mi proceso no consiste en dejar que la IA diseñe sola — nace de entender el problema de diseño, generar versiones y ajustar todo contra un sistema de diseño sólido. Así lo apliqué en la implementación completa del nuevo POS.",
+    "steps": [
+      {
+        "n": "01",
+        "title": "Fundamento: el sistema de diseño primero",
+        "text": "Todo parte de entender el diseño: tokens, componentes y principios definidos en Figma. Este sistema es el criterio contra el que se evalúa cualquier propuesta — humana o generada con IA.",
+        "tools": [
+          "Figma"
+        ]
+      },
+      {
+        "n": "02",
+        "title": "Exploración y versiones con IA",
+        "text": "Genero múltiples versiones y direcciones con Claude Design, itero rápido y ajusto cada propuesta contra el sistema de diseño en Figma. La IA propone; el criterio de diseño decide.",
+        "tools": [
+          "Claude Design",
+          "Figma"
+        ]
+      },
+      {
+        "n": "03",
+        "title": "Imágenes y recursos visuales",
+        "text": "Produzco imágenes con Gemini y las afino con estilos, composiciones y recursos gráficos en Canva, siempre alineadas a la identidad visual del producto.",
+        "tools": [
+          "Gemini",
+          "Canva"
+        ]
+      },
+      {
+        "n": "04",
+        "title": "Testeo de la aplicación",
+        "text": "Valido la aplicación con usuarios y equipos reales: pruebas de flujo, captura de errores y ajustes antes de liberar. Lo que no pasa el testeo, regresa a iteración.",
+        "tools": [
+          "Pruebas con usuarios"
+        ]
+      },
+      {
+        "n": "05",
+        "title": "Adopción: cursos y implementación",
+        "text": "Un sistema solo funciona si todos lo entienden. Diseño cursos y documentación para que los demás departamentos adopten el nuevo sistema — la implementación completa, como lo hice con el POS.",
+        "tools": [
+          "Documentación",
+          "Capacitación"
+        ]
+      }
+    ]
+  },
+  "gallery": {
+    "title": "En imágenes",
+    "missing": "Imagen pendiente — sube el archivo a"
+  }
+}

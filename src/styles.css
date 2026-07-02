@@ -1,0 +1,84 @@
+/* ============================================================
+   Alejandra Fierro — Portfolio
+   Paleta: Caribe de Quintana Roo
+   ============================================================ */
+
+:root {
+  /* Color tokens */
+  --mar-profundo: #0A2A33;   /* fondo principal, tinta marina */
+  --mar-medio: #0E3742;      /* superficies elevadas */
+  --cenote: #2BD9C7;         /* acento turquesa — acciones, links */
+  --arena: #EFE9DC;          /* texto principal sobre oscuro */
+  --arena-suave: #B9C6C6;    /* texto secundario */
+  --coral: #FF7A66;          /* acento cálido — solo métricas destacadas */
+  --linea: rgba(239, 233, 220, 0.14);
+
+  /* Type */
+  --display: 'Fraunces', serif;
+  --body: 'Sora', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+body {
+  background: var(--mar-profundo);
+  color: var(--arena);
+  font-family: var(--body);
+  font-weight: 300;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--cenote); text-decoration: none; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--cenote);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cenote);
+}
+
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.12; }
+
+.btn {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid var(--cenote);
+  color: var(--cenote);
+  border-radius: 999px;
+  transition: background 0.25s, color 0.25s;
+  cursor: pointer;
+  background: transparent;
+}
+.btn:hover { background: var(--cenote); color: var(--mar-profundo); }
+.btn--solid { background: var(--cenote); color: var(--mar-profundo); }
+.btn--solid:hover { background: var(--arena); border-color: var(--arena); }
+
+/* Animación de reveal al hacer scroll (directiva appReveal) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.2, 0.7, 0.3, 1),
+              transform 0.65s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.reveal--in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
