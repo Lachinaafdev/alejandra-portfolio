@@ -12,7 +12,7 @@ import { TranslateService, TranslatePipe } from '../i18n/i18n';
         <a routerLink="/" class="header__logo">A·Fierro</a>
         <nav class="header__nav">
           <a routerLink="/" fragment="casos">{{ 'nav.cases' | t }}</a>
-          <a routerLink="/" fragment="metodologia" class="header__hide-sm">{{ 'nav.method' | t }}</a>
+          <a routerLink="/metodologia-ia" class="header__hide-sm">{{ 'nav.method' | t }}</a>
           <a routerLink="/" fragment="sobre-mi">{{ 'nav.about' | t }}</a>
           <button
             class="header__lang"

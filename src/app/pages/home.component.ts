@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 import { TicketCardComponent } from '../components/ticket-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TicketCardComponent, TranslatePipe, RevealDirective],
+  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective],
   template: `
     <!-- HERO (animación de entrada al cargar) -->
     <section class="hero wrap">
@@ -35,27 +36,28 @@ import { TicketCardComponent } from '../components/ticket-card.component';
     </section>
 
 
-    <!-- METODOLOGÍA CON IA -->
+    <!-- METODOLOGÍA CON IA (card tipo consola → página de flujos) -->
     <section id="metodologia" class="wrap metodo">
       <p class="eyebrow" appReveal>{{ 'method.eyebrow' | t }}</p>
-      <h2 appReveal>{{ 'method.title' | t }}</h2>
-      <p class="metodo__intro" appReveal>{{ 'method.intro' | t }}</p>
-      <ol class="metodo__steps">
-        @for (step of ('method.steps' | t); track $index) {
-          <li class="metodo__step" appReveal [revealDelay]="$index * 100">
-            <span class="metodo__n">{{ step.n }}</span>
-            <div>
-              <h3>{{ step.title }}</h3>
-              <p>{{ step.text }}</p>
-              <div class="metodo__tools">
-                @for (tool of step.tools; track $index) {
-                  <span>{{ tool }}</span>
-                }
-              </div>
-            </div>
-          </li>
-        }
-      </ol>
+      <a class="prompt" routerLink="/metodologia-ia" appReveal>
+        <div class="prompt__bar">
+          <span class="prompt__dot"></span>
+          <span class="prompt__dot"></span>
+          <span class="prompt__dot"></span>
+          <span class="prompt__path">{{ 'method.card.path' | t }}</span>
+          <span class="prompt__count">{{ 'method.card.count' | t }}</span>
+        </div>
+        <div class="prompt__body">
+          <h2>{{ 'method.title' | t }}</h2>
+          <p>{{ 'method.card.text' | t }}</p>
+          <ul class="prompt__flows">
+            @for (flow of ('method.card.flows' | t); track $index) {
+              <li><span class="prompt__caret">›</span>{{ flow }}</li>
+            }
+          </ul>
+          <span class="prompt__cta">{{ 'method.card.cta' | t }}</span>
+        </div>
+      </a>
     </section>
 
     <!-- SOBRE MÍ -->
@@ -113,31 +115,51 @@ import { TicketCardComponent } from '../components/ticket-card.component';
     .casos__list { display: grid; gap: 1.5rem; }
 
 
-    /* Metodología con IA */
+    /* Metodología con IA — card tipo consola de prompt,
+       deliberadamente distinto al ticket de los casos */
     .metodo { padding-top: 6rem; }
-    .metodo h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin: 0.7rem 0 1.2rem; }
-    .metodo__intro { max-width: 62ch; color: var(--arena-suave); margin-bottom: 2.5rem; }
-    .metodo__steps { list-style: none; display: grid; gap: 1rem; counter-reset: none; }
-    .metodo__step {
-      display: grid; grid-template-columns: 64px 1fr; gap: 1.2rem;
-      border: 1px solid var(--linea); border-radius: 14px;
-      padding: 1.5rem 1.8rem;
-      transition: border-color 0.25s;
+    .prompt {
+      display: block; margin-top: 1.2rem;
+      border: 1px solid var(--linea); border-radius: 16px;
+      background: linear-gradient(150deg, var(--mar-medio), color-mix(in srgb, var(--mar-profundo) 70%, var(--cenote) 6%));
+      color: var(--arena); overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s;
     }
-    .metodo__step:hover { border-color: var(--cenote); }
-    .metodo__n {
-      font-family: var(--mono); font-size: 1.4rem;
-      color: var(--cenote); padding-top: 0.2rem;
+    .prompt:hover {
+      border-color: var(--cenote);
+      box-shadow: 0 0 40px color-mix(in srgb, var(--cenote) 18%, transparent);
     }
-    .metodo__step h3 { font-size: 1.15rem; margin-bottom: 0.4rem; }
-    .metodo__step p { color: var(--arena-suave); font-size: 0.95rem; }
-    .metodo__tools { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
-    .metodo__tools span {
-      font-family: var(--mono); font-size: 0.7rem;
-      border: 1px solid var(--linea); border-radius: 999px;
-      padding: 0.25rem 0.7rem; color: var(--cenote);
+    .prompt__bar {
+      display: flex; align-items: center; gap: 0.45rem;
+      padding: 0.8rem 1.4rem;
+      border-bottom: 1px solid var(--linea);
+      font-family: var(--mono); font-size: 0.72rem;
     }
-    @media (max-width: 520px) { .metodo__step { grid-template-columns: 1fr; gap: 0.5rem; } }
+    .prompt__dot {
+      width: 9px; height: 9px; border-radius: 50%;
+      border: 1px solid var(--linea);
+      background: color-mix(in srgb, var(--arena-suave) 25%, transparent);
+    }
+    .prompt__path { margin-left: 0.8rem; color: var(--arena-suave); }
+    .prompt__count { margin-left: auto; color: var(--cenote); }
+    .prompt__body { padding: 2rem 1.8rem 1.8rem; }
+    .prompt__body h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); margin-bottom: 0.8rem; }
+    .prompt__body > p { max-width: 62ch; color: var(--arena-suave); font-size: 0.98rem; }
+    .prompt__flows {
+      list-style: none; margin: 1.5rem 0 0;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem 1.5rem;
+      font-family: var(--mono); font-size: 0.8rem; color: var(--arena);
+    }
+    .prompt__caret { color: var(--cenote); margin-right: 0.55rem; }
+    .prompt__cta {
+      display: inline-block; margin-top: 1.8rem;
+      font-family: var(--mono); font-size: 0.82rem; color: var(--cenote);
+    }
+    @media (max-width: 860px) { .prompt__flows { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) {
+      .prompt__flows { grid-template-columns: 1fr; }
+      .prompt__path { display: none; }
+    }
 
     .sobre { padding-top: 6rem; }
     .sobre__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; }
