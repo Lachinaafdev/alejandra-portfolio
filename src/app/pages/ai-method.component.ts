@@ -109,24 +109,29 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     /* Principios */
     .ia__principios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    /* Cada principio con su propio campo de color de la paleta */
     .ia__principio {
-      border: 1px solid var(--border); border-radius: var(--radius-md);
-      padding: 1.4rem 1.5rem;
-      background: var(--white);
-      transition: border-color var(--duration-base) var(--ease-out),
-                  box-shadow var(--duration-base) var(--ease-out),
-                  transform var(--duration-base) var(--ease-out);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 1.6rem;
+      transition: transform var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out);
     }
-    .ia__principio:hover { border-color: var(--teal-700); box-shadow: var(--shadow-md); transform: translateY(-6px); }
+    .ia__principio:hover { box-shadow: var(--shadow-md); transform: translateY(-6px); }
+    .ia__principio:nth-child(3n + 1) { background: var(--teal-100); }
+    .ia__principio:nth-child(3n + 2) { background: var(--purple-100); }
+    .ia__principio:nth-child(3n) { background: var(--green-glow-light); }
     .ia__principio-n {
-      font-family: var(--mono); font-size: 0.78rem;
-      color: var(--white); background: var(--grad-primary);
-      width: 1.6rem; height: 1.6rem; border-radius: 50%;
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 500;
+      color: var(--white);
+      width: 1.7rem; height: 1.7rem; border-radius: 50%;
       display: inline-flex; align-items: center; justify-content: center;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.9rem;
     }
+    .ia__principio:nth-child(3n + 1) .ia__principio-n { background: var(--teal-700); }
+    .ia__principio:nth-child(3n + 2) .ia__principio-n { background: var(--purple-500); }
+    .ia__principio:nth-child(3n) .ia__principio-n { background: var(--green-glow-dark); }
     .ia__principio h3 { font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .ia__principio p { color: var(--arena-suave); font-size: 0.88rem; }
+    .ia__principio p { color: var(--gray-dark); font-size: 0.88rem; }
     @media (max-width: 720px) { .ia__principios-grid { grid-template-columns: 1fr; } }
 
     /* Flujos */

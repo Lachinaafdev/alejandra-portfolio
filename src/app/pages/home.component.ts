@@ -125,20 +125,31 @@ import { gsap } from 'gsap';
 
     .hero__sub { max-width: 52ch; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
 
-    /* Stats editoriales: cifra en serif display, etiqueta en mono */
+    /* Stats como bloques de color suaves: cifra en serif, etiqueta en mono */
     .hero__facts {
-      display: flex; flex-wrap: wrap; gap: 3.5rem;
+      display: flex; flex-wrap: wrap; gap: 1rem;
       margin-top: 3.5rem;
-      font-family: var(--mono); font-size: 0.68rem;
+      font-family: var(--mono); font-size: 0.66rem;
       text-transform: uppercase; letter-spacing: 0.12em;
-      color: var(--cocoa-500);
+      color: var(--gray-dark);
     }
-    .hero__facts div { border-left: 2px solid var(--teal-300); padding-left: 1.1rem; }
+    .hero__facts div {
+      padding: 1.1rem 1.4rem;
+      border-radius: var(--radius-md);
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+    .hero__facts div:hover { transform: translateY(-4px); }
+    .hero__facts div:nth-child(3n + 1) { background: var(--teal-100); }
+    .hero__facts div:nth-child(3n + 2) { background: var(--purple-100); }
+    .hero__facts div:nth-child(3n) { background: var(--green-glow-light); }
     .hero__facts span {
       display: block; font-family: var(--display); font-weight: 700;
-      color: var(--teal-900); font-size: 1.55rem; letter-spacing: -0.5px;
+      font-size: 1.55rem; letter-spacing: -0.5px;
       margin-bottom: 0.3rem; text-transform: none;
     }
+    .hero__facts div:nth-child(3n + 1) span { color: var(--teal-900); }
+    .hero__facts div:nth-child(3n + 2) span { color: var(--purple-700); }
+    .hero__facts div:nth-child(3n) span { color: var(--green-glow-dark); }
 
     /* Blob de gradiente: aporta color sin ensuciar la lectura */
     .hero__blob {
@@ -253,21 +264,19 @@ import { gsap } from 'gsap';
       float: left; padding: 0.1em 0.45rem 0 0;
       color: var(--teal-700);
     }
-    .sobre__stack { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    /* Skills como tags de color rotando la paleta */
+    .sobre__stack { list-style: none; display: flex; flex-wrap: wrap; align-content: start; gap: 0.6rem; }
     .sobre__stack li {
-      font-family: var(--mono); font-size: 0.82rem;
-      background: var(--white);
-      border: 1px solid var(--border); border-radius: var(--radius-sm);
-      padding: 0.55rem 0.9rem;
-      transition: border-color var(--duration-fast) var(--ease-out),
-                  transform var(--duration-fast) var(--ease-out),
-                  box-shadow var(--duration-fast) var(--ease-out);
+      font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      transition: transform var(--duration-fast) var(--ease-out);
     }
-    .sobre__stack li:hover {
-      border-color: var(--teal-700);
-      transform: translateX(6px);
-      box-shadow: var(--shadow-sm);
-    }
+    .sobre__stack li:hover { transform: translateY(-3px); }
+    .sobre__stack li:nth-child(4n + 1) { background: var(--teal-100); color: var(--teal-900); }
+    .sobre__stack li:nth-child(4n + 2) { background: var(--purple-100); color: var(--purple-700); }
+    .sobre__stack li:nth-child(4n + 3) { background: var(--green-glow-light); color: var(--green-glow-dark); }
+    .sobre__stack li:nth-child(4n) { background: var(--wax-paper); color: var(--cocoa-700); }
     @media (max-width: 720px) { .sobre__grid { grid-template-columns: 1fr; } }
   `]
 })

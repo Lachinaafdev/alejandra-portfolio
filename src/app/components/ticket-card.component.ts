@@ -34,7 +34,6 @@ import { TranslatePipe } from '../i18n/i18n';
         <span class="ticket__value">{{ caso.metric.value }}</span>
         <span class="ticket__label">{{ caso.metric.label }}</span>
         <span class="ticket__cta">{{ 'cases.cta' | t }}</span>
-        <span class="ticket__barcode" aria-hidden="true"></span>
       </div>
     </a>
   `,
@@ -101,7 +100,9 @@ import { TranslatePipe } from '../i18n/i18n';
       gap: 0.25rem;
       position: relative;
       background: var(--gray-light);
+      transition: filter var(--duration-base) var(--ease-out);
     }
+    .ticket:hover .ticket__stub { filter: saturate(1.15); }
     .ticket__stub::before, .ticket__stub::after {
       content: '';
       position: absolute;
@@ -115,20 +116,13 @@ import { TranslatePipe } from '../i18n/i18n';
     .ticket__stub::after { bottom: -11px; }
 
     .ticket__value {
-      font-family: var(--mono);
-      font-size: 2rem;
-      font-weight: 500;
+      font-family: var(--display);
+      font-size: 2.3rem;
+      font-weight: 700;
+      letter-spacing: -1px;
       color: var(--purple-500);
-      /* Subrayado green glow: energía solo en el dato clave */
-      background: linear-gradient(120deg, var(--green-glow-light), var(--green-glow-light));
-      background-repeat: no-repeat;
-      background-position: 0 88%;
-      background-size: 0% 30%;
-      transition: background-size var(--duration-slow) var(--ease-out);
-      align-self: start;
     }
-    .ticket:hover .ticket__value { background-size: 100% 30%; }
-    .ticket__label { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; }
+    .ticket__label { font-size: 0.78rem; color: var(--gray-dark); line-height: 1.4; }
     .ticket__cta {
       margin-top: 0.9rem;
       font-family: var(--mono);
@@ -139,17 +133,16 @@ import { TranslatePipe } from '../i18n/i18n';
     }
     .ticket:hover .ticket__cta { color: var(--purple-500); transform: translateX(4px); }
 
-    /* Código de barras: la firma del boleto */
-    .ticket__barcode {
-      display: block; height: 22px; margin-top: 1rem;
-      background: repeating-linear-gradient(90deg,
-        var(--cocoa-700) 0 2px, transparent 2px 5px,
-        var(--cocoa-700) 5px 6px, transparent 6px 10px,
-        var(--cocoa-700) 10px 13px, transparent 13px 16px);
-      opacity: 0.4;
-      transition: opacity var(--duration-base) var(--ease-out);
-    }
-    .ticket:hover .ticket__barcode { opacity: 0.75; }
+    /* Cada caso tiene su propio campo de color: teal, purple, green */
+    :host(:nth-child(3n + 1)) .ticket__stub { background: var(--teal-100); border-left-color: rgba(42, 143, 157, 0.3); }
+    :host(:nth-child(3n + 1)) .ticket__value { color: var(--teal-900); }
+    :host(:nth-child(3n + 1)) .ticket__media { background: var(--teal-100); }
+    :host(:nth-child(3n + 2)) .ticket__stub { background: var(--purple-100); border-left-color: rgba(122, 79, 163, 0.3); }
+    :host(:nth-child(3n + 2)) .ticket__value { color: var(--purple-700); }
+    :host(:nth-child(3n + 2)) .ticket__media { background: var(--purple-100); }
+    :host(:nth-child(3n)) .ticket__stub { background: var(--green-glow-light); border-left-color: rgba(154, 166, 0, 0.35); }
+    :host(:nth-child(3n)) .ticket__value { color: var(--green-glow-dark); }
+    :host(:nth-child(3n)) .ticket__media { background: var(--green-glow-light); }
 
     @media (max-width: 900px) {
       .ticket { grid-template-columns: 1fr 220px; }
