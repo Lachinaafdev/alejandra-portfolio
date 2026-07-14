@@ -1,23 +1,25 @@
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
+import { TranslateService, TranslatePipe, RevealDirective, MagneticDirective } from '../i18n/i18n';
 import { TicketCardComponent } from '../components/ticket-card.component';
+import { gsap } from 'gsap';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective],
+  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective, MagneticDirective],
   template: `
-    <!-- HERO (animación de entrada al cargar) -->
+    <!-- HERO (timeline GSAP de entrada + blob de gradiente flotante) -->
     <section class="hero wrap">
+      <div class="hero__blob" aria-hidden="true"></div>
       <p class="eyebrow hero__enter">{{ 'hero.eyebrow' | t }}</p>
-      <h1 class="hero__enter hero__enter--2">
+      <h1 class="hero__enter">
         {{ 'hero.titleA' | t }}
         <em>{{ 'hero.titleEm' | t }}</em>
         {{ 'hero.titleB' | t }}
       </h1>
-      <p class="hero__sub hero__enter hero__enter--3">{{ 'hero.sub' | t }}</p>
-      <div class="hero__facts hero__enter hero__enter--4">
+      <p class="hero__sub hero__enter">{{ 'hero.sub' | t }}</p>
+      <div class="hero__facts hero__enter">
         @for (fact of ('hero.facts' | t); track $index) {
           <div><span>{{ fact.value }}</span>{{ fact.label }}</div>
         }
@@ -41,9 +43,9 @@ import { TicketCardComponent } from '../components/ticket-card.component';
       <p class="eyebrow" appReveal>{{ 'method.eyebrow' | t }}</p>
       <a class="prompt" routerLink="/metodologia-ia" appReveal>
         <div class="prompt__bar">
-          <span class="prompt__dot"></span>
-          <span class="prompt__dot"></span>
-          <span class="prompt__dot"></span>
+          <span class="prompt__dot prompt__dot--teal"></span>
+          <span class="prompt__dot prompt__dot--purple"></span>
+          <span class="prompt__dot prompt__dot--green"></span>
           <span class="prompt__path">{{ 'method.card.path' | t }}</span>
           <span class="prompt__count">{{ 'method.card.count' | t }}</span>
         </div>
@@ -78,36 +80,53 @@ import { TicketCardComponent } from '../components/ticket-card.component';
     </section>
   `,
   styles: [`
-    .hero { padding-top: 6rem; padding-bottom: 5rem; }
+    .hero { position: relative; padding-top: 6rem; padding-bottom: 5rem; }
     .hero h1 {
-      font-size: clamp(2.1rem, 5.4vw, 3.6rem);
+      font-size: clamp(2.2rem, 5.4vw, 3.6rem);
       margin: 1.2rem 0 1.4rem;
-      max-width: 18ch;
+      max-width: 19ch;
+      position: relative;
     }
-    .hero h1 em { color: var(--cenote); font-style: italic; }
-    .hero__sub { max-width: 52ch; color: var(--arena-suave); font-size: 1.05rem; }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--teal-900);
+      /* Marcador green glow: barrido tipo subrayado de plumón */
+      background: linear-gradient(120deg, var(--green-glow-light), var(--green-glow-light));
+      background-repeat: no-repeat;
+      background-position: 0 82%;
+      background-size: 0% 38%;
+      animation: markerSweep 0.8s var(--ease-out) 1.1s forwards;
+    }
+    @keyframes markerSweep { to { background-size: 100% 38%; } }
+
+    .hero__sub { max-width: 52ch; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
     .hero__facts {
       display: flex; flex-wrap: wrap; gap: 2.5rem;
       margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid var(--linea);
-      color: var(--arena-suave); font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+      color: var(--cocoa-500); font-size: 0.82rem;
     }
     .hero__facts span {
-      display: block; font-family: var(--mono);
-      color: var(--arena); font-size: 1rem; margin-bottom: 0.2rem;
+      display: block; font-family: var(--mono); font-weight: 500;
+      color: var(--teal-900); font-size: 1rem; margin-bottom: 0.2rem;
     }
 
-    /* Entrada del hero al cargar la página */
-    .hero__enter { animation: heroUp 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-    .hero__enter--2 { animation-delay: 0.12s; }
-    .hero__enter--3 { animation-delay: 0.24s; }
-    .hero__enter--4 { animation-delay: 0.36s; }
-    @keyframes heroUp {
-      from { opacity: 0; transform: translateY(26px); }
-      to { opacity: 1; transform: none; }
+    /* Blob de gradiente: aporta color sin ensuciar la lectura */
+    .hero__blob {
+      position: absolute; top: 2rem; right: -6rem;
+      width: 420px; height: 420px;
+      background: radial-gradient(circle at 35% 35%, var(--teal-100) 0%, var(--purple-100) 55%, transparent 75%);
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: -1;
     }
+
+    /* Estado inicial de la entrada del hero (lo anima GSAP) */
+    .hero__enter { opacity: 0; }
     @media (prefers-reduced-motion: reduce) {
-      .hero__enter { animation: none; }
+      .hero__enter { opacity: 1; }
     }
 
     .casos { padding-top: 2rem; }
@@ -120,41 +139,68 @@ import { TicketCardComponent } from '../components/ticket-card.component';
     .metodo { padding-top: 6rem; }
     .prompt {
       display: block; margin-top: 1.2rem;
-      border: 1px solid var(--linea); border-radius: 16px;
-      background: linear-gradient(150deg, var(--mar-medio), color-mix(in srgb, var(--mar-profundo) 70%, var(--cenote) 6%));
-      color: var(--arena); overflow: hidden;
-      transition: border-color 0.25s, box-shadow 0.25s;
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      background: var(--white);
+      color: var(--text-primary); overflow: hidden;
+      position: relative;
+      transition: border-color var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out),
+                  transform var(--duration-base) var(--ease-out);
     }
-    .prompt:hover {
-      border-color: var(--cenote);
-      box-shadow: 0 0 40px color-mix(in srgb, var(--cenote) 18%, transparent);
+    /* Barra de acento superior: teal → purple, se dibuja al hover */
+    .prompt::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--grad-primary);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--duration-slow) var(--ease-out);
     }
+    .prompt:hover { border-color: var(--teal-700); box-shadow: var(--shadow-lg); transform: translateY(-6px); }
+    .prompt:hover::before { transform: scaleX(1); }
+
     .prompt__bar {
       display: flex; align-items: center; gap: 0.45rem;
-      padding: 0.8rem 1.4rem;
-      border-bottom: 1px solid var(--linea);
+      padding: 0.85rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--gray-light);
       font-family: var(--mono); font-size: 0.72rem;
     }
-    .prompt__dot {
-      width: 9px; height: 9px; border-radius: 50%;
-      border: 1px solid var(--linea);
-      background: color-mix(in srgb, var(--arena-suave) 25%, transparent);
+    .prompt__dot { width: 10px; height: 10px; border-radius: 50%; }
+    .prompt__dot--teal { background: var(--teal-700); }
+    .prompt__dot--purple { background: var(--purple-500); }
+    .prompt__dot--green { background: var(--green-glow); }
+    .prompt__path { margin-left: 0.8rem; color: var(--cocoa-500); }
+    .prompt__path::after {
+      content: '▍';
+      color: var(--teal-700);
+      animation: caretBlink 1.1s steps(1) infinite;
     }
-    .prompt__path { margin-left: 0.8rem; color: var(--arena-suave); }
-    .prompt__count { margin-left: auto; color: var(--cenote); }
-    .prompt__body { padding: 2rem 1.8rem 1.8rem; }
+    @keyframes caretBlink { 50% { opacity: 0; } }
+    .prompt__count {
+      margin-left: auto;
+      background: var(--purple-100); color: var(--purple-500);
+      border: 1px solid rgba(122, 79, 163, 0.2);
+      border-radius: 999px; padding: 0.2rem 0.75rem;
+      font-weight: 500;
+    }
+    .prompt__body { padding: 2.2rem 1.8rem 2rem; }
     .prompt__body h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); margin-bottom: 0.8rem; }
-    .prompt__body > p { max-width: 62ch; color: var(--arena-suave); font-size: 0.98rem; }
+    .prompt__body > p { max-width: 62ch; color: var(--text-secondary); font-size: 0.98rem; }
     .prompt__flows {
       list-style: none; margin: 1.5rem 0 0;
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem 1.5rem;
-      font-family: var(--mono); font-size: 0.8rem; color: var(--arena);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem 1.5rem;
+      font-family: var(--mono); font-size: 0.8rem; color: var(--cocoa-700);
     }
-    .prompt__caret { color: var(--cenote); margin-right: 0.55rem; }
+    .prompt__flows li { transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out); }
+    .prompt:hover .prompt__flows li:hover { color: var(--purple-500); transform: translateX(4px); }
+    .prompt__caret { color: var(--teal-700); margin-right: 0.55rem; }
     .prompt__cta {
       display: inline-block; margin-top: 1.8rem;
-      font-family: var(--mono); font-size: 0.82rem; color: var(--cenote);
+      font-family: var(--mono); font-size: 0.82rem; font-weight: 500;
+      color: var(--teal-700);
+      transition: color var(--duration-fast) var(--ease-out);
     }
+    .prompt:hover .prompt__cta { color: var(--purple-500); }
     @media (max-width: 860px) { .prompt__flows { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) {
       .prompt__flows { grid-template-columns: 1fr; }
@@ -164,16 +210,43 @@ import { TicketCardComponent } from '../components/ticket-card.component';
     .sobre { padding-top: 6rem; }
     .sobre__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; }
     .sobre__text p + p { margin-top: 1rem; }
-    .sobre__text { color: var(--arena-suave); }
+    .sobre__text { color: var(--text-secondary); }
     .sobre__stack { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
     .sobre__stack li {
       font-family: var(--mono); font-size: 0.82rem;
-      border: 1px solid var(--linea); border-radius: 8px;
+      background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
       padding: 0.55rem 0.9rem;
+      transition: border-color var(--duration-fast) var(--ease-out),
+                  transform var(--duration-fast) var(--ease-out),
+                  box-shadow var(--duration-fast) var(--ease-out);
+    }
+    .sobre__stack li:hover {
+      border-color: var(--teal-700);
+      transform: translateX(6px);
+      box-shadow: var(--shadow-sm);
     }
     @media (max-width: 720px) { .sobre__grid { grid-template-columns: 1fr; } }
   `]
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   i18n = inject(TranslateService);
+  private host = inject(ElementRef<HTMLElement>);
+
+  ngAfterViewInit(): void {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    const root = this.host.nativeElement;
+
+    // Entrada del hero: cascada con snap suave
+    gsap.fromTo(root.querySelectorAll('.hero__enter'),
+      { opacity: 0, y: 42 },
+      { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.13, clearProps: 'transform' }
+    );
+
+    // El blob respira lentamente todo el tiempo
+    gsap.to(root.querySelector('.hero__blob'), {
+      y: 30, x: -20, scale: 1.08,
+      duration: 7, ease: 'sine.inOut', repeat: -1, yoyo: true,
+    });
+  }
 }

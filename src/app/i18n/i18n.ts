@@ -3,6 +3,10 @@ import {
   inject, signal, computed, effect, OnInit, Input,
 } from '@angular/core';
 import { CaseStudy } from '../data/cases';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export type Lang = 'es' | 'en';
 
@@ -71,8 +75,9 @@ export class TranslatePipe implements PipeTransform {
 }
 
 /* ============================================================
-   Directiva de animación: revela el elemento al entrar en
-   viewport. Respeta prefers-reduced-motion.
+   Directiva de animación (GSAP + ScrollTrigger): revela el
+   elemento al entrar en viewport con un movimiento suave hacia
+   arriba. Respeta prefers-reduced-motion.
    Uso: <section appReveal> · <div appReveal [revealDelay]="120">
    ============================================================ */
 @Directive({ selector: '[appReveal]', standalone: true })
@@ -85,21 +90,48 @@ export class RevealDirective implements OnInit {
     node.classList.add('reveal');
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      node.classList.add('reveal--in');
+      node.classList.add('reveal--visible');
       return;
     }
-    if (this.revealDelay) {
-      node.style.transitionDelay = `${this.revealDelay}ms`;
-    }
-    const io = new IntersectionObserver(
-      entries => entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          node.classList.add('reveal--in');
-          io.disconnect();
-        }
-      }),
-      { threshold: 0.15 }
+
+    gsap.fromTo(node,
+      { opacity: 0, y: 36 },
+      {
+        opacity: 1, y: 0,
+        duration: 0.9,
+        ease: 'power3.out',
+        delay: this.revealDelay / 1000,
+        clearProps: 'transform',
+        scrollTrigger: { trigger: node, start: 'top 88%', once: true },
+        onStart: () => node.classList.add('reveal--visible'),
+      }
     );
-    io.observe(node);
+  }
+}
+
+/* ============================================================
+   Directiva magnética: el elemento sigue sutilmente al cursor
+   y regresa con rebote elástico al salir. Para CTAs.
+   Uso: <a appMagnetic>…</a>
+   ============================================================ */
+@Directive({ selector: '[appMagnetic]', standalone: true })
+export class MagneticDirective implements OnInit {
+  private el = inject(ElementRef<HTMLElement>);
+
+  ngOnInit(): void {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    const node = this.el.nativeElement;
+
+    node.addEventListener('mousemove', (e: MouseEvent) => {
+      const r = node.getBoundingClientRect();
+      gsap.to(node, {
+        x: (e.clientX - r.left - r.width / 2) * 0.25,
+        y: (e.clientY - r.top - r.height / 2) * 0.35,
+        duration: 0.4, ease: 'power2.out',
+      });
+    });
+    node.addEventListener('mouseleave', () => {
+      gsap.to(node, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' });
+    });
   }
 }

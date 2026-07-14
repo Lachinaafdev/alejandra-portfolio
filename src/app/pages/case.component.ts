@@ -124,8 +124,9 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     .caso__metric span { font-family: var(--mono); color: var(--coral); font-size: 1.2rem; }
 
     .caso__tldr {
-      background: var(--mar-medio); border: 1px solid var(--linea);
-      border-radius: 14px; padding: 1.8rem; margin: 2.5rem 0;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 1.8rem; margin: 2.5rem 0;
+      box-shadow: var(--shadow-sm);
     }
     .caso__tldr p:last-child { margin-top: 0.6rem; }
 
@@ -162,17 +163,24 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     .caso__resultados { list-style: none; display: grid; gap: 0.7rem; }
     .caso__resultados li {
-      border: 1px solid var(--linea); border-radius: 10px;
-      padding: 0.8rem 1.1rem; color: var(--arena);
+      background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 0.8rem 1.1rem; color: var(--text-primary);
       font-size: 0.95rem;
+      transition: border-color var(--duration-fast) var(--ease-out),
+                  transform var(--duration-fast) var(--ease-out);
     }
+    .caso__resultados li:hover { border-color: var(--teal-700); transform: translateX(6px); }
 
     .caso__next {
       display: block; margin-top: 4rem; padding: 1.8rem;
-      border: 1px solid var(--linea); border-radius: 14px;
-      transition: border-color 0.25s;
+      background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      transition: border-color var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out),
+                  transform var(--duration-base) var(--ease-out);
     }
-    .caso__next:hover { border-color: var(--cenote); }
+    .caso__next:hover { border-color: var(--teal-700); box-shadow: var(--shadow-md); transform: translateY(-4px); }
     .caso__next-title {
       display: block; font-family: var(--display);
       font-size: 1.25rem; color: var(--arena); margin-top: 0.4rem;

@@ -109,13 +109,17 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     /* Principios */
     .ia__principios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
     .ia__principio {
-      border: 1px solid var(--linea); border-radius: 14px;
+      border: 1px solid var(--border); border-radius: var(--radius-md);
       padding: 1.4rem 1.5rem;
-      background: var(--mar-medio);
+      background: var(--white);
+      transition: border-color var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out),
+                  transform var(--duration-base) var(--ease-out);
     }
+    .ia__principio:hover { border-color: var(--teal-700); box-shadow: var(--shadow-md); transform: translateY(-6px); }
     .ia__principio-n {
       font-family: var(--mono); font-size: 0.78rem;
-      color: var(--mar-profundo); background: var(--cenote);
+      color: var(--white); background: var(--grad-primary);
       width: 1.6rem; height: 1.6rem; border-radius: 50%;
       display: inline-flex; align-items: center; justify-content: center;
       margin-bottom: 0.8rem;
@@ -128,11 +132,23 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     .ia__flujos { display: grid; gap: 1.4rem; }
     .ia__flujos h2 { margin-bottom: 0.2rem; }
     .flujo {
-      border: 1px solid var(--linea); border-radius: 16px;
+      background: var(--white);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
       padding: 1.8rem;
-      transition: border-color 0.25s;
+      position: relative; overflow: hidden;
+      transition: border-color var(--duration-base) var(--ease-out),
+                  box-shadow var(--duration-base) var(--ease-out);
     }
-    .flujo:hover { border-color: var(--cenote); }
+    /* Barra de acento superior teal → purple al hover */
+    .flujo::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--grad-primary);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--duration-slow) var(--ease-out);
+    }
+    .flujo:hover { border-color: var(--teal-700); box-shadow: var(--shadow-md); }
+    .flujo:hover::before { transform: scaleX(1); }
     .flujo__n {
       font-family: var(--mono); font-size: 0.72rem;
       letter-spacing: 0.16em; text-transform: uppercase;
@@ -151,7 +167,8 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
       margin-top: 1.4rem;
     }
     .flujo__paso {
-      border: 1px solid var(--linea); border-radius: 10px;
+      background: var(--gray-light);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
       padding: 0.9rem 1rem;
       position: relative;
     }
@@ -162,8 +179,11 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
       color: var(--cenote); font-family: var(--mono); font-size: 0.8rem;
       z-index: 1;
     }
-    .flujo__paso--humano { border-color: var(--coral); }
-    .flujo__paso--humano .flujo__label { color: var(--coral); }
+    .flujo__paso--humano {
+      background: var(--purple-100);
+      border-color: rgba(122, 79, 163, 0.35);
+    }
+    .flujo__paso--humano .flujo__label { color: var(--purple-500); }
     .flujo__label {
       display: block; font-family: var(--mono); font-size: 0.64rem;
       letter-spacing: 0.14em; text-transform: uppercase;
@@ -173,9 +193,10 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     .flujo__tools { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
     .flujo__tools span {
-      font-family: var(--mono); font-size: 0.7rem;
-      border: 1px solid var(--linea); border-radius: 999px;
-      padding: 0.25rem 0.7rem; color: var(--cenote);
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+      background: var(--teal-100);
+      border: 1px solid rgba(42, 143, 157, 0.2); border-radius: 999px;
+      padding: 0.25rem 0.7rem; color: var(--teal-700);
     }
 
     @media (max-width: 860px) {
@@ -189,7 +210,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     /* Límites */
     .ia__limites {
-      border-left: 3px solid var(--coral);
+      border-left: 3px solid var(--purple-500);
       padding-left: 1.5rem;
     }
     .ia__limites-intro { color: var(--arena-suave); margin-bottom: 1.4rem; max-width: 62ch; }
