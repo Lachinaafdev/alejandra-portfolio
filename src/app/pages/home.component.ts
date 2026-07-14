@@ -171,7 +171,9 @@ import { gsap } from 'gsap';
 
     .casos { padding-top: 3rem; }
     .casos h2, .sobre h2 { font-size: clamp(1.8rem, 3.8vw, 2.6rem); margin: 1rem 0 2.2rem; }
-    .casos__list { display: grid; gap: 1.5rem; }
+    /* Grid de proyectos: las imágenes son las protagonistas */
+    .casos__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch; }
+    @media (max-width: 900px) { .casos__list { grid-template-columns: 1fr; max-width: 560px; } }
 
 
     /* Metodología con IA — card tipo consola de prompt,
