@@ -28,7 +28,11 @@ import { gsap } from 'gsap';
 
     <!-- CASOS (reveal al hacer scroll) -->
     <section id="casos" class="wrap casos">
-      <p class="eyebrow" appReveal>{{ 'cases.eyebrow' | t }}</p>
+      <div class="sec-head" appReveal>
+        <span class="sec-head__n">01</span>
+        <p class="eyebrow">{{ 'cases.eyebrow' | t }}</p>
+        <span class="sec-head__line"></span>
+      </div>
       <h2 appReveal>{{ 'cases.title' | t }}</h2>
       <div class="casos__list">
         @for (caso of i18n.cases(); track caso.slug) {
@@ -40,7 +44,11 @@ import { gsap } from 'gsap';
 
     <!-- METODOLOGÍA CON IA (card tipo consola → página de flujos) -->
     <section id="metodologia" class="wrap metodo">
-      <p class="eyebrow" appReveal>{{ 'method.eyebrow' | t }}</p>
+      <div class="sec-head" appReveal>
+        <span class="sec-head__n">02</span>
+        <p class="eyebrow">{{ 'method.eyebrow' | t }}</p>
+        <span class="sec-head__line"></span>
+      </div>
       <a class="prompt" routerLink="/metodologia-ia" appReveal>
         <div class="prompt__bar">
           <span class="prompt__dot prompt__dot--teal"></span>
@@ -54,7 +62,7 @@ import { gsap } from 'gsap';
           <p>{{ 'method.card.text' | t }}</p>
           <ul class="prompt__flows">
             @for (flow of ('method.card.flows' | t); track $index) {
-              <li><span class="prompt__caret">›</span>{{ flow }}</li>
+              <li><span class="prompt__num">0{{ $index + 1 }}</span>{{ flow }}</li>
             }
           </ul>
           <span class="prompt__cta">{{ 'method.card.cta' | t }}</span>
@@ -64,7 +72,11 @@ import { gsap } from 'gsap';
 
     <!-- SOBRE MÍ -->
     <section id="sobre-mi" class="wrap sobre">
-      <p class="eyebrow" appReveal>{{ 'about.eyebrow' | t }}</p>
+      <div class="sec-head" appReveal>
+        <span class="sec-head__n">03</span>
+        <p class="eyebrow">{{ 'about.eyebrow' | t }}</p>
+        <span class="sec-head__line"></span>
+      </div>
       <h2 appReveal>{{ 'about.title' | t }}</h2>
       <div class="sobre__grid">
         <div class="sobre__text" appReveal>
@@ -80,11 +92,23 @@ import { gsap } from 'gsap';
     </section>
   `,
   styles: [`
-    .hero { position: relative; padding-top: 6rem; padding-bottom: 5rem; }
+    .hero { position: relative; padding-top: 7rem; padding-bottom: 5rem; }
+    /* Retícula de puntos sutil: textura de mesa de trabajo */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: radial-gradient(ellipse 70% 60% at 75% 20%, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 75% 20%, black 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
     .hero h1 {
-      font-size: clamp(2.2rem, 5.4vw, 3.6rem);
-      margin: 1.2rem 0 1.4rem;
-      max-width: 19ch;
+      font-size: clamp(2.4rem, 6vw, 4.3rem);
+      line-height: 1.06;
+      margin: 1.3rem 0 1.6rem;
+      max-width: 21ch;
       position: relative;
     }
     .hero h1 em {
@@ -100,15 +124,20 @@ import { gsap } from 'gsap';
     @keyframes markerSweep { to { background-size: 100% 38%; } }
 
     .hero__sub { max-width: 52ch; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
+
+    /* Stats editoriales: cifra en serif display, etiqueta en mono */
     .hero__facts {
-      display: flex; flex-wrap: wrap; gap: 2.5rem;
-      margin-top: 3rem; padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      color: var(--cocoa-500); font-size: 0.82rem;
+      display: flex; flex-wrap: wrap; gap: 3.5rem;
+      margin-top: 3.5rem;
+      font-family: var(--mono); font-size: 0.68rem;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--cocoa-500);
     }
+    .hero__facts div { border-left: 2px solid var(--teal-300); padding-left: 1.1rem; }
     .hero__facts span {
-      display: block; font-family: var(--mono); font-weight: 500;
-      color: var(--teal-900); font-size: 1rem; margin-bottom: 0.2rem;
+      display: block; font-family: var(--display); font-weight: 700;
+      color: var(--teal-900); font-size: 1.55rem; letter-spacing: -0.5px;
+      margin-bottom: 0.3rem; text-transform: none;
     }
 
     /* Blob de gradiente: aporta color sin ensuciar la lectura */
@@ -129,8 +158,8 @@ import { gsap } from 'gsap';
       .hero__enter { opacity: 1; }
     }
 
-    .casos { padding-top: 2rem; }
-    .casos h2, .sobre h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); margin: 0.7rem 0 2rem; }
+    .casos { padding-top: 3rem; }
+    .casos h2, .sobre h2 { font-size: clamp(1.8rem, 3.8vw, 2.6rem); margin: 1rem 0 2.2rem; }
     .casos__list { display: grid; gap: 1.5rem; }
 
 
@@ -187,19 +216,25 @@ import { gsap } from 'gsap';
     .prompt__body h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); margin-bottom: 0.8rem; }
     .prompt__body > p { max-width: 62ch; color: var(--text-secondary); font-size: 0.98rem; }
     .prompt__flows {
-      list-style: none; margin: 1.5rem 0 0;
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.55rem 1.5rem;
+      list-style: none; margin: 1.6rem 0 0;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem 1.5rem;
       font-family: var(--mono); font-size: 0.8rem; color: var(--cocoa-700);
     }
-    .prompt__flows li { transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out); }
+    .prompt__flows li {
+      padding-bottom: 0.55rem;
+      border-bottom: 1px solid var(--border);
+      transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+    }
     .prompt:hover .prompt__flows li:hover { color: var(--purple-500); transform: translateX(4px); }
-    .prompt__caret { color: var(--teal-700); margin-right: 0.55rem; }
+    .prompt__num { color: var(--gray-medium); margin-right: 0.7rem; font-size: 0.68rem; }
     .prompt__cta {
-      display: inline-block; margin-top: 1.8rem;
+      display: inline-block; margin-top: 1.9rem;
       font-family: var(--mono); font-size: 0.82rem; font-weight: 500;
       color: var(--teal-700);
       transition: color var(--duration-fast) var(--ease-out);
     }
+    /* Se lee como un comando por ejecutar */
+    .prompt__cta::before { content: '$ '; color: var(--green-glow-dark); }
     .prompt:hover .prompt__cta { color: var(--purple-500); }
     @media (max-width: 860px) { .prompt__flows { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) {
@@ -211,6 +246,13 @@ import { gsap } from 'gsap';
     .sobre__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; }
     .sobre__text p + p { margin-top: 1rem; }
     .sobre__text { color: var(--text-secondary); }
+    /* Capitular editorial en el primer párrafo */
+    .sobre__text p:first-of-type::first-letter {
+      font-family: var(--display); font-weight: 700;
+      font-size: 3.1rem; line-height: 0.85;
+      float: left; padding: 0.1em 0.45rem 0 0;
+      color: var(--teal-700);
+    }
     .sobre__stack { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
     .sobre__stack li {
       font-family: var(--mono); font-size: 0.82rem;

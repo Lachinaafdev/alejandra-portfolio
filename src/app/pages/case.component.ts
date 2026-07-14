@@ -102,7 +102,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
   styles: [`
     .caso { padding-top: 4rem; max-width: 780px; }
     .caso__back { font-family: var(--mono); font-size: 0.82rem; }
-    .caso__head h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 1rem 0 2rem; }
+    .caso__head h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.08; margin: 1rem 0 2rem; }
     .caso__head { animation: caseIn 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
     @keyframes caseIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -125,6 +125,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     .caso__tldr {
       background: var(--white); border: 1px solid var(--border);
+      border-left: 3px solid var(--teal-700);
       border-radius: var(--radius-md); padding: 1.8rem; margin: 2.5rem 0;
       box-shadow: var(--shadow-sm);
     }

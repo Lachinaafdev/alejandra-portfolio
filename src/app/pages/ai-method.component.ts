@@ -41,6 +41,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
         <h2 appReveal>{{ 'method.page.workflowsTitle' | t }}</h2>
         @for (flujo of ('method.page.workflows' | t); track flujo.n) {
           <div class="flujo" appReveal>
+            <span class="flujo__ghost" aria-hidden="true">{{ flujo.n }}</span>
             <header class="flujo__head">
               <span class="flujo__n">{{ 'method.page.flowLabel' | t }} {{ flujo.n }}</span>
               <h3>{{ flujo.title }}</h3>
@@ -95,8 +96,8 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     .ia__back { font-family: var(--mono); font-size: 0.82rem; }
 
     .ia__head { animation: iaIn 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
-    .ia__head h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); margin: 1rem 0 1.4rem; max-width: 22ch; }
-    .ia__intro { max-width: 62ch; color: var(--arena-suave); }
+    .ia__head h1 { font-size: clamp(2.1rem, 5vw, 3.4rem); line-height: 1.08; margin: 1rem 0 1.4rem; max-width: 22ch; }
+    .ia__intro { max-width: 62ch; color: var(--arena-suave); font-size: 1.02rem; line-height: 1.8; }
     @keyframes iaIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: none; }
@@ -149,6 +150,16 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     }
     .flujo:hover { border-color: var(--teal-700); box-shadow: var(--shadow-md); }
     .flujo:hover::before { transform: scaleX(1); }
+    /* Nº fantasma en serif delineado: firma editorial de cada flujo */
+    .flujo__ghost {
+      position: absolute; top: 0.8rem; right: 1.4rem;
+      font-family: var(--display); font-size: 4.6rem; font-weight: 700;
+      line-height: 1; color: transparent;
+      -webkit-text-stroke: 1.5px var(--teal-300);
+      opacity: 0.75; pointer-events: none; user-select: none;
+      transition: opacity var(--duration-base) var(--ease-out);
+    }
+    .flujo:hover .flujo__ghost { opacity: 1; -webkit-text-stroke-color: var(--purple-300); }
     .flujo__n {
       font-family: var(--mono); font-size: 0.72rem;
       letter-spacing: 0.16em; text-transform: uppercase;

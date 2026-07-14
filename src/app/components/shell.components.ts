@@ -43,9 +43,25 @@ gsap.registerPlugin(ScrollTrigger);
     .header__in { display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; padding-bottom: 1rem; }
     .header__logo { font-family: var(--display); font-size: 1.3rem; font-weight: 700; color: var(--text-primary); }
     .header__logo:hover { color: var(--teal-700); }
+    /* Punto green glow: el "encendido" de la marca */
+    .header__logo::after {
+      content: '';
+      display: inline-block; width: 7px; height: 7px;
+      background: var(--green-glow); border-radius: 50%;
+      margin-left: 5px; vertical-align: 2px;
+    }
     .header__nav { display: flex; align-items: center; gap: 1.6rem; }
-    .header__nav a:not(.btn) { color: var(--text-secondary); font-size: 0.9rem; }
-    .header__nav a:not(.btn):hover { color: var(--purple-500); }
+    .header__nav a:not(.btn) { color: var(--text-secondary); font-size: 0.9rem; position: relative; }
+    .header__nav a:not(.btn):hover { color: var(--text-primary); }
+    .header__nav a:not(.btn)::after {
+      content: '';
+      position: absolute; left: 0; bottom: -5px;
+      width: 100%; height: 2px;
+      background: var(--grad-primary);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform var(--duration-base) var(--ease-out);
+    }
+    .header__nav a:not(.btn):hover::after { transform: scaleX(1); }
     .header__nav .btn { padding: 0.5rem 1.1rem; font-size: 0.78rem; }
 
     .header__lang {
@@ -93,7 +109,7 @@ export class HeaderComponent implements AfterViewInit {
       <div class="wrap footer__in">
         <div>
           <p class="eyebrow">{{ 'footer.eyebrow' | t }}</p>
-          <h2>{{ 'footer.titleA' | t }}<br />{{ 'footer.titleB' | t }}</h2>
+          <h2>{{ 'footer.titleA' | t }}<br /><em>{{ 'footer.titleB' | t }}</em></h2>
           <a href="mailto:alejandrafierrorm@gmail.com" class="btn btn--solid" appMagnetic>alejandrafierrorm&#64;gmail.com</a>
         </div>
         <div class="footer__meta">
@@ -110,9 +126,13 @@ export class HeaderComponent implements AfterViewInit {
       margin-top: 6rem;
       background: linear-gradient(135deg, var(--teal-100) 0%, var(--purple-100) 50%, var(--wax-paper) 100%);
     }
-    .footer__in { padding-top: 4rem; padding-bottom: 3rem; display: grid; gap: 2.5rem; }
-    .footer h2 { font-size: clamp(1.7rem, 4vw, 2.6rem); margin: 0.8rem 0 1.6rem; }
+    .footer__in { padding-top: 5rem; padding-bottom: 3rem; display: grid; gap: 2.5rem; }
+    .footer h2 { font-size: clamp(2rem, 5vw, 3.4rem); letter-spacing: -1px; margin: 1rem 0 1.8rem; }
+    .footer h2 em { font-style: italic; color: var(--teal-900); }
     .footer__meta { display: flex; flex-wrap: wrap; gap: 1.5rem; color: var(--cocoa-500); font-size: 0.85rem; font-family: var(--mono); }
+    .footer__meta a { color: var(--teal-900); }
+    .footer__meta a::after { content: ' ↗'; font-size: 0.75rem; }
+    .footer__meta a:hover { color: var(--purple-500); }
   `]
 })
 export class FooterComponent {}

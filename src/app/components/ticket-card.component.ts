@@ -34,6 +34,7 @@ import { TranslatePipe } from '../i18n/i18n';
         <span class="ticket__value">{{ caso.metric.value }}</span>
         <span class="ticket__label">{{ caso.metric.label }}</span>
         <span class="ticket__cta">{{ 'cases.cta' | t }}</span>
+        <span class="ticket__barcode" aria-hidden="true"></span>
       </div>
     </a>
   `,
@@ -80,8 +81,15 @@ import { TranslatePipe } from '../i18n/i18n';
     .ticket__placeholder code { color: var(--teal-700); font-size: 0.62rem; word-break: break-all; }
 
     .ticket__body { padding: 2rem; }
-    .ticket__body h3 { font-size: 1.4rem; margin: 0.6rem 0 0.5rem; }
+    .ticket__body h3 { font-size: 1.5rem; letter-spacing: -0.5px; margin: 0.7rem 0 0.6rem; }
+    .ticket__body .eyebrow { font-size: 0.68rem; color: var(--cocoa-500); }
     .ticket__role { color: var(--text-secondary); font-size: 0.9rem; }
+    .ticket__role::before {
+      content: '';
+      display: inline-block; width: 7px; height: 7px;
+      background: var(--teal-300); border-radius: 2px;
+      margin-right: 0.5rem; vertical-align: 1px;
+    }
 
     /* Talón perforado del ticket */
     .ticket__stub {
@@ -130,6 +138,18 @@ import { TranslatePipe } from '../i18n/i18n';
       transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
     }
     .ticket:hover .ticket__cta { color: var(--purple-500); transform: translateX(4px); }
+
+    /* Código de barras: la firma del boleto */
+    .ticket__barcode {
+      display: block; height: 22px; margin-top: 1rem;
+      background: repeating-linear-gradient(90deg,
+        var(--cocoa-700) 0 2px, transparent 2px 5px,
+        var(--cocoa-700) 5px 6px, transparent 6px 10px,
+        var(--cocoa-700) 10px 13px, transparent 13px 16px);
+      opacity: 0.4;
+      transition: opacity var(--duration-base) var(--ease-out);
+    }
+    .ticket:hover .ticket__barcode { opacity: 0.75; }
 
     @media (max-width: 900px) {
       .ticket { grid-template-columns: 1fr 220px; }

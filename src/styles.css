@@ -116,8 +116,17 @@ a:focus-visible, button:focus-visible {
   color: var(--teal-700);
 }
 
-h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.15; color: var(--text-primary); }
-h1 { letter-spacing: -1px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.12; color: var(--text-primary); }
+h1 { letter-spacing: -1.5px; }
+h2 { letter-spacing: -0.5px; }
+
+/* Cabecera editorial de sección: nº índice + eyebrow + línea al aire */
+.sec-head { display: flex; align-items: center; gap: 1rem; }
+.sec-head__n {
+  font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+  color: var(--gray-medium); letter-spacing: 0.1em;
+}
+.sec-head__line { flex: 1; height: 1px; background: var(--border-strong); }
 
 .btn {
   display: inline-block;
