@@ -227,52 +227,149 @@
   "method": {
     "eyebrow": "Mi metodología con IA",
     "title": "Diseño con IA, no diseño por IA",
-    "intro": "La IA no reemplaza el criterio de diseño: lo amplifica. Mi proceso no consiste en dejar que la IA diseñe sola — nace de entender el problema de diseño, generar versiones y ajustar todo contra un sistema de diseño sólido. Así lo apliqué en la implementación completa del nuevo POS.",
-    "steps": [
-      {
-        "n": "01",
-        "title": "Fundamento: el sistema de diseño primero",
-        "text": "Todo parte de entender el diseño: tokens, componentes y principios definidos en Figma. Este sistema es el criterio contra el que se evalúa cualquier propuesta — humana o generada con IA.",
-        "tools": [
-          "Figma"
-        ]
+    "card": {
+      "path": "~/alejandra/flujos-de-trabajo-ia",
+      "count": "6 flujos documentados",
+      "text": "La IA no reemplaza el criterio de diseño: lo amplifica. Documenté los flujos de trabajo con los que la integro en proyectos reales de producto — de la síntesis de research al componente en producción.",
+      "flows": [
+        "Síntesis de research",
+        "Exploración anclada al design system",
+        "UX writing bilingüe",
+        "Del diseño al componente",
+        "Accesibilidad y estados límite",
+        "Documentación y adopción"
+      ],
+      "cta": "Explorar los flujos de trabajo →"
+    },
+    "page": {
+      "eyebrow": "Metodología con IA",
+      "title": "Flujos de trabajo con IA para diseño de producto",
+      "intro": "Estos son los flujos con los que integro IA en proyectos reales. En todos el patrón es el mismo: la IA acelera la exploración y la producción; el criterio de diseño — el sistema, los datos y el contexto del negocio — decide qué llega a producción.",
+      "back": "← Inicio",
+      "principlesTitle": "Tres reglas antes de cualquier prompt",
+      "principles": [
+        {
+          "title": "La IA propone, el criterio decide",
+          "text": "Ninguna salida de IA llega a producción sin pasar por el mismo estándar que una propuesta humana: el sistema de diseño, las heurísticas de usabilidad y los objetivos del negocio."
+        },
+        {
+          "title": "Contexto antes que prompts",
+          "text": "Un prompt sin contexto genera resultados genéricos. Cada flujo empieza por darle a la IA el material real del proyecto: tokens, componentes, transcripciones, métricas y restricciones técnicas."
+        },
+        {
+          "title": "Datos con responsabilidad",
+          "text": "Ningún dato personal de clientes ni información sensible del negocio entra a una herramienta de IA sin anonimizarse primero. La confianza del usuario también se diseña."
+        }
+      ],
+      "workflowsTitle": "Los flujos",
+      "flowLabel": "Flujo",
+      "whenLabel": "Cuándo lo uso",
+      "stepLabels": {
+        "input": "Entrada",
+        "ai": "Qué hace la IA",
+        "human": "Qué decido yo",
+        "output": "Entregable"
       },
-      {
-        "n": "02",
-        "title": "Exploración y versiones con IA",
-        "text": "Genero múltiples versiones y direcciones con Claude Design, itero rápido y ajusto cada propuesta contra el sistema de diseño en Figma. La IA propone; el criterio de diseño decide.",
-        "tools": [
-          "Claude Design",
-          "Figma"
-        ]
-      },
-      {
-        "n": "03",
-        "title": "Imágenes y recursos visuales",
-        "text": "Produzco imágenes con Gemini y las afino con estilos, composiciones y recursos gráficos en Canva, siempre alineadas a la identidad visual del producto.",
-        "tools": [
-          "Gemini",
-          "Canva"
-        ]
-      },
-      {
-        "n": "04",
-        "title": "Testeo de la aplicación",
-        "text": "Valido la aplicación con usuarios y equipos reales: pruebas de flujo, captura de errores y ajustes antes de liberar. Lo que no pasa el testeo, regresa a iteración.",
-        "tools": [
-          "Pruebas con usuarios"
-        ]
-      },
-      {
-        "n": "05",
-        "title": "Adopción: cursos y implementación",
-        "text": "Un sistema solo funciona si todos lo entienden. Diseño cursos y documentación para que los demás departamentos adopten el nuevo sistema — la implementación completa, como lo hice con el POS.",
-        "tools": [
-          "Documentación",
-          "Capacitación"
-        ]
-      }
-    ]
+      "workflows": [
+        {
+          "n": "01",
+          "title": "Síntesis de research",
+          "when": "Cuando hay horas de entrevistas, tickets de soporte o encuestas, y el equipo necesita insights accionables esta semana — no el próximo mes.",
+          "input": "Transcripciones de entrevistas, tickets de soporte y respuestas de encuestas, previamente anonimizados.",
+          "ai": "Agrupa patrones, propone temas y localiza las citas textuales que sostienen cada tema.",
+          "human": "Verifico cada insight contra las citas originales y descarto los que no resisten la fuente. Un insight sin evidencia trazable no existe.",
+          "output": "Mapa de insights priorizado por impacto, con evidencia citada, listo para decidir con producto.",
+          "tools": [
+            "Claude",
+            "FigJam"
+          ]
+        },
+        {
+          "n": "02",
+          "title": "Exploración anclada al design system",
+          "when": "Al abrir un problema nuevo de UI: necesito ver muchas direcciones rápido sin romper la coherencia del producto.",
+          "input": "El problema de diseño, más los tokens, componentes y principios del sistema como restricción explícita.",
+          "ai": "Genera variaciones de layout, jerarquía y flujo dentro de esas restricciones — decenas de direcciones en el tiempo que antes tomaba una.",
+          "human": "Evalúo cada dirección contra heurísticas de usabilidad y el costo real de construirla; selecciono 2–3 para prototipar en Figma.",
+          "output": "Direcciones prototipadas en Figma, consistentes con el sistema, listas para testear con usuarios.",
+          "tools": [
+            "Claude Design",
+            "Figma"
+          ]
+        },
+        {
+          "n": "03",
+          "title": "UX writing y contenido bilingüe",
+          "when": "Estados de error, vacíos, confirmaciones y microcopy que definen la experiencia — y que el producto necesita en español e inglés.",
+          "input": "La voz y tono del producto, el glosario del dominio (turismo, pagos) y el flujo exacto donde vive cada texto.",
+          "ai": "Propone variantes de microcopy por estado y traduce manteniendo la terminología consistente entre idiomas.",
+          "human": "Pruebo el copy en el componente real — ¿cabe?, ¿se entiende en dos segundos?, ¿suena a la marca? — y valido los términos del dominio con el equipo.",
+          "output": "Tabla de contenido por estado y por idioma, versionada junto al design system.",
+          "tools": [
+            "Claude",
+            "i18n es/en"
+          ]
+        },
+        {
+          "n": "04",
+          "title": "Del diseño al componente",
+          "when": "Cuando un diseño validado tiene que convertirse en un componente Angular o MAUI sin perder fidelidad en el camino.",
+          "input": "El componente en Figma, los design tokens y las convenciones del código existente del equipo.",
+          "ai": "Genera el scaffolding del componente consumiendo los tokens y siguiendo las convenciones del repositorio.",
+          "human": "Reviso accesibilidad, estados y comportamiento responsive contra el diseño; el código pasa el mismo code review que cualquier PR del equipo.",
+          "output": "Componente en producción que consume la misma fuente de verdad que Figma.",
+          "tools": [
+            "Claude Code",
+            "Angular",
+            "Design Tokens"
+          ]
+        },
+        {
+          "n": "05",
+          "title": "Accesibilidad y estados límite",
+          "when": "Antes de liberar: los errores caros viven en los estados que nadie diseñó — vacío, error, carga, texto largo, sin conexión.",
+          "input": "El flujo diseñado, criterios WCAG AA y ejemplos de datos extremos reales del producto.",
+          "ai": "Recorre el flujo buscando estados no diseñados, problemas de contraste y jerarquía, y casos de contenido extremo.",
+          "human": "Reproduzco cada hallazgo con usuarios y datos reales; priorizo por severidad para el usuario, no por facilidad de arreglo.",
+          "output": "Checklist de estados y accesibilidad resuelto antes del release — no como deuda posterior.",
+          "tools": [
+            "Claude",
+            "WCAG AA",
+            "Pruebas con usuarios"
+          ]
+        },
+        {
+          "n": "06",
+          "title": "Documentación y adopción",
+          "when": "Un sistema o un flujo nuevo solo existe si los demás equipos lo entienden y lo usan en su día a día.",
+          "input": "Las decisiones de diseño, sus porqués y las preguntas frecuentes de los equipos que van a adoptarlo.",
+          "ai": "Convierte las decisiones en documentación por audiencia: guías para diseño, referencias para desarrollo, material de capacitación.",
+          "human": "Valido con la prueba definitiva: alguien fuera del proyecto, ¿puede usar el sistema sin preguntarme? Si no, la documentación regresa a iteración.",
+          "output": "Documentación viva y cursos de adopción — como la implementación completa del POS.",
+          "tools": [
+            "Claude",
+            "Documentación",
+            "Capacitación"
+          ]
+        }
+      ],
+      "boundariesTitle": "Dónde no uso IA",
+      "boundariesIntro": "Saber dónde no usar la herramienta es parte del expertise. Tres límites que no negocio:",
+      "boundaries": [
+        {
+          "title": "Hablar con usuarios",
+          "text": "Las entrevistas y los tests de usabilidad los hago yo. La IA sintetiza; no reemplaza estar en la sala observando dónde se atora una persona real."
+        },
+        {
+          "title": "Las decisiones finales de producto",
+          "text": "Qué problema atacar, qué dirección construir y qué se libera lo decide el criterio del equipo, con datos — nunca la salida de un modelo."
+        },
+        {
+          "title": "Datos sensibles",
+          "text": "Información personal de clientes o datos comerciales confidenciales no entran a una herramienta de IA. Anonimizar primero no es opcional."
+        }
+      ]
+    }
   },
   "gallery": {
     "title": "En imágenes",

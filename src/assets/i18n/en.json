@@ -227,52 +227,149 @@
   "method": {
     "eyebrow": "My AI methodology",
     "title": "Designing with AI, not by AI",
-    "intro": "AI doesn't replace design judgment — it amplifies it. My process is not about letting AI design on its own: it starts with understanding the design problem, generating versions, and adjusting everything against a solid design system. That's how I ran the complete implementation of the new POS.",
-    "steps": [
-      {
-        "n": "01",
-        "title": "Foundation: the design system first",
-        "text": "Everything starts with understanding the design: tokens, components, and principles defined in Figma. That system is the standard every proposal is measured against — human or AI-generated.",
-        "tools": [
-          "Figma"
-        ]
+    "card": {
+      "path": "~/alejandra/ai-design-workflows",
+      "count": "6 documented workflows",
+      "text": "AI doesn't replace design judgment — it amplifies it. I documented the workflows I use to integrate it into real product projects, from research synthesis to the component in production.",
+      "flows": [
+        "Research synthesis",
+        "System-anchored exploration",
+        "Bilingual UX writing",
+        "From design to component",
+        "Accessibility & edge states",
+        "Documentation & adoption"
+      ],
+      "cta": "Explore the workflows →"
+    },
+    "page": {
+      "eyebrow": "AI methodology",
+      "title": "AI workflows for product design",
+      "intro": "These are the workflows I use to integrate AI into real projects. The pattern is the same in all of them: AI speeds up exploration and production; design judgment — the system, the data, and the business context — decides what ships.",
+      "back": "← Home",
+      "principlesTitle": "Three rules before any prompt",
+      "principles": [
+        {
+          "title": "AI proposes, judgment decides",
+          "text": "No AI output ships without passing the same bar as a human proposal: the design system, usability heuristics, and the business goals."
+        },
+        {
+          "title": "Context before prompts",
+          "text": "A prompt without context produces generic results. Every workflow starts by giving the AI the project's real material: tokens, components, transcripts, metrics, and technical constraints."
+        },
+        {
+          "title": "Data handled responsibly",
+          "text": "No customer personal data or sensitive business information enters an AI tool without being anonymized first. User trust is designed too."
+        }
+      ],
+      "workflowsTitle": "The workflows",
+      "flowLabel": "Workflow",
+      "whenLabel": "When I use it",
+      "stepLabels": {
+        "input": "Input",
+        "ai": "What the AI does",
+        "human": "What I decide",
+        "output": "Deliverable"
       },
-      {
-        "n": "02",
-        "title": "Exploration and versions with AI",
-        "text": "I generate multiple versions and directions with Claude Design, iterate fast, and adjust every proposal against the design system in Figma. AI proposes; design judgment decides.",
-        "tools": [
-          "Claude Design",
-          "Figma"
-        ]
-      },
-      {
-        "n": "03",
-        "title": "Images and visual assets",
-        "text": "I produce images with Gemini and refine them with styles, compositions, and graphic assets in Canva — always aligned with the product's visual identity.",
-        "tools": [
-          "Gemini",
-          "Canva"
-        ]
-      },
-      {
-        "n": "04",
-        "title": "Application testing",
-        "text": "I validate the application with real users and teams: flow testing, error capture, and adjustments before release. Whatever fails testing goes back to iteration.",
-        "tools": [
-          "User testing"
-        ]
-      },
-      {
-        "n": "05",
-        "title": "Adoption: training and rollout",
-        "text": "A system only works if everyone understands it. I design courses and documentation so other departments adopt the new system — the full implementation, as I did with the POS.",
-        "tools": [
-          "Documentation",
-          "Training"
-        ]
-      }
-    ]
+      "workflows": [
+        {
+          "n": "01",
+          "title": "Research synthesis",
+          "when": "When there are hours of interviews, support tickets, or surveys, and the team needs actionable insights this week — not next month.",
+          "input": "Interview transcripts, support tickets, and survey responses, anonymized beforehand.",
+          "ai": "Clusters patterns, proposes themes, and locates the verbatim quotes that support each theme.",
+          "human": "I verify every insight against the original quotes and discard the ones the source doesn't hold up. An insight without traceable evidence doesn't exist.",
+          "output": "An insight map prioritized by impact, with cited evidence, ready to make decisions with product.",
+          "tools": [
+            "Claude",
+            "FigJam"
+          ]
+        },
+        {
+          "n": "02",
+          "title": "System-anchored exploration",
+          "when": "When opening a new UI problem: I need to see many directions fast without breaking the product's coherence.",
+          "input": "The design problem, plus the system's tokens, components, and principles as an explicit constraint.",
+          "ai": "Generates variations of layout, hierarchy, and flow within those constraints — dozens of directions in the time one used to take.",
+          "human": "I evaluate each direction against usability heuristics and the real cost of building it; I select 2–3 to prototype in Figma.",
+          "output": "Directions prototyped in Figma, consistent with the system, ready for user testing.",
+          "tools": [
+            "Claude Design",
+            "Figma"
+          ]
+        },
+        {
+          "n": "03",
+          "title": "UX writing and bilingual content",
+          "when": "Error states, empty states, confirmations, and the microcopy that defines the experience — which the product needs in Spanish and English.",
+          "input": "The product's voice and tone, the domain glossary (tourism, payments), and the exact flow where each text lives.",
+          "ai": "Proposes microcopy variants per state and translates while keeping terminology consistent across languages.",
+          "human": "I test the copy in the real component — does it fit? is it understood in two seconds? does it sound like the brand? — and validate domain terms with the team.",
+          "output": "A content table per state and per language, versioned alongside the design system.",
+          "tools": [
+            "Claude",
+            "i18n es/en"
+          ]
+        },
+        {
+          "n": "04",
+          "title": "From design to component",
+          "when": "When a validated design has to become an Angular or MAUI component without losing fidelity along the way.",
+          "input": "The component in Figma, the design tokens, and the team's existing code conventions.",
+          "ai": "Generates the component scaffolding consuming the tokens and following the repository's conventions.",
+          "human": "I review accessibility, states, and responsive behavior against the design; the code goes through the same review as any team PR.",
+          "output": "A component in production consuming the same source of truth as Figma.",
+          "tools": [
+            "Claude Code",
+            "Angular",
+            "Design Tokens"
+          ]
+        },
+        {
+          "n": "05",
+          "title": "Accessibility and edge states",
+          "when": "Before release: expensive bugs live in the states nobody designed — empty, error, loading, long text, offline.",
+          "input": "The designed flow, WCAG AA criteria, and real extreme-data examples from the product.",
+          "ai": "Walks the flow hunting for undesigned states, contrast and hierarchy issues, and extreme-content cases.",
+          "human": "I reproduce every finding with real users and data; I prioritize by severity for the user, not by ease of fixing.",
+          "output": "A states-and-accessibility checklist resolved before release — not as debt afterwards.",
+          "tools": [
+            "Claude",
+            "WCAG AA",
+            "User testing"
+          ]
+        },
+        {
+          "n": "06",
+          "title": "Documentation and adoption",
+          "when": "A new system or flow only exists if the other teams understand it and use it day to day.",
+          "input": "The design decisions, their whys, and the frequent questions from the teams adopting it.",
+          "ai": "Turns decisions into documentation per audience: guides for design, references for development, training material.",
+          "human": "I validate with the ultimate test: can someone outside the project use the system without asking me? If not, the docs go back to iteration.",
+          "output": "Living documentation and adoption courses — like the complete POS rollout.",
+          "tools": [
+            "Claude",
+            "Documentation",
+            "Training"
+          ]
+        }
+      ],
+      "boundariesTitle": "Where I don't use AI",
+      "boundariesIntro": "Knowing where not to use the tool is part of the expertise. Three limits I don't negotiate:",
+      "boundaries": [
+        {
+          "title": "Talking to users",
+          "text": "I run the interviews and usability tests myself. AI synthesizes; it doesn't replace being in the room watching where a real person gets stuck."
+        },
+        {
+          "title": "Final product decisions",
+          "text": "Which problem to attack, which direction to build, and what ships is decided by the team's judgment, with data — never by a model's output."
+        },
+        {
+          "title": "Sensitive data",
+          "text": "Customer personal information or confidential business data never enters an AI tool. Anonymizing first is not optional."
+        }
+      ]
+    }
   },
   "gallery": {
     "title": "In pictures",
