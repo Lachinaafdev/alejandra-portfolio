@@ -1,6 +1,6 @@
 import {
   Injectable, Pipe, PipeTransform, Directive, ElementRef,
-  inject, signal, computed, effect, OnInit, Input,
+  inject, signal, computed, effect, OnInit, OnDestroy, Input,
 } from '@angular/core';
 import { CaseStudy } from '../data/cases';
 import { gsap } from 'gsap';
@@ -81,9 +81,10 @@ export class TranslatePipe implements PipeTransform {
    Uso: <section appReveal> · <div appReveal [revealDelay]="120">
    ============================================================ */
 @Directive({ selector: '[appReveal]', standalone: true })
-export class RevealDirective implements OnInit {
+export class RevealDirective implements OnInit, OnDestroy {
   @Input() revealDelay = 0;
   private el = inject(ElementRef<HTMLElement>);
+  private tween?: gsap.core.Tween;
 
   ngOnInit(): void {
     const node = this.el.nativeElement;
@@ -94,7 +95,7 @@ export class RevealDirective implements OnInit {
       return;
     }
 
-    gsap.fromTo(node,
+    this.tween = gsap.fromTo(node,
       { opacity: 0, y: 36 },
       {
         opacity: 1, y: 0,
@@ -106,6 +107,11 @@ export class RevealDirective implements OnInit {
         onStart: () => node.classList.add('reveal--visible'),
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.tween?.scrollTrigger?.kill();
+    this.tween?.kill();
   }
 }
 

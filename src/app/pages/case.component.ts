@@ -3,11 +3,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
+import { ImageRevealDirective, ParallaxDirective } from '../anim/scroll-animations';
 
 @Component({
   selector: 'app-case',
   standalone: true,
-  imports: [RouterLink, TranslatePipe, RevealDirective],
+  imports: [RouterLink, TranslatePipe, RevealDirective, ImageRevealDirective, ParallaxDirective],
   template: `
     @if (caso(); as c) {
       <article class="wrap caso">
@@ -57,7 +58,10 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
               @for (img of c.gallery; track img.src) {
                 <figure class="caso__figura">
                   @if (!imgError.has(img.src)) {
-                    <img [src]="img.src" [alt]="img.caption" loading="lazy" (error)="imgError.add(img.src)" />
+                    <span class="caso__figura-frame" appImageReveal
+                          [revealDirection]="$index % 2 === 0 ? 'vertical' : 'diagonal'">
+                      <img [src]="img.src" [alt]="img.caption" loading="lazy" appParallax [parallaxY]="18" (error)="imgError.add(img.src)" />
+                    </span>
                   } @else {
                     <div class="caso__figura-placeholder">
                       <span>{{ 'gallery.missing' | t }}</span>
@@ -140,10 +144,15 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     .caso__galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
     .caso__figura { margin: 0; }
+    .caso__figura-frame {
+      display: block; position: relative;
+      aspect-ratio: 4 / 3; overflow: hidden;
+      border-radius: var(--radius-md); border: 1px solid var(--border);
+    }
     .caso__figura img {
-      width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
-      border-radius: 12px; border: 1px solid var(--linea);
-      display: block;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; will-change: transform;
     }
     .caso__figura-placeholder {
       aspect-ratio: 4 / 3; border: 1px dashed var(--linea); border-radius: 12px;

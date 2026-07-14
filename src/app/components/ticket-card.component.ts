@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CaseStudy } from '../data/cases';
 import { TranslatePipe } from '../i18n/i18n';
+import { ImageRevealDirective, ParallaxDirective } from '../anim/scroll-animations';
 
 /**
  * Card de proyecto: la imagen de portada es la protagonista y
@@ -12,12 +13,12 @@ import { TranslatePipe } from '../i18n/i18n';
 @Component({
   selector: 'app-ticket-card',
   standalone: true,
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, ImageRevealDirective, ParallaxDirective],
   template: `
     <a class="card" [routerLink]="['/caso', caso.slug]">
-      <div class="card__media">
+      <div class="card__media" appImageReveal>
         @if (caso.cover && !coverError) {
-          <img [src]="caso.cover.src" [alt]="caso.cover.alt" loading="lazy" (error)="coverError = true" />
+          <img [src]="caso.cover.src" [alt]="caso.cover.alt" loading="lazy" appParallax (error)="coverError = true" />
         } @else {
           <div class="card__placeholder">
             <span>{{ 'gallery.missing' | t }}</span>
@@ -71,12 +72,13 @@ import { TranslatePipe } from '../i18n/i18n';
       background: var(--gray-light);
       overflow: hidden;
     }
+    /* El zoom lo maneja GSAP (parallax + escala); sin transition CSS
+       en transform para no pelear con el scrub */
     .card__media img {
       position: absolute; inset: 0;
       width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.6s var(--ease-out);
+      will-change: transform;
     }
-    .card:hover .card__media img { transform: scale(1.05); }
     .card__placeholder {
       position: absolute; inset: 12px;
       border: 1px dashed var(--border-strong); border-radius: var(--radius-sm);
