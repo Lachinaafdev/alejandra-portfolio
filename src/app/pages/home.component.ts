@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, ElementRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService, TranslatePipe, RevealDirective, MagneticDirective } from '../i18n/i18n';
-import { TicketCardComponent } from '../components/ticket-card.component';
+import { CaseShowcaseComponent } from '../components/case-showcase.component';
 import { gsap } from 'gsap';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective, MagneticDirective],
+  imports: [RouterLink, CaseShowcaseComponent, TranslatePipe, RevealDirective, MagneticDirective],
   template: `
     <!-- HERO (timeline GSAP de entrada + blob de gradiente flotante) -->
     <section class="hero wrap">
@@ -34,11 +34,7 @@ import { gsap } from 'gsap';
         <span class="sec-head__line"></span>
       </div>
       <h2 appReveal>{{ 'cases.title' | t }}</h2>
-      <div class="casos__list">
-        @for (caso of i18n.cases(); track caso.slug) {
-          <app-ticket-card [caso]="caso" appReveal [revealDelay]="$index * 120" />
-        }
-      </div>
+      <app-case-showcase />
     </section>
 
 
@@ -171,9 +167,6 @@ import { gsap } from 'gsap';
 
     .casos { padding-top: 3rem; }
     .casos h2, .sobre h2 { font-size: clamp(1.8rem, 3.8vw, 2.6rem); margin: 1rem 0 2.2rem; }
-    /* Grid de proyectos: las imágenes son las protagonistas */
-    .casos__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch; }
-    @media (max-width: 900px) { .casos__list { grid-template-columns: 1fr; max-width: 560px; } }
 
 
     /* Metodología con IA — card tipo consola de prompt,

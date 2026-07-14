@@ -31,6 +31,7 @@
     "title": "Tres boletos, tres historias completas",
     "cta": "Ver caso →",
     "next": "Siguiente caso",
+    "prev": "Caso anterior",
     "back": "← Todos los casos",
     "labels": {
       "role": "Rol",
