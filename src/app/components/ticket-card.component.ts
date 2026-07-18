@@ -2,124 +2,116 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CaseStudy } from '../data/cases';
 import { TranslatePipe } from '../i18n/i18n';
-import { ImageRevealDirective, ParallaxDirective } from '../anim/scroll-animations';
+import { ParallaxDirective } from '../motion/motion';
 
 /**
- * Card de proyecto: la imagen de portada es la protagonista y
- * debajo va lo esencial — caso, título, rol y el dato clave como
- * chip de color. Sube tu imagen a la ruta indicada en el JSON
- * (cover.src); mientras no exista se muestra un placeholder.
+ * Bloque de caso plano full-width: fondo con gradiente propio
+ * (cíclico navy / deep / teal) con parallax, texto blanco
+ * abajo-izquierda y flecha ↗ en círculo arriba-derecha.
+ * Conserva toda la info del ticket: nº de caso y fechas, título,
+ * rol, métrica destacada y CTA.
  */
 @Component({
   selector: 'app-ticket-card',
   standalone: true,
-  imports: [RouterLink, TranslatePipe, ImageRevealDirective, ParallaxDirective],
+  imports: [RouterLink, TranslatePipe, ParallaxDirective],
   template: `
-    <a class="card" [routerLink]="['/caso', caso.slug]">
-      <div class="card__media" appImageReveal>
-        @if (caso.cover && !coverError) {
-          <img [src]="caso.cover.src" [alt]="caso.cover.alt" loading="lazy" appParallax (error)="coverError = true" />
-        } @else {
-          <div class="card__placeholder">
-            <span>{{ 'gallery.missing' | t }}</span>
-            <code>src/{{ caso.cover?.src || 'assets/img/' + caso.slug + '-cover.jpg' }}</code>
-          </div>
-        }
-      </div>
-      <div class="card__body">
-        <span class="eyebrow">{{ caso.ticketNo }} · {{ caso.period }}</span>
+    <a class="work" [routerLink]="['/caso', caso.slug]">
+      <span class="work__bg" appParallax aria-hidden="true"></span>
+      <span class="work__arrow" aria-hidden="true">↗</span>
+      <div class="work__body">
+        <span class="work__eyebrow">{{ caso.ticketNo }} · {{ caso.period }}</span>
         <h3>{{ caso.title }}</h3>
-        <p class="card__role">{{ caso.role }}</p>
-        <div class="card__foot">
-          <span class="card__metric">
-            <strong>{{ caso.metric.value }}</strong> {{ caso.metric.label }}
-          </span>
-          <span class="card__cta">{{ 'cases.cta' | t }}</span>
+        <p class="work__role">{{ caso.role }}</p>
+        <div class="work__foot">
+          <span class="work__metric"><b>{{ caso.metric.value }}</b> {{ caso.metric.label }}</span>
+          <span class="work__cta">{{ 'cases.cta' | t }}</span>
         </div>
       </div>
     </a>
   `,
   styles: [`
-    .card {
-      display: flex; flex-direction: column;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      color: var(--text-primary);
-      overflow: hidden;
+    :host { display: block; }
+    .work {
       position: relative;
-      height: 100%;
-      transition: transform var(--duration-base) var(--ease-out),
-                  border-color var(--duration-base) var(--ease-out),
-                  box-shadow var(--duration-base) var(--ease-out);
+      display: flex; align-items: flex-end;
+      min-height: clamp(340px, 55vh, 520px);
+      overflow: hidden;
+      color: #fff;
+      border-radius: 0;
     }
-    /* Barra de acento teal → purple: se dibuja al hover */
-    .card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--teal-700), var(--purple-500));
-      transform: scaleX(0); transform-origin: left;
-      transition: transform var(--duration-slow) var(--ease-out);
-      z-index: 1;
-    }
-    .card:hover { transform: translateY(-8px); border-color: var(--teal-700); box-shadow: var(--shadow-md); }
-    .card:hover::after { transform: scaleX(1); }
 
-    /* La imagen manda: proporción amplia y protagonismo total */
-    .card__media {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      background: var(--gray-light);
-      overflow: hidden;
-    }
-    /* El zoom lo maneja GSAP (parallax + escala); sin transition CSS
-       en transform para no pelear con el scrub */
-    .card__media img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover;
+    /* Fondo sobredimensionado: absorbe el parallax sin dejar huecos */
+    .work__bg {
+      position: absolute; inset: -12% 0; height: 124%;
       will-change: transform;
+      transition: scale 0.6s var(--ease-out);
     }
-    .card__placeholder {
-      position: absolute; inset: 12px;
-      border: 1px dashed var(--border-strong); border-radius: var(--radius-sm);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      gap: 0.4rem; text-align: center; padding: 0.8rem;
-      color: var(--cocoa-500); font-size: 0.68rem; font-family: var(--mono);
+    .work:hover .work__bg { scale: 1.04; }
+    :host(:nth-child(3n + 1)) .work__bg {
+      background:
+        radial-gradient(ellipse 90% 70% at 78% 18%, rgba(255, 255, 255, 0.18), transparent 60%),
+        linear-gradient(135deg, var(--navy), #10193a);
     }
-    .card__placeholder code { color: var(--teal-700); font-size: 0.62rem; word-break: break-all; }
+    :host(:nth-child(3n + 2)) .work__bg {
+      background:
+        radial-gradient(ellipse 90% 70% at 78% 18%, rgba(255, 255, 255, 0.16), transparent 60%),
+        linear-gradient(135deg, var(--deep), #06181e);
+    }
+    :host(:nth-child(3n)) .work__bg {
+      background:
+        radial-gradient(ellipse 90% 70% at 78% 18%, rgba(255, 255, 255, 0.2), transparent 60%),
+        linear-gradient(135deg, var(--teal-700), #085249);
+    }
 
-    .card__body { display: flex; flex-direction: column; flex: 1; padding: 1.5rem 1.5rem 1.4rem; }
-    .card__body .eyebrow { font-size: 0.66rem; color: var(--cocoa-500); }
-    .card__body h3 { font-size: 1.22rem; letter-spacing: -0.3px; line-height: 1.25; margin: 0.6rem 0 0.45rem; }
-    .card__role { color: var(--text-secondary); font-size: 0.85rem; }
+    .work__arrow {
+      position: absolute; top: 2rem; right: 2rem; z-index: 1;
+      width: 3rem; height: 3rem; border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      display: grid; place-items: center;
+      font-size: 1.1rem; color: #fff;
+      transition: translate 0.35s var(--ease-out), background 0.35s var(--ease-out);
+    }
+    .work:hover .work__arrow { translate: 4px -4px; background: rgba(255, 255, 255, 0.12); }
 
-    .card__foot {
-      display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
-      margin-top: auto; padding-top: 1.1rem;
+    .work__body {
+      position: relative; z-index: 1;
+      width: 100%;
+      padding: clamp(1.6rem, 4vw, 3rem);
+      display: flex; flex-direction: column; gap: 0.4rem;
     }
-    /* El dato clave como chip de color: cada caso con su tono */
-    .card__metric {
-      font-family: var(--mono); font-size: 0.7rem; line-height: 1.35;
-      border-radius: 999px; padding: 0.35rem 0.85rem;
+    .work__eyebrow {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
     }
-    .card__metric strong { font-weight: 700; font-size: 0.82rem; }
-    .card__cta {
-      font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
-      color: var(--teal-700); white-space: nowrap;
-      transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+    .work__body h3 {
+      color: #fff;
+      font-size: clamp(1.7rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+      margin: 0.4rem 0 0.2rem;
+      max-width: 22ch;
     }
-    .card:hover .card__cta { color: var(--purple-500); transform: translateX(4px); }
-
-    /* Rotación de la paleta por caso: teal, purple, green glow */
-    :host(:nth-child(3n + 1)) .card__metric { background: var(--teal-100); color: var(--teal-900); }
-    :host(:nth-child(3n + 1)) .card__placeholder { background: var(--teal-100); border-color: rgba(42, 143, 157, 0.3); }
-    :host(:nth-child(3n + 2)) .card__metric { background: var(--purple-100); color: var(--purple-700); }
-    :host(:nth-child(3n + 2)) .card__placeholder { background: var(--purple-100); border-color: rgba(122, 79, 163, 0.3); }
-    :host(:nth-child(3n)) .card__metric { background: var(--green-glow-light); color: var(--green-glow-dark); }
-    :host(:nth-child(3n)) .card__placeholder { background: var(--green-glow-light); border-color: rgba(154, 166, 0, 0.35); }
+    .work__role { color: rgba(255, 255, 255, 0.78); font-size: 0.92rem; }
+    .work__foot {
+      display: flex; flex-wrap: wrap; align-items: baseline;
+      justify-content: space-between; gap: 1rem;
+      margin-top: 1.4rem; padding-top: 1.1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .work__metric {
+      font-family: var(--mono); font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .work__metric b { font-size: 1.7rem; font-weight: 500; color: #fff; margin-right: 0.5rem; }
+    .work__cta {
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 500;
+      color: #fff;
+      transition: translate 0.25s var(--ease-out);
+    }
+    .work:hover .work__cta { translate: 4px 0; }
   `]
 })
 export class TicketCardComponent {
   @Input({ required: true }) caso!: CaseStudy;
-  coverError = false;
 }
