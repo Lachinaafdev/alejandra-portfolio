@@ -119,9 +119,10 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     .caso__meta strong {
       display: block; font-family: var(--mono); font-weight: 500;
       font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--cenote); margin-bottom: 0.4rem;
+      color: var(--teal-900); margin-bottom: 0.4rem;
     }
-    .caso__metric span { font-family: var(--mono); color: var(--coral); font-size: 1.2rem; }
+    /* Coral oscurecido (--purple-500) para cumplir AA sobre blanco */
+    .caso__metric span { font-family: var(--mono); font-weight: 500; color: var(--purple-500); font-size: 1.2rem; }
 
     .caso__tldr {
       background: var(--white); border: 1px solid var(--border);
@@ -136,7 +137,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     section p { color: var(--arena-suave); }
 
     .caso__proceso { padding-left: 1.2rem; display: grid; gap: 0.8rem; color: var(--arena-suave); }
-    .caso__proceso li::marker { font-family: var(--mono); color: var(--cenote); }
+    .caso__proceso li::marker { font-family: var(--mono); color: var(--teal-900); }
 
     .caso__galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
     .caso__figura { margin: 0; }
@@ -151,7 +152,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
       gap: 0.4rem; text-align: center; padding: 1rem;
       color: var(--arena-suave); font-size: 0.7rem; font-family: var(--mono);
     }
-    .caso__figura-placeholder code { color: var(--cenote); font-size: 0.64rem; word-break: break-all; }
+    .caso__figura-placeholder code { color: var(--teal-900); font-size: 0.64rem; word-break: break-all; }
     .caso__figura figcaption {
       font-size: 0.78rem; color: var(--arena-suave);
       font-family: var(--mono); margin-top: 0.5rem;

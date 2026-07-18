@@ -65,7 +65,11 @@
     "titleA": "Diseñemos el siguiente",
     "titleB": "buen viaje de tus usuarios.",
     "location": "Puerto Morelos, Q. Roo · Remoto",
-    "rights": "© 2026 Alejandra Fierro"
+    "rights": "© 2026 Alejandra Fierro",
+    "top": "Volver arriba"
+  },
+  "reel": {
+    "hint": "▶ Mira mi trabajo en movimiento"
   },
   "caseList": [
     {
