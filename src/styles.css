@@ -1,56 +1,63 @@
 /* ============================================================
    Alejandra Fierro — Portfolio
-   Paleta: WGSN O/I 2026-27 + Coloro
-   Teal = confianza · Purple = creatividad · Green Glow = energía
-   Cocoa = calma · Wax Paper = base que respira
+   Tema claro / plano: fondo blanco, tipografía display gigante
+   (Archivo), acentos de marca cenote #0E8F82 y coral #FF5A45.
+   Los nombres de variables se conservan (las páginas internas
+   los consumen); solo cambian los valores.
    ============================================================ */
 
 :root {
-  /* PRIMARIOS — Transformative Teal (color del año 2026) */
-  --teal-900: #1a4f5c;
-  --teal-700: #2a8f9d;
-  --teal-500: #4ba8b3;
-  --teal-300: #a3d9e3;
-  --teal-100: #d6eef3;
+  /* PRIMARIOS — escala cenote (teal de marca) */
+  --teal-900: #0a6b60; /* cenote oscuro: AA para texto pequeño sobre blanco */
+  --teal-700: #0e8f82; /* cenote de marca (decorativo / texto grande) */
+  --teal-500: #3aa79b;
+  --teal-300: #9ed4cd;
+  --teal-100: #e1f1ef;
 
-  /* BASE NEUTRA — Wax Paper */
-  --wax-paper: #e8e4d5;
+  /* BASE NEUTRA */
+  --wax-paper: #f4f4f2;
   --white: #ffffff;
-  --gray-light: #f5f3f0;
-  --gray-medium: #b8b3a8;
-  --gray-dark: #4a4945;
+  --gray-light: #f6f6f6;
+  --gray-medium: #9a9a9a;
+  --gray-dark: #555555;
 
-  /* ACENTOS */
-  --purple-700: #6b3a8a;
-  --purple-500: #7a4fa3;
-  --purple-300: #b88fd1;
-  --purple-100: #e8d9f0;
-  --green-glow: #c4d300;
-  --green-glow-dark: #9aa600;
-  --green-glow-light: #e8ec99;
-  --cocoa-700: #5c4938;
-  --cocoa-500: #6b5447;
-  --cocoa-300: #a89a8f;
-  --cocoa-100: #d4ccc2;
+  /* ACENTOS — la familia "purple" ahora carga la escala coral
+     para que las páginas internas hereden el tema sin tocarse */
+  --purple-700: #b23222;
+  --purple-500: #d93a25; /* coral AA para texto sobre blanco */
+  --purple-300: #ff9c8f;
+  --purple-100: #ffe9e5;
+  --green-glow: #0e8f82;
+  --green-glow-dark: #0a6b60;
+  --green-glow-light: #d2ece9;
+  --cocoa-700: #3a3a3a;
+  --cocoa-500: #555555;
+  --cocoa-300: #9a9a9a;
+  --cocoa-100: #e8e8e8;
+
+  /* FONDOS DE CARDS DE CASOS */
+  --navy: #1b2a5b;
+  --deep: #0b2a33;
 
   /* TEXT & BORDERS */
-  --text-primary: #2a2a2a;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --border: #e5e0d5;
-  --border-strong: #d4ccc2;
+  --text-primary: #111111;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --border: rgba(17, 17, 17, 0.12);
+  --border-strong: rgba(17, 17, 17, 0.22);
 
-  /* ESQUINAS */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+  /* ESQUINAS — estética plana; radios mínimos solo para
+     elementos pequeños de páginas internas */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
   --radius-full: 50%;
 
-  /* SOMBRAS (tinte teal, nunca negro duro) */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 8px 24px rgba(42, 143, 157, 0.08);
-  --shadow-lg: 0 12px 40px rgba(42, 143, 157, 0.12);
-  --shadow-xl: 0 20px 60px rgba(42, 143, 157, 0.15);
+  /* SOMBRAS — neutras y discretas */
+  --shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.06);
+  --shadow-md: 0 8px 24px rgba(17, 17, 17, 0.08);
+  --shadow-lg: 0 12px 40px rgba(17, 17, 17, 0.1);
+  --shadow-xl: 0 20px 60px rgba(17, 17, 17, 0.12);
 
   /* MOVIMIENTO */
   --duration-fast: 0.2s;
@@ -58,36 +65,37 @@
   --duration-slow: 0.6s;
   --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-mask: cubic-bezier(0.22, 0.7, 0.2, 1);
 
-  /* GRADIENTES estratégicos */
-  --grad-primary: linear-gradient(135deg, var(--teal-700), var(--purple-500));
+  /* GRADIENTES */
+  --grad-primary: linear-gradient(135deg, var(--teal-700), var(--navy));
   --grad-soft: linear-gradient(135deg, var(--teal-100) 0%, var(--purple-100) 50%, var(--wax-paper) 100%);
 
   /* ALIAS SEMÁNTICOS (los componentes consumen estos nombres) */
-  --mar-profundo: var(--gray-light);   /* fondo de página */
+  --mar-profundo: var(--white);        /* fondo de página */
   --mar-medio: var(--white);           /* superficies elevadas */
   --cenote: var(--teal-700);           /* primario: CTAs, links, labels */
   --arena: var(--text-primary);        /* texto principal */
   --arena-suave: var(--text-secondary);/* texto secundario */
-  --coral: var(--purple-500);          /* acento creativo: métricas, criterio humano */
-  --linea: var(--border);
+  --coral: #ff5a45;                    /* acento de marca (decorativo / texto grande) */
+  --linea: rgba(17, 17, 17, 0.12);
 
   /* TYPE */
-  --display: 'Fraunces', serif;
+  --display: 'Archivo', sans-serif;
   --body: 'Sora', sans-serif;
   --mono: 'IBM Plex Mono', monospace;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
 body {
-  background: var(--gray-light);
+  background: var(--white);
   color: var(--text-primary);
   font-family: var(--body);
   font-weight: 400;
@@ -95,17 +103,20 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* El header es fijo (mix-blend-mode) y ya no ocupa flujo */
+main { padding-top: 4.5rem; }
+
 ::selection { background: var(--green-glow-light); color: var(--text-primary); }
 
-a { color: var(--teal-700); text-decoration: none; transition: color var(--duration-fast) var(--ease-out); }
-a:hover { color: var(--purple-500); }
+a { color: var(--teal-900); text-decoration: none; transition: color var(--duration-fast) var(--ease-out); }
+a:hover { color: var(--teal-700); }
 a:focus-visible, button:focus-visible {
   outline: 2px solid var(--teal-700);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
-.wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
 .eyebrow {
   font-family: var(--mono);
@@ -113,12 +124,16 @@ a:focus-visible, button:focus-visible {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--teal-700);
+  color: var(--gray-dark);
 }
 
-h1, h2, h3 { font-family: var(--display); font-weight: 700; line-height: 1.12; color: var(--text-primary); }
-h1 { letter-spacing: -1.5px; }
-h2 { letter-spacing: -0.5px; }
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+h1, h2 { letter-spacing: -0.035em; line-height: 1.0; }
+h3 { letter-spacing: -0.02em; line-height: 1.15; }
 
 /* Cabecera editorial de sección: nº índice + eyebrow + línea al aire */
 .sec-head { display: flex; align-items: center; gap: 1rem; }
@@ -126,7 +141,7 @@ h2 { letter-spacing: -0.5px; }
   font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
   color: var(--gray-medium); letter-spacing: 0.1em;
 }
-.sec-head__line { flex: 1; height: 1px; background: var(--border-strong); }
+.sec-head__line { flex: 1; height: 1px; background: var(--linea); }
 
 .btn {
   display: inline-block;
@@ -144,10 +159,10 @@ h2 { letter-spacing: -0.5px; }
   cursor: pointer;
   background: transparent;
 }
-.btn:hover { border-color: var(--teal-700); color: var(--teal-700); box-shadow: var(--shadow-md); }
+.btn:hover { border-color: var(--text-primary); color: var(--text-primary); box-shadow: var(--shadow-sm); }
 .btn:active { transform: scale(0.95); }
-.btn--solid { background: var(--teal-700); border-color: var(--teal-700); color: var(--white); }
-.btn--solid:hover { background: var(--purple-500); border-color: var(--purple-500); color: var(--white); box-shadow: var(--shadow-md); }
+.btn--solid { background: var(--text-primary); border-color: var(--text-primary); color: var(--white); }
+.btn--solid:hover { background: var(--teal-700); border-color: var(--teal-700); color: var(--white); box-shadow: var(--shadow-md); }
 
 /* Los elementos con appReveal parten ocultos; GSAP los anima al entrar
    en viewport. Con reduced-motion la directiva los deja visibles. */
