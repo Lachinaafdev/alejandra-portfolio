@@ -2,31 +2,25 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CaseStudy } from '../data/cases';
 import { TranslatePipe } from '../i18n/i18n';
+import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
 
 /**
- * Card de proyecto: la imagen de portada es la protagonista y
- * debajo va lo esencial — caso, título, rol y el dato clave como
- * chip de color. Sube tu imagen a la ruta indicada en el JSON
- * (cover.src); mientras no exista se muestra un placeholder.
+ * Card de caso: bloque plano full-width con fondo de gradiente
+ * propio (cíclico navy / deep / teal), texto blanco abajo-izquierda
+ * y flecha en círculo arriba-derecha. El fondo hace parallax al
+ * hacer scroll y cada card entra con una animación distinta según
+ * su índice (cortina / desliza / zoom-out).
  */
 @Component({
   selector: 'app-ticket-card',
   standalone: true,
-  imports: [RouterLink, TranslatePipe],
+  imports: [RouterLink, TranslatePipe, ParallaxDirective, CaseEntranceDirective],
   template: `
-    <a class="card" [routerLink]="['/caso', caso.slug]">
-      <div class="card__media">
-        @if (caso.cover && !coverError) {
-          <img [src]="caso.cover.src" [alt]="caso.cover.alt" loading="lazy" (error)="coverError = true" />
-        } @else {
-          <div class="card__placeholder">
-            <span>{{ 'gallery.missing' | t }}</span>
-            <code>src/{{ caso.cover?.src || 'assets/img/' + caso.slug + '-cover.jpg' }}</code>
-          </div>
-        }
-      </div>
-      <div class="card__body">
-        <span class="eyebrow">{{ caso.ticketNo }} · {{ caso.period }}</span>
+    <a class="card" [class]="'card--' + (index % 3)" [routerLink]="['/caso', caso.slug]" [appCaseEntrance]="index">
+      <div class="work__bg" appParallax aria-hidden="true"></div>
+      <span class="card__arrow" aria-hidden="true">↗</span>
+      <div class="card__content">
+        <span class="card__eyebrow">{{ caso.ticketNo }} · {{ caso.period }}</span>
         <h3>{{ caso.title }}</h3>
         <p class="card__role">{{ caso.role }}</p>
         <div class="card__foot">
@@ -40,84 +34,105 @@ import { TranslatePipe } from '../i18n/i18n';
   `,
   styles: [`
     .card {
-      display: flex; flex-direction: column;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      color: var(--text-primary);
-      overflow: hidden;
       position: relative;
-      height: 100%;
-      transition: transform var(--duration-base) var(--ease-out),
-                  border-color var(--duration-base) var(--ease-out),
-                  box-shadow var(--duration-base) var(--ease-out);
+      display: flex; align-items: flex-end;
+      min-height: clamp(340px, 55vh, 520px);
+      border-radius: 0;
+      overflow: hidden;
+      color: #fff;
     }
-    /* Barra de acento teal → purple: se dibuja al hover */
-    .card::after {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--teal-700), var(--purple-500));
-      transform: scaleX(0); transform-origin: left;
-      transition: transform var(--duration-slow) var(--ease-out);
-      z-index: 1;
-    }
-    .card:hover { transform: translateY(-8px); border-color: var(--teal-700); box-shadow: var(--shadow-md); }
-    .card:hover::after { transform: scaleX(1); }
 
-    /* La imagen manda: proporción amplia y protagonismo total */
-    .card__media {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      background: var(--gray-light);
-      overflow: hidden;
+    /* Fondo absoluto sobredimensionado para el parallax (±6%).
+       El gradiente vive en el ::before para que el hover (scale)
+       no pelee con el transform inline que pone GSAP. */
+    .work__bg {
+      position: absolute; inset: -12% 0; height: 124%;
+      z-index: 0;
     }
-    .card__media img {
+    .work__bg::before {
+      content: '';
       position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.6s var(--ease-out);
     }
-    .card:hover .card__media img { transform: scale(1.05); }
-    .card__placeholder {
-      position: absolute; inset: 12px;
-      border: 1px dashed var(--border-strong); border-radius: var(--radius-sm);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      gap: 0.4rem; text-align: center; padding: 0.8rem;
-      color: var(--cocoa-500); font-size: 0.68rem; font-family: var(--mono);
-    }
-    .card__placeholder code { color: var(--teal-700); font-size: 0.62rem; word-break: break-all; }
+    .card:hover .work__bg::before { transform: scale(1.04); }
 
-    .card__body { display: flex; flex-direction: column; flex: 1; padding: 1.5rem 1.5rem 1.4rem; }
-    .card__body .eyebrow { font-size: 0.66rem; color: var(--cocoa-500); }
-    .card__body h3 { font-size: 1.22rem; letter-spacing: -0.3px; line-height: 1.25; margin: 0.6rem 0 0.45rem; }
-    .card__role { color: var(--text-secondary); font-size: 0.85rem; }
+    .card--0 .work__bg::before {
+      background:
+        radial-gradient(ellipse 60% 55% at 72% 18%, rgba(255, 255, 255, 0.22), transparent 60%),
+        linear-gradient(135deg, #22336B 0%, var(--navy) 55%, #101A3D 100%);
+    }
+    .card--1 .work__bg::before {
+      background:
+        radial-gradient(ellipse 60% 55% at 28% 15%, rgba(255, 255, 255, 0.18), transparent 60%),
+        linear-gradient(135deg, #14444F 0%, var(--deep) 55%, #06181E 100%);
+    }
+    .card--2 .work__bg::before {
+      background:
+        radial-gradient(ellipse 60% 55% at 75% 80%, rgba(255, 255, 255, 0.2), transparent 60%),
+        linear-gradient(135deg, #12A594 0%, var(--cenote) 55%, #085248 100%);
+    }
+
+    .card__arrow {
+      position: absolute; top: 2rem; right: 2rem; z-index: 2;
+      width: 52px; height: 52px;
+      display: grid; place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 50%;
+      font-size: 1.25rem; line-height: 1; color: #fff;
+      transition: transform var(--duration-base) var(--ease-out),
+                  background var(--duration-base) var(--ease-out);
+    }
+    .card:hover .card__arrow { transform: translate(4px, -4px); background: rgba(255, 255, 255, 0.12); }
+
+    .card__content {
+      position: relative; z-index: 1;
+      width: 100%;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      max-width: 1200px; margin: 0 auto;
+    }
+    .card__eyebrow {
+      font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+    }
+    .card__content h3 {
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(1.6rem, 3.6vw, 3rem);
+      letter-spacing: -0.03em; line-height: 1.05;
+      color: #fff; max-width: 22ch;
+      margin: 0.9rem 0 0.6rem;
+    }
+    .card__role { color: rgba(255, 255, 255, 0.75); font-size: 0.9rem; }
 
     .card__foot {
-      display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
-      margin-top: auto; padding-top: 1.1rem;
+      display: flex; flex-wrap: wrap; align-items: flex-end;
+      justify-content: space-between; gap: 1rem;
+      margin-top: 2rem;
     }
-    /* El dato clave como chip de color: cada caso con su tono */
     .card__metric {
-      font-family: var(--mono); font-size: 0.7rem; line-height: 1.35;
-      border-radius: 999px; padding: 0.35rem 0.85rem;
+      font-family: var(--mono); font-size: 0.75rem; line-height: 1.4;
+      color: rgba(255, 255, 255, 0.85); max-width: 30ch;
     }
-    .card__metric strong { font-weight: 700; font-size: 0.82rem; }
+    .card__metric strong {
+      display: block;
+      font-weight: 500; font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      letter-spacing: -0.02em; color: #fff;
+    }
     .card__cta {
-      font-family: var(--mono); font-size: 0.75rem; font-weight: 500;
-      color: var(--teal-700); white-space: nowrap;
-      transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
+      font-family: var(--mono); font-size: 0.78rem; font-weight: 500;
+      color: #fff; white-space: nowrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+      padding-bottom: 0.2rem;
+      transition: border-color var(--duration-fast) var(--ease-out);
     }
-    .card:hover .card__cta { color: var(--purple-500); transform: translateX(4px); }
+    .card:hover .card__cta { border-color: #fff; }
 
-    /* Rotación de la paleta por caso: teal, purple, green glow */
-    :host(:nth-child(3n + 1)) .card__metric { background: var(--teal-100); color: var(--teal-900); }
-    :host(:nth-child(3n + 1)) .card__placeholder { background: var(--teal-100); border-color: rgba(42, 143, 157, 0.3); }
-    :host(:nth-child(3n + 2)) .card__metric { background: var(--purple-100); color: var(--purple-700); }
-    :host(:nth-child(3n + 2)) .card__placeholder { background: var(--purple-100); border-color: rgba(122, 79, 163, 0.3); }
-    :host(:nth-child(3n)) .card__metric { background: var(--green-glow-light); color: var(--green-glow-dark); }
-    :host(:nth-child(3n)) .card__placeholder { background: var(--green-glow-light); border-color: rgba(154, 166, 0, 0.35); }
+    @media (max-width: 560px) {
+      .card__arrow { top: 1.2rem; right: 1.2rem; width: 44px; height: 44px; }
+    }
   `]
 })
 export class TicketCardComponent {
   @Input({ required: true }) caso!: CaseStudy;
-  coverError = false;
+  @Input() index = 0;
 }
