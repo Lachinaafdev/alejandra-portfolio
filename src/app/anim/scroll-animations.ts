@@ -58,41 +58,4 @@ export class ImageRevealDirective implements OnInit, OnDestroy {
   }
 }
 
-/* ============================================================
-   appParallax — el elemento se desplaza en Y a otra velocidad
-   mientras cruza el viewport (scrub). Pensado para <img> dentro
-   de un contenedor con overflow hidden: se escala un poco para
-   que el desplazamiento nunca deje huecos.
-   Uso: <img appParallax /> · [parallaxY]="30"
-   ============================================================ */
-@Directive({ selector: '[appParallax]', standalone: true })
-export class ParallaxDirective implements OnInit, OnDestroy {
-  @Input() parallaxY = 26;
-  private el = inject(ElementRef<HTMLElement>);
-  private tween?: gsap.core.Tween;
-
-  ngOnInit(): void {
-    if (reducedMotion()) { return; }
-    const node = this.el.nativeElement;
-    const scale = 1 + (this.parallaxY * 2) / (node.clientHeight || 300);
-    this.tween = gsap.fromTo(node,
-      { y: -this.parallaxY, scale: Math.max(scale, 1.08) },
-      {
-        y: this.parallaxY,
-        scale: Math.max(scale, 1.08),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: node.parentElement ?? node,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.6,
-        },
-      }
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.tween?.scrollTrigger?.kill();
-    this.tween?.kill();
-  }
-}
+/* El parallax genérico vive ahora en src/app/motion/motion.ts */

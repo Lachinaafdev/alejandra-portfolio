@@ -3,7 +3,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
-import { ImageRevealDirective, ParallaxDirective } from '../anim/scroll-animations';
+import { ImageRevealDirective } from '../anim/scroll-animations';
+import { ParallaxDirective } from '../motion/motion';
 
 @Component({
   selector: 'app-case',
@@ -60,7 +61,7 @@ import { ImageRevealDirective, ParallaxDirective } from '../anim/scroll-animatio
                   @if (!imgError.has(img.src)) {
                     <span class="caso__figura-frame" appImageReveal
                           [revealDirection]="$index % 2 === 0 ? 'vertical' : 'diagonal'">
-                      <img [src]="img.src" [alt]="img.caption" loading="lazy" appParallax [parallaxY]="18" (error)="imgError.add(img.src)" />
+                      <img [src]="img.src" [alt]="img.caption" loading="lazy" appParallax (error)="imgError.add(img.src)" />
                     </span>
                   } @else {
                     <div class="caso__figura-placeholder">
@@ -149,9 +150,11 @@ import { ImageRevealDirective, ParallaxDirective } from '../anim/scroll-animatio
       aspect-ratio: 4 / 3; overflow: hidden;
       border-radius: var(--radius-md); border: 1px solid var(--border);
     }
+    /* Sobredimensionada verticalmente para que el parallax
+       (yPercent ±6) nunca deje huecos */
     .caso__figura img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; top: -12%; left: 0; right: 0;
+      width: 100%; height: 124%; object-fit: cover;
       display: block; will-change: transform;
     }
     .caso__figura-placeholder {
