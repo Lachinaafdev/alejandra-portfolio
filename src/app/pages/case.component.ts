@@ -124,7 +124,7 @@ import { ParallaxDirective } from '../motion/motion';
     .caso__meta strong {
       display: block; font-family: var(--mono); font-weight: 500;
       font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--cenote); margin-bottom: 0.4rem;
+      color: var(--teal-800); margin-bottom: 0.4rem;
     }
     .caso__metric span { font-family: var(--mono); color: var(--coral); font-size: 1.2rem; }
 

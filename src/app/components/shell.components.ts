@@ -11,9 +11,9 @@ import { TranslateService, TranslatePipe, MagneticDirective } from '../i18n/i18n
       <div class="wrap header__in">
         <a routerLink="/" class="header__logo">A·Fierro</a>
         <nav class="header__nav">
-          <a routerLink="/" fragment="casos">{{ 'nav.cases' | t }}</a>
+          <a routerLink="/" fragment="casos" class="header__hide-xs">{{ 'nav.cases' | t }}</a>
           <a routerLink="/metodologia-ia" class="header__hide-sm">{{ 'nav.method' | t }}</a>
-          <a routerLink="/" fragment="sobre-mi">{{ 'nav.about' | t }}</a>
+          <a routerLink="/" fragment="sobre-mi" class="header__hide-xs">{{ 'nav.about' | t }}</a>
           <button
             class="header__lang"
             type="button"
@@ -73,6 +73,7 @@ import { TranslateService, TranslatePipe, MagneticDirective } from '../i18n/i18n
     .header__cta:hover { background: #fff; color: #000; }
 
     @media (max-width: 620px) { .header__nav { gap: 0.9rem; } .header__hide-sm { display: none; } }
+    @media (max-width: 460px) { .header__hide-xs { display: none; } }
   `]
 })
 export class HeaderComponent {
