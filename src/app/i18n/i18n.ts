@@ -3,10 +3,7 @@ import {
   inject, signal, computed, effect, OnInit, Input,
 } from '@angular/core';
 import { CaseStudy } from '../data/cases';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from '../motion/motion';
 
 export type Lang = 'es' | 'en';
 

@@ -1,10 +1,7 @@
 import { AfterViewInit, Component, ElementRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService, TranslatePipe, MagneticDirective } from '../i18n/i18n';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from '../motion/motion';
 
 @Component({
   selector: 'app-header',
