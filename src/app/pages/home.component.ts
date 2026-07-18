@@ -1,195 +1,251 @@
-import { AfterViewInit, Component, ElementRef, inject } from '@angular/core';
+import {
+  Component, ElementRef, OnDestroy, afterNextRender, effect, inject, viewChild,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslateService, TranslatePipe, RevealDirective, MagneticDirective } from '../i18n/i18n';
+import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 import { TicketCardComponent } from '../components/ticket-card.component';
-import { gsap } from 'gsap';
+import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective, MagneticDirective],
+  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective],
   template: `
-    <!-- HERO (timeline GSAP de entrada + blob de gradiente flotante) -->
+    <!-- HERO: blanco, tipografía gigante, entrada por mask reveal (solo CSS) -->
     <section class="hero wrap">
-      <div class="hero__blob" aria-hidden="true"></div>
-      <p class="eyebrow hero__enter">{{ 'hero.eyebrow' | t }}</p>
-      <h1 class="hero__enter">
-        {{ 'hero.titleA' | t }}
-        <em>{{ 'hero.titleEm' | t }}</em>
-        {{ 'hero.titleB' | t }}
-      </h1>
-      <p class="hero__sub hero__enter">{{ 'hero.sub' | t }}</p>
-      <div class="hero__facts hero__enter">
-        @for (fact of ('hero.facts' | t); track $index) {
-          <div><span>{{ fact.value }}</span>{{ fact.label }}</div>
-        }
+      <div class="mask"><p class="eyebrow" style="animation-delay: 0s">{{ 'hero.eyebrow' | t }}</p></div>
+      <div class="mask">
+        <h1 style="animation-delay: 0.08s">
+          {{ 'hero.titleA' | t }}
+          <em>{{ 'hero.titleEm' | t }}</em>
+          {{ 'hero.titleB' | t }}
+        </h1>
       </div>
-    </section>
-
-    <!-- CASOS (reveal al hacer scroll) -->
-    <section id="casos" class="wrap casos">
-      <div class="sec-head" appReveal>
-        <span class="sec-head__n">01</span>
-        <p class="eyebrow">{{ 'cases.eyebrow' | t }}</p>
-        <span class="sec-head__line"></span>
-      </div>
-      <h2 appReveal>{{ 'cases.title' | t }}</h2>
-      <div class="casos__list">
-        @for (caso of i18n.cases(); track caso.slug) {
-          <app-ticket-card [caso]="caso" appReveal [revealDelay]="$index * 120" />
-        }
-      </div>
-    </section>
-
-
-    <!-- METODOLOGÍA CON IA (card tipo consola → página de flujos) -->
-    <section id="metodologia" class="wrap metodo">
-      <div class="sec-head" appReveal>
-        <span class="sec-head__n">02</span>
-        <p class="eyebrow">{{ 'method.eyebrow' | t }}</p>
-        <span class="sec-head__line"></span>
-      </div>
-      <a class="prompt" routerLink="/metodologia-ia" appReveal>
-        <div class="prompt__bar">
-          <span class="prompt__dot prompt__dot--teal"></span>
-          <span class="prompt__dot prompt__dot--purple"></span>
-          <span class="prompt__dot prompt__dot--green"></span>
-          <span class="prompt__path">{{ 'method.card.path' | t }}</span>
-          <span class="prompt__count">{{ 'method.card.count' | t }}</span>
+      <div class="mask"><p class="hero__sub" style="animation-delay: 0.2s">{{ 'hero.sub' | t }}</p></div>
+      <div class="mask">
+        <div class="hero__facts" style="animation-delay: 0.3s">
+          @for (fact of ('hero.facts' | t); track $index) {
+            <div><span>{{ fact.value }}</span>{{ fact.label }}</div>
+          }
         </div>
-        <div class="prompt__body">
-          <h2>{{ 'method.title' | t }}</h2>
-          <p>{{ 'method.card.text' | t }}</p>
-          <ul class="prompt__flows">
-            @for (flow of ('method.card.flows' | t); track $index) {
-              <li><span class="prompt__num">0{{ $index + 1 }}</span>{{ flow }}</li>
+      </div>
+    </section>
+
+    <!-- REEL PINEADO: blanco/completo → gris/encogido-redondeado → negro -->
+    <div class="reel-zone" #reelZone>
+      <div class="reel-sticky" #reelSticky>
+        <div class="reel" #reel>
+          <div class="reel__fallback" aria-hidden="true"></div>
+          <video autoplay muted loop playsinline preload="auto" src="assets/video/reel.mp4"></video>
+          <span class="reel__hint">{{ 'reel.hint' | t }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LÁMINA BLANCA: pasa por encima del reel pineado -->
+    <div class="over">
+      <!-- Marquee infinito con el stack -->
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__track">
+          @for (group of [0, 1]; track group) {
+            <div class="marquee__group">
+              @for (skill of ('about.stack' | t); track $index) {
+                <span>{{ skill }}</span><span class="marquee__sep">✳</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- CASOS: cards planas full-width -->
+      <section id="casos" class="casos">
+        <div class="wrap">
+          <div class="sec-head" appReveal>
+            <span class="sec-head__n">01</span>
+            <p class="eyebrow">{{ 'cases.eyebrow' | t }}</p>
+            <span class="sec-head__line"></span>
+          </div>
+          <h2 appReveal>{{ 'cases.title' | t }}</h2>
+        </div>
+        <div class="casos__list">
+          @for (caso of i18n.cases(); track caso.slug) {
+            <app-ticket-card [caso]="caso" [index]="$index" />
+          }
+        </div>
+      </section>
+
+      <!-- METODOLOGÍA CON IA (card tipo consola → página de flujos) -->
+      <section id="metodologia" class="wrap metodo">
+        <div class="sec-head" appReveal>
+          <span class="sec-head__n">02</span>
+          <p class="eyebrow">{{ 'method.eyebrow' | t }}</p>
+          <span class="sec-head__line"></span>
+        </div>
+        <a class="prompt" routerLink="/metodologia-ia" appReveal>
+          <div class="prompt__bar">
+            <span class="prompt__dot prompt__dot--teal"></span>
+            <span class="prompt__dot prompt__dot--coral"></span>
+            <span class="prompt__dot prompt__dot--navy"></span>
+            <span class="prompt__path">{{ 'method.card.path' | t }}</span>
+            <span class="prompt__count">{{ 'method.card.count' | t }}</span>
+          </div>
+          <div class="prompt__body">
+            <h2>{{ 'method.title' | t }}</h2>
+            <p>{{ 'method.card.text' | t }}</p>
+            <ul class="prompt__flows">
+              @for (flow of ('method.card.flows' | t); track $index) {
+                <li><span class="prompt__num">0{{ $index + 1 }}</span>{{ flow }}</li>
+              }
+            </ul>
+            <span class="prompt__cta">{{ 'method.card.cta' | t }}</span>
+          </div>
+        </a>
+      </section>
+
+      <!-- SOBRE MÍ -->
+      <section id="sobre-mi" class="wrap sobre">
+        <div class="sec-head" appReveal>
+          <span class="sec-head__n">03</span>
+          <p class="eyebrow">{{ 'about.eyebrow' | t }}</p>
+          <span class="sec-head__line"></span>
+        </div>
+        <h2 appReveal>{{ 'about.title' | t }}</h2>
+        <div class="sobre__grid">
+          <div class="sobre__text" appReveal>
+            <p>{{ 'about.p1' | t }}</p>
+            <p>{{ 'about.p2' | t }}</p>
+          </div>
+          <ul class="sobre__stack" appReveal [revealDelay]="150">
+            @for (skill of ('about.stack' | t); track $index) {
+              <li>{{ skill }}</li>
             }
           </ul>
-          <span class="prompt__cta">{{ 'method.card.cta' | t }}</span>
         </div>
-      </a>
-    </section>
-
-    <!-- SOBRE MÍ -->
-    <section id="sobre-mi" class="wrap sobre">
-      <div class="sec-head" appReveal>
-        <span class="sec-head__n">03</span>
-        <p class="eyebrow">{{ 'about.eyebrow' | t }}</p>
-        <span class="sec-head__line"></span>
-      </div>
-      <h2 appReveal>{{ 'about.title' | t }}</h2>
-      <div class="sobre__grid">
-        <div class="sobre__text" appReveal>
-          <p>{{ 'about.p1' | t }}</p>
-          <p>{{ 'about.p2' | t }}</p>
-        </div>
-        <ul class="sobre__stack" appReveal [revealDelay]="150">
-          @for (skill of ('about.stack' | t); track $index) {
-            <li>{{ skill }}</li>
-          }
-        </ul>
-      </div>
-    </section>
+      </section>
+    </div>
   `,
   styles: [`
-    .hero { position: relative; padding-top: 7rem; padding-bottom: 5rem; }
-    /* Retícula de puntos sutil: textura de mesa de trabajo */
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(var(--border-strong) 1px, transparent 1px);
-      background-size: 26px 26px;
-      mask-image: radial-gradient(ellipse 70% 60% at 75% 20%, black 0%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse 70% 60% at 75% 20%, black 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-    }
+    /* ---------- HERO ---------- */
+    .hero { padding-top: 6rem; padding-bottom: 7rem; }
     .hero h1 {
-      font-size: clamp(2.4rem, 6vw, 4.3rem);
-      line-height: 1.06;
-      margin: 1.3rem 0 1.6rem;
-      max-width: 21ch;
-      position: relative;
+      font-size: clamp(3.2rem, 11.5vw, 10.5rem);
+      line-height: 1.0;
+      margin: 1.6rem 0 2rem;
     }
-    .hero h1 em {
-      font-style: italic;
-      color: var(--teal-900);
-      /* Marcador green glow: barrido tipo subrayado de plumón */
-      background: linear-gradient(120deg, var(--green-glow-light), var(--green-glow-light));
-      background-repeat: no-repeat;
-      background-position: 0 82%;
-      background-size: 0% 38%;
-      animation: markerSweep 0.8s var(--ease-out) 1.1s forwards;
-    }
-    @keyframes markerSweep { to { background-size: 100% 38%; } }
-
-    .hero__sub { max-width: 52ch; color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; }
-
-    /* Stats como bloques de color suaves: cifra en serif, etiqueta en mono */
+    .hero h1 em { font-style: normal; color: var(--cenote); }
+    .hero__sub { max-width: 54ch; color: var(--text-secondary); font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.8; }
     .hero__facts {
-      display: flex; flex-wrap: wrap; gap: 1rem;
-      margin-top: 3.5rem;
+      display: flex; flex-wrap: wrap; gap: 2.5rem;
+      margin-top: 3.5rem; padding-top: 1.4rem;
+      border-top: 1px solid var(--linea);
       font-family: var(--mono); font-size: 0.66rem;
       text-transform: uppercase; letter-spacing: 0.12em;
       color: var(--gray-dark);
     }
-    .hero__facts div {
-      padding: 1.1rem 1.4rem;
-      border-radius: var(--radius-md);
-      transition: transform var(--duration-base) var(--ease-out);
-    }
-    .hero__facts div:hover { transform: translateY(-4px); }
-    .hero__facts div:nth-child(3n + 1) { background: var(--teal-100); }
-    .hero__facts div:nth-child(3n + 2) { background: var(--purple-100); }
-    .hero__facts div:nth-child(3n) { background: var(--green-glow-light); }
     .hero__facts span {
-      display: block; font-family: var(--display); font-weight: 700;
-      font-size: 1.55rem; letter-spacing: -0.5px;
-      margin-bottom: 0.3rem; text-transform: none;
-    }
-    .hero__facts div:nth-child(3n + 1) span { color: var(--teal-900); }
-    .hero__facts div:nth-child(3n + 2) span { color: var(--purple-700); }
-    .hero__facts div:nth-child(3n) span { color: var(--green-glow-dark); }
-
-    /* Blob de gradiente: aporta color sin ensuciar la lectura */
-    .hero__blob {
-      position: absolute; top: 2rem; right: -6rem;
-      width: 420px; height: 420px;
-      background: radial-gradient(circle at 35% 35%, var(--teal-100) 0%, var(--purple-100) 55%, transparent 75%);
-      border-radius: 50%;
-      filter: blur(40px);
-      opacity: 0.9;
-      pointer-events: none;
-      z-index: -1;
+      display: block; font-family: var(--display); font-weight: 600;
+      font-size: 1.4rem; letter-spacing: -0.02em;
+      margin-bottom: 0.3rem; text-transform: none; color: var(--text-primary);
     }
 
-    /* Estado inicial de la entrada del hero (lo anima GSAP) */
-    .hero__enter { opacity: 0; }
-    @media (prefers-reduced-motion: reduce) {
-      .hero__enter { opacity: 1; }
+    /* Mask reveal de entrada: contenedor que recorta, hijo que sube.
+       El texto llega async del i18n, así que es 100% CSS. */
+    .mask { overflow: hidden; }
+    .mask > * {
+      transform: translateY(115%);
+      animation: maskUp 1s var(--ease-mask) forwards;
+    }
+    @keyframes maskUp { to { transform: translateY(0); } }
+
+    /* ---------- REEL PINEADO ---------- */
+    .reel-zone { height: 300vh; position: relative; }
+    .reel-sticky {
+      position: sticky; top: 0; height: 100vh;
+      overflow: hidden; display: grid; place-items: center;
+      background: #fff;
+    }
+    .reel {
+      position: relative;
+      width: 100vw; height: 100vh;
+      border-radius: 0; overflow: hidden;
+      transform-origin: center;
+      will-change: transform, border-radius;
+    }
+    .reel video {
+      position: absolute; inset: 0; z-index: 1;
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    /* Mientras no exista el mp4, un gradiente animado "reproduce" algo */
+    .reel__fallback {
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(120deg, #22336B, #0B2A33, #0E8F82);
+      background-size: 300% 300%;
+      animation: reelFlow 9s ease-in-out infinite;
+    }
+    @keyframes reelFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .reel__hint {
+      position: absolute; z-index: 2;
+      left: 50%; bottom: 2.2rem; transform: translateX(-50%);
+      font-family: var(--mono); font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; white-space: nowrap;
+      color: #fff; background: rgba(5, 5, 5, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px; padding: 0.55rem 1.2rem;
+      backdrop-filter: blur(6px);
     }
 
-    .casos { padding-top: 3rem; }
-    .casos h2, .sobre h2 { font-size: clamp(1.8rem, 3.8vw, 2.6rem); margin: 1rem 0 2.2rem; }
-    /* Grid de proyectos: las imágenes son las protagonistas */
-    .casos__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; align-items: stretch; }
-    @media (max-width: 900px) { .casos__list { grid-template-columns: 1fr; max-width: 560px; } }
+    /* ---------- LÁMINA BLANCA SOBRE EL REEL ---------- */
+    .over {
+      position: relative; z-index: 5;
+      background: #fff;
+      margin-top: -60vh;
+      padding-top: 4.5rem;
+    }
 
+    /* ---------- MARQUEE ---------- */
+    .marquee {
+      overflow: hidden;
+      border-top: 1px solid var(--linea);
+      border-bottom: 1px solid var(--linea);
+      padding: 1.3rem 0;
+      margin-bottom: 6rem;
+    }
+    .marquee__track {
+      display: flex; width: max-content;
+      animation: marqueeMove 28s linear infinite;
+    }
+    .marquee:hover .marquee__track { animation-play-state: paused; }
+    .marquee__group {
+      display: flex; align-items: center; gap: 2.2rem;
+      padding-right: 2.2rem; white-space: nowrap;
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(1.3rem, 2.6vw, 2.1rem);
+      letter-spacing: -0.02em; color: var(--text-primary);
+    }
+    .marquee__sep { color: var(--cenote); font-size: 0.75em; }
+    @keyframes marqueeMove { to { transform: translateX(-50%); } }
 
-    /* Metodología con IA — card tipo consola de prompt,
-       deliberadamente distinto al ticket de los casos */
-    .metodo { padding-top: 6rem; }
+    /* ---------- SECCIONES ---------- */
+    .casos h2, .sobre h2 {
+      font-size: clamp(2.4rem, 5.5vw, 4.4rem);
+      margin: 1.2rem 0 2.6rem;
+    }
+    .casos__list { display: flex; flex-direction: column; gap: 1rem; }
+
+    /* Metodología: la card consola, aplanada al nuevo tema */
+    .metodo { padding-top: 7rem; }
     .prompt {
       display: block; margin-top: 1.2rem;
-      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      border: 1px solid var(--linea); border-radius: 0;
       background: var(--white);
       color: var(--text-primary); overflow: hidden;
       position: relative;
-      transition: border-color var(--duration-base) var(--ease-out),
-                  box-shadow var(--duration-base) var(--ease-out),
-                  transform var(--duration-base) var(--ease-out);
+      transition: border-color var(--duration-base) var(--ease-out);
     }
-    /* Barra de acento superior: teal → purple, se dibuja al hover */
     .prompt::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 3px;
@@ -197,109 +253,132 @@ import { gsap } from 'gsap';
       transform: scaleX(0); transform-origin: left;
       transition: transform var(--duration-slow) var(--ease-out);
     }
-    .prompt:hover { border-color: var(--teal-700); box-shadow: var(--shadow-lg); transform: translateY(-6px); }
+    .prompt:hover { border-color: var(--text-primary); }
     .prompt:hover::before { transform: scaleX(1); }
 
     .prompt__bar {
       display: flex; align-items: center; gap: 0.45rem;
       padding: 0.85rem 1.4rem;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--linea);
       background: var(--gray-light);
       font-family: var(--mono); font-size: 0.72rem;
     }
     .prompt__dot { width: 10px; height: 10px; border-radius: 50%; }
-    .prompt__dot--teal { background: var(--teal-700); }
-    .prompt__dot--purple { background: var(--purple-500); }
-    .prompt__dot--green { background: var(--green-glow); }
-    .prompt__path { margin-left: 0.8rem; color: var(--cocoa-500); }
+    .prompt__dot--teal { background: var(--cenote); }
+    .prompt__dot--coral { background: var(--coral); }
+    .prompt__dot--navy { background: var(--navy); }
+    .prompt__path { margin-left: 0.8rem; color: var(--gray-dark); }
     .prompt__path::after {
       content: '▍';
-      color: var(--teal-700);
+      color: var(--cenote);
       animation: caretBlink 1.1s steps(1) infinite;
     }
     @keyframes caretBlink { 50% { opacity: 0; } }
     .prompt__count {
       margin-left: auto;
-      background: var(--purple-100); color: var(--purple-500);
-      border: 1px solid rgba(122, 79, 163, 0.2);
+      background: var(--white); color: var(--teal-900);
+      border: 1px solid var(--linea);
       border-radius: 999px; padding: 0.2rem 0.75rem;
       font-weight: 500;
     }
-    .prompt__body { padding: 2.2rem 1.8rem 2rem; }
-    .prompt__body h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); margin-bottom: 0.8rem; }
+    .prompt__body { padding: 2.4rem 1.8rem 2.2rem; }
+    .prompt__body h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); margin-bottom: 0.9rem; }
     .prompt__body > p { max-width: 62ch; color: var(--text-secondary); font-size: 0.98rem; }
     .prompt__flows {
       list-style: none; margin: 1.6rem 0 0;
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem 1.5rem;
-      font-family: var(--mono); font-size: 0.8rem; color: var(--cocoa-700);
+      font-family: var(--mono); font-size: 0.8rem; color: var(--gray-dark);
     }
     .prompt__flows li {
       padding-bottom: 0.55rem;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--linea);
       transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
     }
-    .prompt:hover .prompt__flows li:hover { color: var(--purple-500); transform: translateX(4px); }
+    .prompt:hover .prompt__flows li:hover { color: var(--text-primary); transform: translateX(4px); }
     .prompt__num { color: var(--gray-medium); margin-right: 0.7rem; font-size: 0.68rem; }
     .prompt__cta {
       display: inline-block; margin-top: 1.9rem;
       font-family: var(--mono); font-size: 0.82rem; font-weight: 500;
-      color: var(--teal-700);
+      color: var(--teal-900);
       transition: color var(--duration-fast) var(--ease-out);
     }
-    /* Se lee como un comando por ejecutar */
-    .prompt__cta::before { content: '$ '; color: var(--green-glow-dark); }
-    .prompt:hover .prompt__cta { color: var(--purple-500); }
+    .prompt__cta::before { content: '$ '; color: var(--gray-medium); }
+    .prompt:hover .prompt__cta { color: var(--text-primary); }
     @media (max-width: 860px) { .prompt__flows { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 560px) {
       .prompt__flows { grid-template-columns: 1fr; }
       .prompt__path { display: none; }
     }
 
-    .sobre { padding-top: 6rem; }
+    .sobre { padding-top: 7rem; padding-bottom: 3rem; }
     .sobre__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; }
     .sobre__text p + p { margin-top: 1rem; }
-    .sobre__text { color: var(--text-secondary); }
-    /* Capitular editorial en el primer párrafo */
-    .sobre__text p:first-of-type::first-letter {
-      font-family: var(--display); font-weight: 700;
-      font-size: 3.1rem; line-height: 0.85;
-      float: left; padding: 0.1em 0.45rem 0 0;
-      color: var(--teal-700);
-    }
-    /* Skills como tags de color rotando la paleta */
+    .sobre__text { color: var(--text-secondary); max-width: 60ch; }
     .sobre__stack { list-style: none; display: flex; flex-wrap: wrap; align-content: start; gap: 0.6rem; }
     .sobre__stack li {
       font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
-      border-radius: 999px;
-      padding: 0.5rem 1rem;
-      transition: transform var(--duration-fast) var(--ease-out);
+      border: 1px solid var(--border-strong); border-radius: 999px;
+      padding: 0.5rem 1rem; color: var(--text-primary);
+      transition: border-color var(--duration-fast) var(--ease-out),
+                  background var(--duration-fast) var(--ease-out);
     }
-    .sobre__stack li:hover { transform: translateY(-3px); }
-    .sobre__stack li:nth-child(4n + 1) { background: var(--teal-100); color: var(--teal-900); }
-    .sobre__stack li:nth-child(4n + 2) { background: var(--purple-100); color: var(--purple-700); }
-    .sobre__stack li:nth-child(4n + 3) { background: var(--green-glow-light); color: var(--green-glow-dark); }
-    .sobre__stack li:nth-child(4n) { background: var(--wax-paper); color: var(--cocoa-700); }
+    .sobre__stack li:hover { border-color: var(--text-primary); background: var(--gray-light); }
     @media (max-width: 720px) { .sobre__grid { grid-template-columns: 1fr; } }
+
+    /* ---------- REDUCED MOTION: todo estático ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      .mask > * { transform: none; animation: none; }
+      .reel-zone { height: auto; }
+      .reel-sticky { position: static; background: #111; }
+      .over { margin-top: 0; }
+      .marquee__track { animation: none; }
+    }
   `]
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements OnDestroy {
   i18n = inject(TranslateService);
-  private host = inject(ElementRef<HTMLElement>);
 
-  ngAfterViewInit(): void {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
-    const root = this.host.nativeElement;
+  private reelZone = viewChild.required<ElementRef<HTMLElement>>('reelZone');
+  private reelSticky = viewChild.required<ElementRef<HTMLElement>>('reelSticky');
+  private reel = viewChild.required<ElementRef<HTMLElement>>('reel');
 
-    // Entrada del hero: cascada con snap suave
-    gsap.fromTo(root.querySelectorAll('.hero__enter'),
-      { opacity: 0, y: 42 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.13, clearProps: 'transform' }
-    );
+  private reelTl?: gsap.core.Timeline;
 
-    // El blob respira lentamente todo el tiempo
-    gsap.to(root.querySelector('.hero__blob'), {
-      y: 30, x: -20, scale: 1.08,
-      duration: 7, ease: 'sine.inOut', repeat: -1, yoyo: true,
+  constructor() {
+    afterNextRender(() => this.initReel());
+
+    // El texto llega async del i18n y cambia las alturas del layout:
+    // recalcular las posiciones de todos los ScrollTriggers.
+    effect(() => {
+      this.i18n.cases();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
     });
+  }
+
+  /* Secuencia del reel (scrub sobre los 300vh de .reel-zone):
+     0.00–0.15 blanco, video completo · 0.15–0.55 gris + encoge y
+     redondea · 0.55–1.00 negro, video pequeño al centro. */
+  private initReel(): void {
+    if (prefersReducedMotion()) { return; }
+
+    this.reelTl = gsap.timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: {
+        trigger: this.reelZone().nativeElement,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: true,
+      },
+    });
+
+    this.reelTl
+      .to(this.reelSticky().nativeElement, { backgroundColor: '#8f8f8f', duration: 0.4 }, 0.15)
+      .to(this.reel().nativeElement, { scale: 0.58, borderRadius: 28, duration: 0.4 }, 0.15)
+      .to(this.reelSticky().nativeElement, { backgroundColor: '#050505', duration: 0.45 }, 0.55);
+  }
+
+  ngOnDestroy(): void {
+    this.reelTl?.scrollTrigger?.kill();
+    this.reelTl?.kill();
   }
 }
