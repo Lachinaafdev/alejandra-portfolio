@@ -105,7 +105,7 @@ import { ParallaxDirective } from '../motion/motion';
     }
   `,
   styles: [`
-    .caso { padding-top: 4rem; max-width: 780px; }
+    .caso { padding-top: 7.5rem; max-width: 780px; }
     .caso__back { font-family: var(--mono); font-size: 0.82rem; }
     .caso__head h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.08; margin: 1rem 0 2rem; }
     .caso__head { animation: caseIn 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both; }

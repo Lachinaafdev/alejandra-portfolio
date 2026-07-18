@@ -92,7 +92,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     </article>
   `,
   styles: [`
-    .ia { padding-top: 4rem; max-width: 880px; }
+    .ia { padding-top: 7.5rem; max-width: 880px; }
     .ia__back { font-family: var(--mono); font-size: 0.82rem; }
 
     .ia__head { animation: iaIn 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
