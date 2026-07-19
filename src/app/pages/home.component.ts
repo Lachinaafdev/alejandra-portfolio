@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, afterNextRender, inject } from '@angular/core';
+import { Component, ElementRef, OnDestroy, afterNextRender, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 import { TicketCardComponent } from '../components/ticket-card.component';
@@ -13,15 +13,16 @@ gsap.registerPlugin(ScrollTrigger);
   standalone: true,
   imports: [RouterLink, TicketCardComponent, CaseEntranceDirective, TranslatePipe, RevealDirective],
   template: `
-    <!-- HERO blanco: entrada con mask reveal (solo CSS) -->
+    <!-- HERO blanco: h1 corto gigante + intro con destacados (masks solo CSS) -->
     <section class="hero wrap">
-      <div class="mask"><p class="eyebrow mask__in">{{ 'hero.eyebrow' | t }}</p></div>
-      <div class="mask"><h1 class="mask__in mask__in--d1">
+      <div class="mask"><p class="eyebrow mask__in">{{ heroTags() }}</p></div>
+      <div class="mask"><h1 class="mask__in mask__in--d1">{{ heroRole() }}</h1></div>
+      <div class="mask"><p class="hero__intro mask__in mask__in--d2">
         {{ 'hero.titleA' | t }}
         <em>{{ 'hero.titleEm' | t }}</em>
         {{ 'hero.titleB' | t }}
-      </h1></div>
-      <div class="mask"><p class="hero__sub mask__in mask__in--d2">{{ 'hero.sub' | t }}</p></div>
+      </p></div>
+      <div class="mask"><p class="hero__sub mask__in mask__in--d3">{{ 'hero.sub' | t }}</p></div>
       <div class="mask"><div class="hero__facts mask__in mask__in--d3">
         @for (fact of ('hero.facts' | t); track $index) {
           <div><span>{{ fact.value }}</span>{{ fact.label }}</div>
@@ -115,13 +116,22 @@ gsap.registerPlugin(ScrollTrigger);
   `,
   styles: [`
     /* ---------- HERO ---------- */
-    .hero { padding-top: 10rem; padding-bottom: 4rem; }
+    .hero { padding-top: 8.5rem; padding-bottom: 4rem; }
     .hero h1 {
       font-size: clamp(3.2rem, 11.5vw, 10.5rem);
-      margin: 1.2rem 0 2rem;
+      letter-spacing: -0.045em;
+      margin: 0.8rem 0 0;
+      max-width: 8ch;
     }
-    .hero h1 em { font-style: normal; color: var(--teal-700); }
-    .hero__sub { max-width: 54ch; color: var(--text-secondary); font-size: 1.08rem; line-height: 1.8; }
+    .hero__intro {
+      margin-top: 2.4rem;
+      max-width: 62ch;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .hero__intro em { font-style: normal; font-weight: 500; color: var(--teal-800); }
+    .hero__sub { margin-top: 1.4rem; max-width: 54ch; color: var(--text-secondary); font-size: 0.98rem; line-height: 1.8; }
     .hero__facts {
       display: flex; flex-wrap: wrap; gap: 2.8rem;
       margin-top: 2.6rem; padding-top: 1.6rem;
@@ -183,11 +193,13 @@ gsap.registerPlugin(ScrollTrigger);
       to { background-position: 100% 50%; }
     }
     .reel__hint {
-      position: absolute; bottom: 2.2rem; left: 50%;
+      position: absolute; bottom: 6%; left: 50%;
       transform: translateX(-50%);
       font-family: var(--mono); font-size: 0.72rem; white-space: nowrap;
-      background: rgba(255, 255, 255, 0.92); color: var(--text-primary);
-      border-radius: 999px; padding: 0.55rem 1.2rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      background: rgba(0, 0, 0, 0.35); color: #fff;
+      backdrop-filter: blur(6px);
+      border-radius: 999px; padding: 0.6rem 1.2rem;
     }
 
     /* ---------- LÁMINA QUE CUBRE EL REEL ---------- */
@@ -200,9 +212,12 @@ gsap.registerPlugin(ScrollTrigger);
 
     @media (prefers-reduced-motion: reduce) {
       .reel-zone { height: auto; }
-      .reel-sticky { position: static; height: auto; background: #111; padding: 0; }
-      .reel { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+      .reel-sticky { position: static; height: 70vh; background: #111; padding: 0; }
+      .reel { width: 100%; height: 100%; }
       .over { margin-top: 0; }
+    }
+    @media (max-width: 900px) {
+      .over { margin-top: -45vh; }
     }
 
     /* ---------- MARQUEE ---------- */
@@ -218,15 +233,20 @@ gsap.registerPlugin(ScrollTrigger);
     }
     .marquee:hover .marquee__track { animation-play-state: paused; }
     .marquee__group {
-      display: flex; align-items: center; gap: 2.4rem;
-      padding-right: 2.4rem;
+      display: flex; align-items: center; gap: 3.4rem;
+      padding-right: 3.4rem;
       font-family: var(--display); font-weight: 600;
-      font-size: clamp(1.1rem, 2.4vw, 1.6rem);
+      font-size: 1.15rem;
       letter-spacing: -0.02em;
       white-space: nowrap; color: var(--text-primary);
     }
-    .marquee__group span { display: inline-flex; align-items: center; gap: 2.4rem; }
-    .marquee__group i { font-style: normal; color: var(--teal-700); font-size: 0.9em; }
+    .marquee__group span {
+      display: inline-flex; align-items: center; gap: 3.4rem;
+      opacity: 0.5;
+      transition: opacity var(--duration-base) var(--ease-out);
+    }
+    .marquee__group span:hover { opacity: 1; }
+    .marquee__group i { font-style: normal; color: var(--teal-700); opacity: 0.9; }
     @media (prefers-reduced-motion: reduce) {
       .marquee__track { animation: none; }
     }
@@ -321,6 +341,15 @@ export class HomeComponent implements OnDestroy {
   i18n = inject(TranslateService);
   private host = inject(ElementRef<HTMLElement>);
   private reelTl?: gsap.core.Timeline;
+
+  /* El h1 gigante es el primer segmento del eyebrow ("Product
+     Designer"); el resto queda como línea pequeña arriba. Todo
+     sale del JSON, nada inventado. */
+  private heroParts = computed(() =>
+    String(this.i18n.t('hero.eyebrow') || '').split('·').map(s => s.trim())
+  );
+  heroRole = computed(() => this.heroParts()[0] ?? '');
+  heroTags = computed(() => this.heroParts().slice(1).join(' · '));
 
   constructor() {
     afterNextRender(() => this.initReel());

@@ -90,7 +90,7 @@ export class HeaderComponent {
         <div>
           <p class="eyebrow">{{ 'footer.eyebrow' | t }}</p>
           <h2>{{ 'footer.titleA' | t }}<br />{{ 'footer.titleB' | t }}</h2>
-          <a href="mailto:alejandrafierrorm@gmail.com" class="btn btn--solid" appMagnetic>alejandrafierrorm&#64;gmail.com</a>
+          <a href="mailto:alejandrafierrorm@gmail.com" class="footer__mail" appMagnetic>alejandrafierrorm&#64;gmail.com</a>
         </div>
         <div class="footer__meta">
           <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn ↗</a>
@@ -106,8 +106,20 @@ export class HeaderComponent {
     .footer__in { padding-top: 6rem; padding-bottom: 3rem; display: grid; gap: 3.5rem; }
     .footer h2 {
       font-size: clamp(2.6rem, 8vw, 6.5rem);
-      margin: 1.2rem 0 2.4rem;
+      letter-spacing: -0.04em;
+      margin: 1.2rem 0 0;
     }
+    .footer__mail {
+      display: inline-block; margin-top: 1.8rem;
+      font-family: var(--mono);
+      font-size: clamp(1rem, 2.4vw, 1.5rem);
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--text-primary);
+      padding-bottom: 0.3rem;
+      transition: color var(--duration-base) var(--ease-out),
+                  border-color var(--duration-base) var(--ease-out);
+    }
+    .footer__mail:hover { color: var(--teal-700); border-color: var(--teal-700); }
     .footer__meta {
       display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem;
       color: var(--text-secondary); font-size: 0.85rem; font-family: var(--mono);
