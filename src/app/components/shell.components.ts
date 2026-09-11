@@ -116,12 +116,12 @@ export class HeaderComponent implements AfterViewInit {
   template: `
     <footer class="footer">
       <div class="wrap footer__in">
-        <div>
-          <p class="eyebrow">{{ 'footer.eyebrow' | t }}</p>
-          <h2>{{ 'footer.titleA' | t }}<br /><em>{{ 'footer.titleB' | t }}</em></h2>
-          <a href="mailto:alejandrafierrorm@gmail.com" class="btn btn--solid" appMagnetic>alejandrafierrorm&#64;gmail.com</a>
-        </div>
-        <div class="footer__meta">
+        <p class="eyebrow">{{ 'footer.eyebrow' | t }}</p>
+        <h2>{{ 'footer.titleA' | t }}<br /><em>{{ 'footer.titleB' | t }}</em></h2>
+        <a href="mailto:alejandrafierrorm@gmail.com" class="btn btn--solid" appMagnetic>alejandrafierrorm&#64;gmail.com</a>
+      </div>
+      <div class="footer__bar">
+        <div class="wrap footer__meta">
           <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
           <span>{{ 'footer.location' | t }}</span>
           <span>{{ 'footer.rights' | t }}</span>
@@ -138,29 +138,33 @@ export class HeaderComponent implements AfterViewInit {
       background: var(--white);
       border-top: 1px solid var(--linea);
     }
-    .footer__in { padding-top: 6rem; padding-bottom: 3rem; display: grid; gap: 3.5rem; }
+    .footer__in { padding-top: 6.5rem; padding-bottom: 4rem; }
     .footer h2 {
       font-size: clamp(2.6rem, 8vw, 6.5rem);
       letter-spacing: -0.035em; line-height: 1.0;
       margin: 1.4rem 0 2.4rem;
     }
     .footer h2 em { font-style: normal; color: var(--cenote); }
+
+    /* Barra inferior oscura, full-bleed, con la meta y volver arriba */
+    .footer__bar { background: #050505; }
     .footer__meta {
       display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem;
-      color: var(--gray-dark); font-size: 0.85rem; font-family: var(--mono);
-      border-top: 1px solid var(--linea); padding-top: 1.4rem;
+      color: rgba(255, 255, 255, 0.65); font-size: 0.78rem; font-family: var(--mono);
+      padding-top: 1.1rem; padding-bottom: 1.1rem;
     }
-    .footer__meta a { color: var(--text-primary); }
-    .footer__meta a::after { content: ' ↗'; font-size: 0.75rem; }
-    .footer__meta a:hover { color: var(--teal-900); }
+    .footer__meta a { color: #fff; }
+    .footer__meta a::after { content: ' ↗'; font-size: 0.72rem; }
+    .footer__meta a:hover { color: var(--teal-300); }
     .footer__top {
       margin-left: auto;
       background: none; border: none; cursor: pointer;
-      font-family: var(--mono); font-size: 0.85rem;
-      color: var(--text-primary);
+      font-family: var(--mono); font-size: 0.78rem;
+      color: #fff;
       transition: color var(--duration-fast) var(--ease-out);
     }
-    .footer__top:hover { color: var(--teal-900); }
+    .footer__top:hover { color: var(--teal-300); }
+    .footer__top:focus-visible { outline-color: #fff; }
   `]
 })
 export class FooterComponent {

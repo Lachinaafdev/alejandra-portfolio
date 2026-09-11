@@ -1,5 +1,5 @@
 import {
-  Component, ElementRef, OnDestroy, afterNextRender, effect, inject, viewChild,
+  Component, ElementRef, OnDestroy, afterNextRender, computed, effect, inject, viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
@@ -11,15 +11,13 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
   standalone: true,
   imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective],
   template: `
-    <!-- HERO: blanco, tipografía gigante, entrada por mask reveal (solo CSS) -->
+    <!-- HERO: blanco, título corto y gigante tipo "Product Designer".
+         El h1 es el primer segmento del eyebrow i18n; el resto de
+         segmentos queda como línea meta. Entrada por mask reveal (CSS). -->
     <section class="hero wrap">
-      <div class="mask"><p class="eyebrow" style="animation-delay: 0s">{{ 'hero.eyebrow' | t }}</p></div>
+      <div class="mask"><p class="eyebrow" style="animation-delay: 0s">{{ heroParts().rest }}</p></div>
       <div class="mask">
-        <h1 style="animation-delay: 0.08s">
-          {{ 'hero.titleA' | t }}
-          <em>{{ 'hero.titleEm' | t }}</em>
-          {{ 'hero.titleB' | t }}
-        </h1>
+        <h1 style="animation-delay: 0.08s">{{ heroParts().main }}</h1>
       </div>
       <div class="mask"><p class="hero__sub" style="animation-delay: 0.2s">{{ 'hero.sub' | t }}</p></div>
       <div class="mask">
@@ -57,7 +55,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
         </div>
       </div>
 
-      <!-- CASOS: cards planas full-width -->
+      <!-- CASOS: grid de bloques planos con gradiente -->
       <section id="casos" class="casos">
         <div class="wrap">
           <div class="sec-head" appReveal>
@@ -66,12 +64,22 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
             <span class="sec-head__line"></span>
           </div>
           <h2 appReveal>{{ 'cases.title' | t }}</h2>
+          <div class="casos__list">
+            @for (caso of i18n.cases(); track caso.slug) {
+              <app-ticket-card [caso]="caso" [index]="$index" />
+            }
+          </div>
         </div>
-        <div class="casos__list">
-          @for (caso of i18n.cases(); track caso.slug) {
-            <app-ticket-card [caso]="caso" [index]="$index" />
-          }
-        </div>
+      </section>
+
+      <!-- STATEMENT: la frase de posicionamiento del hero, en grande -->
+      <section class="wrap statement" appReveal>
+        <p class="statement__text">
+          {{ 'hero.titleA' | t }}
+          <em>{{ 'hero.titleEm' | t }}</em>
+          {{ 'hero.titleB' | t }}
+        </p>
+        <a href="mailto:alejandrafierrorm@gmail.com" class="btn btn--solid">{{ 'nav.contact' | t }}</a>
       </section>
 
       <!-- METODOLOGÍA CON IA (card tipo consola → página de flujos) -->
@@ -129,10 +137,10 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     .hero { padding-top: 6rem; padding-bottom: 7rem; }
     .hero h1 {
       font-size: clamp(3.2rem, 11.5vw, 10.5rem);
-      line-height: 1.0;
-      margin: 1.6rem 0 2rem;
+      font-weight: 700;
+      line-height: 0.95;
+      margin: 1.2rem 0 1.8rem;
     }
-    .hero h1 em { font-style: normal; color: var(--cenote); }
     .hero__sub { max-width: 54ch; color: var(--text-secondary); font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.8; }
     .hero__facts {
       display: flex; flex-wrap: wrap; gap: 2.5rem;
@@ -234,7 +242,22 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       font-size: clamp(2.4rem, 5.5vw, 4.4rem);
       margin: 1.2rem 0 2.6rem;
     }
-    .casos__list { display: flex; flex-direction: column; gap: 1rem; }
+    .casos__list {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem; align-items: stretch;
+    }
+    @media (max-width: 980px) { .casos__list { grid-template-columns: 1fr; } }
+
+    /* Statement gigante después del grid, con el acento en color */
+    .statement { padding-top: 7rem; }
+    .statement__text {
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(2rem, 4.6vw, 4rem);
+      letter-spacing: -0.035em; line-height: 1.08;
+      color: var(--text-primary); max-width: 1050px;
+    }
+    .statement__text em { font-style: normal; color: var(--cenote); }
+    .statement .btn { margin-top: 2.4rem; }
 
     /* Metodología: la card consola, aplanada al nuevo tema */
     .metodo { padding-top: 7rem; }
@@ -337,6 +360,14 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 })
 export class HomeComponent implements OnDestroy {
   i18n = inject(TranslateService);
+
+  /* El eyebrow i18n ("Product Designer · Service Design · …") se parte:
+     el primer segmento es el título gigante, el resto la línea meta. */
+  heroParts = computed(() => {
+    const parts = String(this.i18n.t('hero.eyebrow') ?? '')
+      .split('·').map(p => p.trim()).filter(Boolean);
+    return { main: parts[0] ?? '', rest: parts.slice(1).join(' · ') };
+  });
 
   private reelZone = viewChild.required<ElementRef<HTMLElement>>('reelZone');
   private reelSticky = viewChild.required<ElementRef<HTMLElement>>('reelSticky');

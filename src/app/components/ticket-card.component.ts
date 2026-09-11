@@ -73,8 +73,8 @@ import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
     }
 
     .card__arrow {
-      position: absolute; top: 2rem; right: 2rem; z-index: 2;
-      width: 52px; height: 52px;
+      position: absolute; top: 1.4rem; right: 1.4rem; z-index: 2;
+      width: 46px; height: 46px;
       display: grid; place-items: center;
       border: 1px solid rgba(255, 255, 255, 0.55);
       border-radius: 50%;
@@ -87,8 +87,7 @@ import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
     .card__content {
       position: relative; z-index: 1;
       width: 100%;
-      padding: clamp(1.5rem, 4vw, 3rem);
-      max-width: 1200px; margin: 0 auto;
+      padding: clamp(1.4rem, 2.2vw, 2rem);
     }
     .card__eyebrow {
       font-family: var(--mono); font-size: 0.7rem; font-weight: 500;
@@ -97,25 +96,25 @@ import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
     }
     .card__content h3 {
       font-family: var(--display); font-weight: 600;
-      font-size: clamp(1.6rem, 3.6vw, 3rem);
-      letter-spacing: -0.03em; line-height: 1.05;
-      color: #fff; max-width: 22ch;
-      margin: 0.9rem 0 0.6rem;
+      font-size: clamp(1.35rem, 1.8vw, 1.75rem);
+      letter-spacing: -0.03em; line-height: 1.12;
+      color: #fff;
+      margin: 0.8rem 0 0.5rem;
     }
     .card__role { color: rgba(255, 255, 255, 0.75); font-size: 0.9rem; }
 
     .card__foot {
       display: flex; flex-wrap: wrap; align-items: flex-end;
       justify-content: space-between; gap: 1rem;
-      margin-top: 2rem;
+      margin-top: 1.6rem;
     }
     .card__metric {
-      font-family: var(--mono); font-size: 0.75rem; line-height: 1.4;
-      color: rgba(255, 255, 255, 0.85); max-width: 30ch;
+      font-family: var(--mono); font-size: 0.72rem; line-height: 1.4;
+      color: rgba(255, 255, 255, 0.85); max-width: 26ch;
     }
     .card__metric strong {
       display: block;
-      font-weight: 500; font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      font-weight: 500; font-size: clamp(1.5rem, 2vw, 2rem);
       letter-spacing: -0.02em; color: #fff;
     }
     .card__cta {
