@@ -78,6 +78,15 @@
     "TRAFIC",
     "SIRENIS"
   ],
+  "statement": {
+    "eyebrow": "Resumen",
+    "a": "Colaboro con aerolíneas y marcas de hospitalidad para diseñar productos",
+    "em1": "digitales",
+    "b": "bien pensados y experiencias de viaje, sin",
+    "em2": "rodeos",
+    "c": ".",
+    "cta": "Ver casos de estudio"
+  },
   "projects": [
     {
       "slug": "trafic-pos",

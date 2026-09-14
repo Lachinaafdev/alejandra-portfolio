@@ -95,11 +95,15 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
            "projects"; las entradas con slug enlazan a su caso. -->
       <section id="casos" class="casos">
         <div class="wrap">
+          <!-- Cabecera "01 · Casos de estudio" oculta a pedido del
+               prototipo. Cambia @if (false) por @if (true) para verla. -->
+          @if (false) {
           <div class="sec-head" appReveal>
             <span class="sec-head__n">01</span>
             <p class="eyebrow">{{ 'cases.eyebrow' | t }}</p>
             <span class="sec-head__line"></span>
           </div>
+          }
           <!-- Título de sección oculto (el mock muestra el grid directo).
                Cambia @if (false) por @if (true) para recuperarlo. -->
           @if (false) {
@@ -125,14 +129,18 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
         </div>
       </section>
 
-      <!-- STATEMENT: la frase de posicionamiento del hero, en grande -->
+      <!-- STATEMENT (Overview): texto grande en navy con palabras
+           destacadas en gris y CTA subrayado en coral, como el mock.
+           Todo sale de las llaves i18n statement.* -->
       <section class="wrap statement" appReveal>
+        <p class="statement__eyebrow">{{ 'statement.eyebrow' | t }}</p>
         <p class="statement__text">
-          {{ 'hero.titleA' | t }}
-          <em>{{ 'hero.titleEm' | t }}</em>
-          {{ 'hero.titleB' | t }}
+          {{ 'statement.a' | t }}
+          <em>{{ 'statement.em1' | t }}</em>
+          {{ 'statement.b' | t }}
+          <em>{{ 'statement.em2' | t }}</em>{{ 'statement.c' | t }}
         </p>
-        <a routerLink="/" fragment="casos" class="btn">{{ 'nav.cases' | t }}</a>
+        <a routerLink="/" fragment="casos" class="statement__cta">{{ 'statement.cta' | t }}</a>
       </section>
 
       <!-- METODOLOGÍA CON IA: oculta por ahora, como en el prototipo.
@@ -270,11 +278,11 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       position: relative; z-index: 5;
       background: #fff;
       margin-top: -60vh;
-      padding-top: 4.5rem;
+      padding-top: 3rem;
     }
 
     /* ---------- CARRUSEL DE MARCAS ---------- */
-    .clients { overflow: hidden; padding: 3.5rem 0 4rem; }
+    .clients { overflow: hidden; padding: 2.2rem 0 2.6rem; }
     .clients__track {
       display: flex; width: max-content;
       animation: clientsMove 30s linear infinite;
@@ -317,6 +325,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     @keyframes marqueeMove { to { transform: translateX(-50%); } }
 
     /* ---------- SECCIONES ---------- */
+    .casos { padding-top: 1.5rem; }
     .casos h2, .sobre h2 {
       font-size: clamp(2.4rem, 5.5vw, 4.4rem);
       margin: 1.2rem 0 2.6rem;
@@ -349,18 +358,25 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     a.proj:hover .proj__title { color: var(--teal-900); }
     .proj__cat { margin-top: 0.15rem; font-size: 0.78rem; color: var(--gray-medium); }
 
-    /* Statement gigante después del grid, con el acento en color
-       y el CTA a los casos alineado a la derecha, como el mock */
+    /* Statement (Overview) después del grid, como el mock: texto
+       navy con palabras en gris y CTA subrayado en coral a la derecha */
     .statement { padding-top: 7rem; display: flex; flex-direction: column; }
-    .statement .btn { align-self: flex-end; }
+    .statement__eyebrow { font-size: 0.85rem; color: var(--gray-medium); margin-bottom: 1.4rem; }
     .statement__text {
-      font-family: var(--display); font-weight: 600;
-      font-size: clamp(2rem, 4.6vw, 4rem);
-      letter-spacing: -0.035em; line-height: 1.08;
-      color: var(--text-primary); max-width: 1050px;
+      font-family: var(--body); font-weight: 500;
+      font-size: clamp(1.7rem, 3.2vw, 2.8rem);
+      letter-spacing: -0.01em; line-height: 1.4;
+      color: var(--navy); max-width: 21ch;
     }
-    .statement__text em { font-style: normal; color: var(--cenote); }
-    .statement .btn { margin-top: 2.4rem; }
+    .statement__text em { font-style: normal; color: var(--gray-medium); }
+    .statement__cta {
+      align-self: flex-end; margin-top: 1rem;
+      font-size: clamp(0.95rem, 1.3vw, 1.1rem); font-weight: 500;
+      color: var(--navy);
+      border-bottom: 2px solid var(--coral); padding-bottom: 2px;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+    .statement__cta:hover { color: var(--coral); }
 
     /* Metodología: la card consola, aplanada al nuevo tema */
     .metodo { padding-top: 7rem; }

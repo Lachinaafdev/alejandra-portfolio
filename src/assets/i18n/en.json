@@ -78,6 +78,15 @@
     "TRAFIC",
     "SIRENIS"
   ],
+  "statement": {
+    "eyebrow": "Overview",
+    "a": "I partner with airlines and hospitality brands to design thoughtful",
+    "em1": "digital",
+    "b": "products and guest journeys, minus the",
+    "em2": "bullshit",
+    "c": ".",
+    "cta": "View case studies"
+  },
   "projects": [
     {
       "slug": "trafic-pos",
