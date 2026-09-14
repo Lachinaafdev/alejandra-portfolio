@@ -95,11 +95,15 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
            "projects"; las entradas con slug enlazan a su caso. -->
       <section id="casos" class="casos">
         <div class="wrap">
+          <!-- Cabecera "01 · Casos de estudio" oculta a pedido del
+               prototipo. Cambia @if (false) por @if (true) para verla. -->
+          @if (false) {
           <div class="sec-head" appReveal>
             <span class="sec-head__n">01</span>
             <p class="eyebrow">{{ 'cases.eyebrow' | t }}</p>
             <span class="sec-head__line"></span>
           </div>
+          }
           <!-- Título de sección oculto (el mock muestra el grid directo).
                Cambia @if (false) por @if (true) para recuperarlo. -->
           @if (false) {
@@ -270,11 +274,11 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       position: relative; z-index: 5;
       background: #fff;
       margin-top: -60vh;
-      padding-top: 4.5rem;
+      padding-top: 3rem;
     }
 
     /* ---------- CARRUSEL DE MARCAS ---------- */
-    .clients { overflow: hidden; padding: 3.5rem 0 4rem; }
+    .clients { overflow: hidden; padding: 2.2rem 0 2.6rem; }
     .clients__track {
       display: flex; width: max-content;
       animation: clientsMove 30s linear infinite;
@@ -317,6 +321,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     @keyframes marqueeMove { to { transform: translateX(-50%); } }
 
     /* ---------- SECCIONES ---------- */
+    .casos { padding-top: 1.5rem; }
     .casos h2, .sobre h2 {
       font-size: clamp(2.4rem, 5.5vw, 4.4rem);
       margin: 1.2rem 0 2.6rem;
