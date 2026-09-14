@@ -17,7 +17,12 @@ import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
   imports: [RouterLink, TranslatePipe, ParallaxDirective, CaseEntranceDirective],
   template: `
     <a class="card" [class]="'card--' + (index % 3)" [routerLink]="['/caso', caso.slug]" [appCaseEntrance]="index">
-      <div class="work__bg" appParallax aria-hidden="true"></div>
+      <div class="work__bg" appParallax aria-hidden="true">
+        <span class="work__bg-fill"></span>
+        @if (caso.cover && !coverError) {
+          <img [src]="caso.cover.src" alt="" loading="lazy" (error)="coverError = true" />
+        }
+      </div>
       <span class="card__arrow" aria-hidden="true">↗</span>
       <div class="card__content">
         <span class="card__eyebrow">{{ caso.ticketNo }} · {{ caso.period }}</span>
@@ -43,30 +48,38 @@ import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
     }
 
     /* Fondo absoluto sobredimensionado para el parallax (±6%).
-       El gradiente vive en el ::before para que el hover (scale)
-       no pelee con el transform inline que pone GSAP. */
+       Debajo va el gradiente del caso (respaldo permanente) y
+       encima la imagen de portada del JSON cuando el archivo
+       existe. El hover escala a los hijos para no pelear con el
+       transform inline que pone GSAP en el contenedor. */
     .work__bg {
       position: absolute; inset: -12% 0; height: 124%;
       z-index: 0;
     }
-    .work__bg::before {
-      content: '';
+    .work__bg-fill, .work__bg img {
       position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.6s var(--ease-out);
     }
-    .card:hover .work__bg::before { transform: scale(1.04); }
+    .card:hover .work__bg-fill, .card:hover .work__bg img { transform: scale(1.04); }
+    /* Velo inferior: mantiene legible el texto blanco sobre fotos */
+    .work__bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(5, 5, 5, 0) 35%, rgba(5, 5, 5, 0.55) 100%);
+    }
 
-    .card--0 .work__bg::before {
+    .card--0 .work__bg-fill {
       background:
         radial-gradient(ellipse 60% 55% at 72% 18%, rgba(255, 255, 255, 0.22), transparent 60%),
         linear-gradient(135deg, #22336B 0%, var(--navy) 55%, #101A3D 100%);
     }
-    .card--1 .work__bg::before {
+    .card--1 .work__bg-fill {
       background:
         radial-gradient(ellipse 60% 55% at 28% 15%, rgba(255, 255, 255, 0.18), transparent 60%),
         linear-gradient(135deg, #14444F 0%, var(--deep) 55%, #06181E 100%);
     }
-    .card--2 .work__bg::before {
+    .card--2 .work__bg-fill {
       background:
         radial-gradient(ellipse 60% 55% at 75% 80%, rgba(255, 255, 255, 0.2), transparent 60%),
         linear-gradient(135deg, #12A594 0%, var(--cenote) 55%, #085248 100%);
@@ -134,4 +147,6 @@ import { ParallaxDirective, CaseEntranceDirective } from '../motion/motion';
 export class TicketCardComponent {
   @Input({ required: true }) caso!: CaseStudy;
   @Input() index = 0;
+  /** Si la portada del JSON no existe aún, queda el gradiente del caso. */
+  coverError = false;
 }

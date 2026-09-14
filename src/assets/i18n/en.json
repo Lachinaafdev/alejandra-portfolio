@@ -71,6 +71,12 @@
   "reel": {
     "hint": "▶ Watch my work in motion"
   },
+  "clients": [
+    "Delta Vacations",
+    "Funjet Vacations",
+    "Trafictours",
+    "Apple Vacations"
+  ],
   "caseList": [
     {
       "slug": "trafic-pos",

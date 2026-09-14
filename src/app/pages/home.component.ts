@@ -42,6 +42,26 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 
     <!-- LÁMINA BLANCA: pasa por encima del reel pineado -->
     <div class="over">
+      <!-- Logos de clientes/marcas: cada archivo se llama como la
+           marca (en kebab-case) dentro de assets/img/logos/. Mientras
+           el archivo no exista se muestra el nombre en texto. -->
+      <div class="clients" appReveal>
+        <div class="wrap clients__row">
+          @for (brand of ('clients' | t); track $index) {
+            @if (logoExt(brand) !== 'text') {
+              <img
+                class="clients__logo"
+                [src]="'assets/img/logos/' + slugify(brand) + '.' + logoExt(brand)"
+                [alt]="brand"
+                loading="lazy"
+                (error)="onLogoError(brand)" />
+            } @else {
+              <span class="clients__name">{{ brand }}</span>
+            }
+          }
+        </div>
+      </div>
+
       <!-- Marquee infinito con el stack -->
       <div class="marquee" aria-hidden="true">
         <div class="marquee__track">
@@ -214,6 +234,26 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       padding-top: 4.5rem;
     }
 
+    /* ---------- LOGOS DE CLIENTES ---------- */
+    .clients { padding: 3.2rem 0 3.6rem; }
+    .clients__row {
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 1.8rem 3rem;
+    }
+    .clients__logo {
+      height: clamp(24px, 3vw, 36px); width: auto;
+      opacity: 0.85; filter: grayscale(1);
+      transition: opacity var(--duration-fast) var(--ease-out),
+                  filter var(--duration-fast) var(--ease-out);
+    }
+    .clients__logo:hover { opacity: 1; filter: none; }
+    .clients__name {
+      font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gray-dark);
+    }
+    @media (max-width: 700px) { .clients__row { justify-content: center; } }
+
     /* ---------- MARQUEE ---------- */
     .marquee {
       overflow: hidden;
@@ -368,6 +408,24 @@ export class HomeComponent implements OnDestroy {
       .split('·').map(p => p.trim()).filter(Boolean);
     return { main: parts[0] ?? '', rest: parts.slice(1).join(' · ') };
   });
+
+  /* Logos: se intenta <marca>.svg, luego <marca>.png; si ninguno
+     existe se muestra el nombre de la marca en texto. */
+  private logoTries = new Map<string, 'svg' | 'png' | 'text'>();
+
+  slugify(brand: string): string {
+    return brand.toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  logoExt(brand: string): 'svg' | 'png' | 'text' {
+    return this.logoTries.get(brand) ?? 'svg';
+  }
+
+  onLogoError(brand: string): void {
+    this.logoTries.set(brand, this.logoExt(brand) === 'svg' ? 'png' : 'text');
+  }
 
   private reelZone = viewChild.required<ElementRef<HTMLElement>>('reelZone');
   private reelSticky = viewChild.required<ElementRef<HTMLElement>>('reelSticky');
