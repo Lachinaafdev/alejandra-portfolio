@@ -3,13 +3,12 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
-import { TicketCardComponent } from '../components/ticket-card.component';
 import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, TicketCardComponent, TranslatePipe, RevealDirective],
+  imports: [RouterLink, TranslatePipe, RevealDirective],
   template: `
     <!-- HERO: blanco, título corto y gigante tipo "Product Designer".
          El h1 es el primer segmento del eyebrow i18n; el resto de
@@ -91,7 +90,9 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       </div>
       }
 
-      <!-- CASOS: grid de bloques planos con gradiente -->
+      <!-- PROYECTOS: grid como el mock — imagen con esquinas suaves,
+           título y categoría debajo. La lista vive en la llave i18n
+           "projects"; las entradas con slug enlazan a su caso. -->
       <section id="casos" class="casos">
         <div class="wrap">
           <div class="sec-head" appReveal>
@@ -99,10 +100,26 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
             <p class="eyebrow">{{ 'cases.eyebrow' | t }}</p>
             <span class="sec-head__line"></span>
           </div>
+          <!-- Título de sección oculto (el mock muestra el grid directo).
+               Cambia @if (false) por @if (true) para recuperarlo. -->
+          @if (false) {
           <h2 appReveal>{{ 'cases.title' | t }}</h2>
-          <div class="casos__list">
-            @for (caso of i18n.cases(); track caso.slug) {
-              <app-ticket-card [caso]="caso" [index]="$index" />
+          }
+          <div class="casos__grid">
+            @for (p of ('projects' | t); track $index) {
+              @if (p.slug) {
+                <a class="proj" [routerLink]="['/caso', p.slug]" appReveal [revealDelay]="($index % 3) * 100">
+                  <div class="proj__media"><img [src]="p.img" [alt]="p.title" loading="lazy" /></div>
+                  <h3 class="proj__title">{{ p.title }}</h3>
+                  <p class="proj__cat">{{ p.category }}</p>
+                </a>
+              } @else {
+                <div class="proj" appReveal [revealDelay]="($index % 3) * 100">
+                  <div class="proj__media"><img [src]="p.img" [alt]="p.title" loading="lazy" /></div>
+                  <h3 class="proj__title">{{ p.title }}</h3>
+                  <p class="proj__cat">{{ p.category }}</p>
+                </div>
+              }
             }
           </div>
         </div>
@@ -304,11 +321,33 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       font-size: clamp(2.4rem, 5.5vw, 4.4rem);
       margin: 1.2rem 0 2.6rem;
     }
-    .casos__list {
+    .casos__grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1.2rem; align-items: stretch;
+      gap: 2.4rem 1.4rem;
     }
-    @media (max-width: 980px) { .casos__list { grid-template-columns: 1fr; } }
+    @media (max-width: 1000px) { .casos__grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .casos__grid { grid-template-columns: 1fr; } }
+
+    /* Card de proyecto: imagen arriba, texto debajo (como el mock) */
+    .proj { display: block; color: var(--text-primary); }
+    .proj__media {
+      border-radius: 12px; overflow: hidden;
+      aspect-ratio: 405 / 480;
+      background: var(--gray-light);
+    }
+    .proj__media img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.6s var(--ease-out);
+    }
+    a.proj:hover .proj__media img { transform: scale(1.04); }
+    .proj__title {
+      margin-top: 0.9rem;
+      font-family: var(--body); font-weight: 600;
+      font-size: 0.95rem; line-height: 1.35; letter-spacing: 0;
+      color: var(--text-primary);
+    }
+    a.proj:hover .proj__title { color: var(--teal-900); }
+    .proj__cat { margin-top: 0.15rem; font-size: 0.78rem; color: var(--gray-medium); }
 
     /* Statement gigante después del grid, con el acento en color
        y el CTA a los casos alineado a la derecha, como el mock */
