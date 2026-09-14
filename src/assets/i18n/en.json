@@ -78,6 +78,41 @@
     "TRAFIC",
     "SIRENIS"
   ],
+  "projects": [
+    {
+      "slug": "trafic-pos",
+      "title": "Trafic POS: Tour sales",
+      "category": "Mobile · SaaS",
+      "img": "assets/img/PROYECTOS/POS.png"
+    },
+    {
+      "slug": "agenda-digital",
+      "title": "Agenda Digital",
+      "category": "Web",
+      "img": "assets/img/PROYECTOS/AGENDA.png"
+    },
+    {
+      "slug": "design-system",
+      "title": "Trafictours Design System",
+      "category": "Web",
+      "img": "assets/img/PROYECTOS/DESINGSYTEM.png"
+    },
+    {
+      "title": "Flair Vacations",
+      "category": "Mobile",
+      "img": "assets/img/PROYECTOS/FLAYR.png"
+    },
+    {
+      "title": "Digital brochure",
+      "category": "Web",
+      "img": "assets/img/PROYECTOS/BROCHURE.png"
+    },
+    {
+      "title": "E-Travel Guide",
+      "category": "Web",
+      "img": "assets/img/PROYECTOS/E-TRAVEL.png"
+    }
+  ],
   "caseList": [
     {
       "slug": "trafic-pos",

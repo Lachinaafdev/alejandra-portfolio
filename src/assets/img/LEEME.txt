@@ -1,6 +1,14 @@
 Sube aquí las imágenes de tus proyectos con estos nombres exactos:
 
-PORTADAS (aparecen en las tarjetas de la home):
+GRID DE PROYECTOS DE LA HOME:
+  Carpeta: src/assets/img/PROYECTOS/
+  Archivos actuales: POS.png · AGENDA.png · DESINGSYTEM.png ·
+  FLAYR.png · BROCHURE.png · E-TRAVEL.png
+  La lista (título, categoría, imagen y link a caso) vive en la
+  llave "projects" de es.json/en.json — edita ahí para agregar,
+  quitar o renombrar proyectos.
+
+PORTADAS DE LA PÁGINA DE CASO (llave "cover" del caseList):
   trafic-pos-cover.jpg
   agenda-digital-cover.jpg
   design-system-cover.jpg
