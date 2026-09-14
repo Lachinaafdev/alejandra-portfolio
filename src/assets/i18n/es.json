@@ -72,10 +72,11 @@
     "hint": "▶ Mira mi trabajo en movimiento"
   },
   "clients": [
-    "Delta Vacations",
-    "Funjet Vacations",
-    "Trafictours",
-    "Apple Vacations"
+    "DELTA",
+    "TRANSAT",
+    "FLAIR",
+    "TRAFIC",
+    "SIRENIS"
   ],
   "caseList": [
     {

@@ -16,18 +16,14 @@ GALERÍA DE CADA CASO (sección "En imágenes"):
   design-system-2.jpg     (componentes en Figma)
   design-system-3.jpg     (componente en Angular y MAUI)
 
-LOGOS DE CLIENTES/MARCAS (fila bajo el reel en la home):
+LOGOS DE CLIENTES/MARCAS (carrusel en loop bajo el reel en la home):
   Carpeta: src/assets/img/logos/
-  Cada archivo se llama como la marca en minúsculas y con guiones
-  (kebab-case). El sitio intenta .svg primero y luego .png:
-    delta-vacations.svg   (o .png)
-    funjet-vacations.svg  (o .png)
-    trafictours.svg       (o .png)
-    apple-vacations.svg   (o .png)
-  Las marcas se definen en la llave "clients" de es.json y en.json —
-  edita esa lista con tus marcas reales; el nombre del archivo debe
-  coincidir con el nombre de la marca. Mientras el archivo no exista,
-  se muestra el nombre de la marca en texto.
+  El archivo se llama EXACTAMENTE como cada entrada de la llave
+  "clients" en es.json/en.json. El sitio intenta .png y luego .svg:
+    DELTA.png · TRANSAT.png · FLAIR.png · TRAFIC.png · SIRENIS.png
+  Para agregar o quitar marcas: edita la lista "clients" en ambos
+  JSON y sube el archivo con ese mismo nombre. Mientras el archivo
+  no exista, se muestra el nombre de la marca en texto.
 
 Formatos aceptados: .jpg, .png, .webp (recomendado: .webp comprimido).
 Si usas otro nombre o formato, actualiza la ruta en:
