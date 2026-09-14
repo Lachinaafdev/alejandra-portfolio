@@ -99,10 +99,14 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
           <em>{{ 'hero.titleEm' | t }}</em>
           {{ 'hero.titleB' | t }}
         </p>
-        <a href="mailto:alejandrafierrorm@gmail.com" class="btn btn--solid">{{ 'nav.contact' | t }}</a>
+        <a routerLink="/" fragment="casos" class="btn">{{ 'nav.cases' | t }}</a>
       </section>
 
-      <!-- METODOLOGÍA CON IA (card tipo consola → página de flujos) -->
+      <!-- METODOLOGÍA CON IA: oculta por ahora, como en el prototipo.
+           Para volver a mostrarla cambia el @if (false) por @if (true)
+           o quita el bloque @if. La página /metodologia-ia sigue viva
+           y accesible desde el menú. -->
+      @if (false) {
       <section id="metodologia" class="wrap metodo">
         <div class="sec-head" appReveal>
           <span class="sec-head__n">02</span>
@@ -129,11 +133,12 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
           </div>
         </a>
       </section>
+      }
 
       <!-- SOBRE MÍ -->
       <section id="sobre-mi" class="wrap sobre">
         <div class="sec-head" appReveal>
-          <span class="sec-head__n">03</span>
+          <span class="sec-head__n">02</span>
           <p class="eyebrow">{{ 'about.eyebrow' | t }}</p>
           <span class="sec-head__line"></span>
         </div>
@@ -288,8 +293,10 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     }
     @media (max-width: 980px) { .casos__list { grid-template-columns: 1fr; } }
 
-    /* Statement gigante después del grid, con el acento en color */
-    .statement { padding-top: 7rem; }
+    /* Statement gigante después del grid, con el acento en color
+       y el CTA a los casos alineado a la derecha, como el mock */
+    .statement { padding-top: 7rem; display: flex; flex-direction: column; }
+    .statement .btn { align-self: flex-end; }
     .statement__text {
       font-family: var(--display); font-weight: 600;
       font-size: clamp(2rem, 4.6vw, 4rem);
