@@ -47,27 +47,37 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 
     <!-- LÁMINA BLANCA: pasa por encima del reel pineado -->
     <div class="over">
-      <!-- Logos de clientes/marcas: cada archivo se llama como la
-           marca (en kebab-case) dentro de assets/img/logos/. Mientras
-           el archivo no exista se muestra el nombre en texto. -->
-      <div class="clients" appReveal>
-        <div class="wrap clients__row">
-          @for (brand of ('clients' | t); track $index) {
-            @if (logoExt(brand) !== 'text') {
-              <img
-                class="clients__logo"
-                [src]="'assets/img/logos/' + slugify(brand) + '.' + logoExt(brand)"
-                [alt]="brand"
-                loading="lazy"
-                (error)="onLogoError(brand)" />
-            } @else {
-              <span class="clients__name">{{ brand }}</span>
-            }
+      <!-- Carrusel infinito de marcas: los archivos viven en
+           assets/img/logos/ y se llaman EXACTAMENTE como cada entrada
+           de la llave i18n "clients" (DELTA.png, TRANSAT.png, …).
+           Se intenta .png y luego .svg; si no existe el archivo se
+           muestra el nombre en texto. Dos grupos idénticos + keyframe
+           a -50% = loop continuo; se pausa al pasar el mouse. -->
+      <div class="clients" aria-hidden="true">
+        <div class="clients__track">
+          @for (group of [0, 1]; track group) {
+            <div class="clients__group">
+              @for (brand of ('clients' | t); track $index) {
+                @if (logoExt(brand) !== 'text') {
+                  <img
+                    class="clients__logo"
+                    [src]="'assets/img/logos/' + brand + '.' + logoExt(brand)"
+                    [alt]="brand"
+                    loading="lazy"
+                    (error)="onLogoError(brand)" />
+                } @else {
+                  <span class="clients__name">{{ brand }}</span>
+                }
+              }
+            </div>
           }
         </div>
       </div>
 
-      <!-- Marquee infinito con el stack -->
+      <!-- Marquee del stack: oculto para dejar solo el carrusel de
+           marcas, como el prototipo. Cambia @if (false) por @if (true)
+           para mostrarlo de nuevo. -->
+      @if (false) {
       <div class="marquee" aria-hidden="true">
         <div class="marquee__track">
           @for (group of [0, 1]; track group) {
@@ -79,6 +89,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
           }
         </div>
       </div>
+      }
 
       <!-- CASOS: grid de bloques planos con gradiente -->
       <section id="casos" class="casos">
@@ -245,25 +256,25 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       padding-top: 4.5rem;
     }
 
-    /* ---------- LOGOS DE CLIENTES ---------- */
-    .clients { padding: 3.2rem 0 3.6rem; }
-    .clients__row {
-      display: flex; flex-wrap: wrap; align-items: center;
-      justify-content: space-between; gap: 1.8rem 3rem;
+    /* ---------- CARRUSEL DE MARCAS ---------- */
+    .clients { overflow: hidden; padding: 3.5rem 0 4rem; }
+    .clients__track {
+      display: flex; width: max-content;
+      animation: clientsMove 30s linear infinite;
     }
-    .clients__logo {
-      height: clamp(24px, 3vw, 36px); width: auto;
-      opacity: 0.85; filter: grayscale(1);
-      transition: opacity var(--duration-fast) var(--ease-out),
-                  filter var(--duration-fast) var(--ease-out);
+    .clients:hover .clients__track { animation-play-state: paused; }
+    .clients__group {
+      display: flex; align-items: center;
+      gap: clamp(3rem, 7vw, 6.5rem);
+      padding-right: clamp(3rem, 7vw, 6.5rem);
     }
-    .clients__logo:hover { opacity: 1; filter: none; }
+    .clients__logo { height: clamp(30px, 4vw, 46px); width: auto; }
     .clients__name {
       font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
       letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--gray-dark);
+      color: var(--gray-dark); white-space: nowrap;
     }
-    @media (max-width: 700px) { .clients__row { justify-content: center; } }
+    @keyframes clientsMove { to { transform: translateX(-50%); } }
 
     /* ---------- MARQUEE ---------- */
     .marquee {
@@ -408,6 +419,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       .reel-sticky { position: static; background: #111; }
       .over { margin-top: 0; }
       .marquee__track { animation: none; }
+      .clients__track { animation: none; }
     }
   `]
 })
@@ -422,22 +434,17 @@ export class HomeComponent implements OnDestroy {
     return { main: parts[0] ?? '', rest: parts.slice(1).join(' · ') };
   });
 
-  /* Logos: se intenta <marca>.svg, luego <marca>.png; si ninguno
-     existe se muestra el nombre de la marca en texto. */
-  private logoTries = new Map<string, 'svg' | 'png' | 'text'>();
+  /* Logos: el archivo se llama exactamente como la entrada de
+     "clients" (p. ej. DELTA → assets/img/logos/DELTA.png). Se intenta
+     .png, luego .svg; si ninguno existe, el nombre en texto. */
+  private logoTries = new Map<string, 'png' | 'svg' | 'text'>();
 
-  slugify(brand: string): string {
-    return brand.toLowerCase()
-      .normalize('NFD').replace(/[̀-ͯ]/g, '')
-      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  }
-
-  logoExt(brand: string): 'svg' | 'png' | 'text' {
-    return this.logoTries.get(brand) ?? 'svg';
+  logoExt(brand: string): 'png' | 'svg' | 'text' {
+    return this.logoTries.get(brand) ?? 'png';
   }
 
   onLogoError(brand: string): void {
-    this.logoTries.set(brand, this.logoExt(brand) === 'svg' ? 'png' : 'text');
+    this.logoTries.set(brand, this.logoExt(brand) === 'png' ? 'svg' : 'text');
   }
 
   private reelZone = viewChild.required<ElementRef<HTMLElement>>('reelZone');
