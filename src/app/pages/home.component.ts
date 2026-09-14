@@ -20,6 +20,10 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
         <h1 style="animation-delay: 0.08s">{{ heroParts().main }}</h1>
       </div>
       <div class="mask"><p class="hero__sub" style="animation-delay: 0.2s">{{ 'hero.sub' | t }}</p></div>
+      <!-- Datos rápidos del hero: ocultos para dejar el hero como el
+           prototipo (solo eyebrow + título + párrafo). Cambia el
+           @if (false) por @if (true) para mostrarlos de nuevo. -->
+      @if (false) {
       <div class="mask">
         <div class="hero__facts" style="animation-delay: 0.3s">
           @for (fact of ('hero.facts' | t); track $index) {
@@ -27,6 +31,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
           }
         </div>
       </div>
+      }
     </section>
 
     <!-- REEL PINEADO: blanco/completo → gris/encogido-redondeado → negro -->
@@ -159,14 +164,15 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
   `,
   styles: [`
     /* ---------- HERO ---------- */
-    .hero { padding-top: 6rem; padding-bottom: 7rem; }
+    .hero { padding-top: 5.5rem; padding-bottom: 6rem; }
     .hero h1 {
       font-size: clamp(3.2rem, 11.5vw, 10.5rem);
       font-weight: 700;
       line-height: 0.95;
-      margin: 1.2rem 0 1.8rem;
+      margin: 1.2rem 0 1.6rem;
+      color: var(--navy);
     }
-    .hero__sub { max-width: 54ch; color: var(--text-secondary); font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.8; }
+    .hero__sub { max-width: 66ch; color: var(--text-secondary); font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.75; }
     .hero__facts {
       display: flex; flex-wrap: wrap; gap: 2.5rem;
       margin-top: 3.5rem; padding-top: 1.4rem;
