@@ -178,11 +178,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 
       <!-- SOBRE MÍ -->
       <section id="sobre-mi" class="wrap sobre">
-        <div class="sec-head" appReveal>
-          <span class="sec-head__n">02</span>
-          <p class="eyebrow">{{ 'about.eyebrow' | t }}</p>
-          <span class="sec-head__line"></span>
-        </div>
+        <p class="sec-label" appReveal>{{ 'about.eyebrow' | t }}</p>
         <!-- Título y semblanza ocultos: la sección queda solo con las
              habilidades. Cambia @if (false) por @if (true) para
              recuperarlos. -->
@@ -386,6 +382,8 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
        navy con palabras en gris y CTA subrayado en coral a la derecha */
     .statement { padding-top: 7rem; display: flex; flex-direction: column; }
     .statement__eyebrow { font-size: 0.85rem; color: var(--gray-medium); margin-bottom: 1.4rem; }
+    /* Etiqueta de sección con el mismo estilo que "Overview" */
+    .sec-label { font-size: 0.85rem; color: var(--gray-medium); }
     .statement__text {
       font-family: var(--body); font-weight: 500;
       font-size: clamp(1.7rem, 3.2vw, 2.8rem);
@@ -480,7 +478,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     .sobre__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; }
     .sobre__text p + p { margin-top: 1rem; }
     .sobre__text { color: var(--text-secondary); max-width: 60ch; }
-    .sobre__stack { list-style: none; display: flex; flex-wrap: wrap; align-content: start; gap: 0.7rem; margin-top: 2rem; }
+    .sobre__stack { list-style: none; display: flex; flex-wrap: wrap; align-content: start; gap: 0.7rem; margin-top: 1.6rem; }
     .sobre__stack li {
       font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
       border: 1px solid var(--border-strong); border-radius: 999px;
