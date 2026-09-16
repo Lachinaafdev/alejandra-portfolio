@@ -46,18 +46,25 @@
     }
   },
   "about": {
-    "eyebrow": "About me",
+    "eyebrow": "Skills",
     "title": "A designer from the industry where service is everything",
     "p1": "I grew professionally in Quintana Roo's tourism industry, where a broken process instantly becomes a bad travel experience. That's where I learned to design complete services — not just screens — and to validate every decision with data from real operations.",
     "p2": "I studied Multiplatform Software Design at Universidad Tecnológica de Cancún, I mentor a group of interns, and I'm an active member of the 'Developers in Playa del Carmen' club. I'm interested in data analysis, design innovation, and sustainable design.",
     "stack": [
-      "Figma & Design Systems",
-      "Service Design & Blueprints",
-      "Design Sprints",
+      "UX/UI & Product Design",
+      "Advanced Figma & Design Systems",
+      "React · Hooks · State management",
+      "HTML5 · CSS3/SASS · JavaScript (ES6+)",
+      "TypeScript · Next.js",
+      "Tailwind CSS · Material UI",
       "Angular · Angular Material",
-      "Tailwind CSS · Material Design",
-      ".NET · MAUI (collaboration)",
-      "Data analysis (growing)"
+      "Accessibility (WCAG)",
+      "Usability testing & research",
+      "Git · REST API integration",
+      "Scrum / Kanban · Jira",
+      "Motion & microinteractions",
+      "Service Design & Blueprints",
+      "Professional English (C1)"
     ]
   },
   "footer": {

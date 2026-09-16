@@ -183,18 +183,23 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
           <p class="eyebrow">{{ 'about.eyebrow' | t }}</p>
           <span class="sec-head__line"></span>
         </div>
+        <!-- Título y semblanza ocultos: la sección queda solo con las
+             habilidades. Cambia @if (false) por @if (true) para
+             recuperarlos. -->
+        @if (false) {
         <h2 appReveal>{{ 'about.title' | t }}</h2>
         <div class="sobre__grid">
           <div class="sobre__text" appReveal>
             <p>{{ 'about.p1' | t }}</p>
             <p>{{ 'about.p2' | t }}</p>
           </div>
-          <ul class="sobre__stack" appReveal [revealDelay]="150">
-            @for (skill of ('about.stack' | t); track $index) {
-              <li>{{ skill }}</li>
-            }
-          </ul>
         </div>
+        }
+        <ul class="sobre__stack" appReveal>
+          @for (skill of ('about.stack' | t); track $index) {
+            <li>{{ skill }}</li>
+          }
+        </ul>
       </section>
     </div>
   `,
@@ -206,7 +211,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
        entrada (maskUp) porque esta regla pisa a la de .mask > *. */
     .hero h1 {
       font-size: clamp(3.2rem, 11.5vw, 10.5rem);
-      font-weight: 600;
+      font-weight: 500;
       line-height: 1;
       /* aire para el descendente de la "g": el .mask (overflow hidden)
          lo recortaba */
@@ -475,7 +480,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     .sobre__grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; }
     .sobre__text p + p { margin-top: 1rem; }
     .sobre__text { color: var(--text-secondary); max-width: 60ch; }
-    .sobre__stack { list-style: none; display: flex; flex-wrap: wrap; align-content: start; gap: 0.6rem; }
+    .sobre__stack { list-style: none; display: flex; flex-wrap: wrap; align-content: start; gap: 0.7rem; margin-top: 2rem; }
     .sobre__stack li {
       font-family: var(--mono); font-size: 0.8rem; font-weight: 500;
       border: 1px solid var(--border-strong); border-radius: 999px;
