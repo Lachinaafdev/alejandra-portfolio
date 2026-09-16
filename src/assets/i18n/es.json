@@ -46,18 +46,25 @@
     }
   },
   "about": {
-    "eyebrow": "Sobre mí",
+    "eyebrow": "Habilidades",
     "title": "Diseñadora en la industria donde el servicio lo es todo",
     "p1": "Crecí profesionalmente en el turismo de Quintana Roo, donde un mal proceso se traduce inmediatamente en una mala experiencia de viaje. Ahí aprendí a diseñar servicios completos — no solo pantallas — y a validar cada decisión con datos de la operación real.",
     "p2": "Estudié Diseño de Software Multiplataforma en la Universidad Tecnológica de Cancún, mentoreo a un grupo de interns y participo activamente en el club 'Developers in Playa del Carmen'. Me interesan el análisis de datos, la innovación en diseño y el diseño sustentable.",
     "stack": [
-      "Figma & Design Systems",
-      "Service Design & Blueprints",
-      "Design Sprints",
+      "UX/UI & Product Design",
+      "Figma avanzado & Design Systems",
+      "React · Hooks · Manejo de estado",
+      "HTML5 · CSS3/SASS · JavaScript (ES6+)",
+      "TypeScript · Next.js",
+      "Tailwind CSS · Material UI",
       "Angular · Angular Material",
-      "Tailwind CSS · Material Design",
-      ".NET · MAUI (colaboración)",
-      "Análisis de datos (en crecimiento)"
+      "Accesibilidad (WCAG)",
+      "Pruebas de usabilidad & research",
+      "Git · Integración de APIs REST",
+      "Scrum / Kanban · Jira",
+      "Motion & microinteracciones",
+      "Service Design & Blueprints",
+      "Inglés profesional (C1)"
     ]
   },
   "footer": {
