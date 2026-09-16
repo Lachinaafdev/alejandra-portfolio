@@ -206,9 +206,12 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
        entrada (maskUp) porque esta regla pisa a la de .mask > *. */
     .hero h1 {
       font-size: clamp(3.2rem, 11.5vw, 10.5rem);
-      font-weight: 700;
-      line-height: 0.95;
-      margin: 1.2rem 0 1.6rem;
+      font-weight: 600;
+      line-height: 1;
+      /* aire para el descendente de la "g": el .mask (overflow hidden)
+         lo recortaba */
+      padding-bottom: 0.1em;
+      margin: 1.2rem 0 1rem;
       background: linear-gradient(90deg, var(--navy), var(--cenote), var(--coral), var(--cenote), var(--navy));
       background-size: 260% 100%;
       background-position: 0% 50%;
