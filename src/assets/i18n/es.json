@@ -97,33 +97,39 @@
   "projects": [
     {
       "slug": "trafic-pos",
+      "code": "POS",
       "title": "Trafic POS: Venta de tours",
       "category": "Móvil · SaaS",
       "img": "assets/img/PROYECTOS/POS.png"
     },
     {
       "slug": "agenda-digital",
+      "code": "AGENDA",
       "title": "Agenda Digital",
       "category": "Web",
       "img": "assets/img/PROYECTOS/AGENDA.png"
     },
     {
       "slug": "design-system",
+      "code": "DESINGSYTEM",
       "title": "Trafictours Design System",
       "category": "Web",
       "img": "assets/img/PROYECTOS/DESINGSYTEM.png"
     },
     {
+      "code": "FLAYR",
       "title": "Flair Vacations",
       "category": "Móvil",
       "img": "assets/img/PROYECTOS/FLAYR.png"
     },
     {
+      "code": "BROCHURE",
       "title": "Brochure digital",
       "category": "Web",
       "img": "assets/img/PROYECTOS/BROCHURE.png"
     },
     {
+      "code": "E-TRAVEL",
       "title": "E-Travel Guide",
       "category": "Web",
       "img": "assets/img/PROYECTOS/E-TRAVEL.png"

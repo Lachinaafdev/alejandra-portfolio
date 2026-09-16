@@ -4,25 +4,31 @@ GRID DE PROYECTOS DE LA HOME:
   Carpeta: src/assets/img/PROYECTOS/
   Archivos actuales: POS.png · AGENDA.png · DESINGSYTEM.png ·
   FLAYR.png · BROCHURE.png · E-TRAVEL.png
-  La lista (título, categoría, imagen y link a caso) vive en la
-  llave "projects" de es.json/en.json — edita ahí para agregar,
-  quitar o renombrar proyectos.
+  Esta misma imagen se usa como miniatura de "Siguiente caso".
+  La lista (título, categoría, siglas e imagen) vive en la llave
+  "projects" de es.json/en.json — edita ahí para agregar, quitar
+  o renombrar proyectos.
 
-PORTADAS DE LA PÁGINA DE CASO (llave "cover" del caseList):
-  trafic-pos-cover.jpg
-  agenda-digital-cover.jpg
-  design-system-cover.jpg
+PÁGINA DE CADA CASO — 7 IMÁGENES POR PROYECTO:
+  Carpeta: src/assets/img/CASOS/
+  Se nombran con las SIGLAS del proyecto (llave "code" en projects)
+  más el rol que ocupan en la página. Formato .png (también acepta
+  .jpg). Orden en que aparecen:
 
-GALERÍA DE CADA CASO (sección "En imágenes"):
-  trafic-pos-1.jpg        (journey map)
-  trafic-pos-2.jpg        (service blueprint)
-  trafic-pos-3.jpg        (flujo de cobro TPV/móvil)
-  agenda-digital-1.jpg    (segmentación en 4 grupos)
-  agenda-digital-2.jpg    (canales por segmento)
-  agenda-digital-3.jpg    (personalización Material/Tailwind)
-  design-system-1.jpg     (tokens)
-  design-system-2.jpg     (componentes en Figma)
-  design-system-3.jpg     (componente en Angular y MAUI)
+    <SIGLAS>-portada     arriba, apaisada muy ancha (21:9)
+    <SIGLAS>-banner      tras el proceso, apaisada (16:9)
+    <SIGLAS>-cuadrada    tras la decisión clave, cuadrada (1:1)
+    <SIGLAS>-1           rejilla final, 2 columnas (4:3)
+    <SIGLAS>-2           rejilla final
+    <SIGLAS>-3           rejilla final
+    <SIGLAS>-4           rejilla final
+
+  Ejemplo para Trafic POS (siglas POS):
+    POS-portada.png · POS-banner.png · POS-cuadrada.png ·
+    POS-1.png · POS-2.png · POS-3.png · POS-4.png
+
+  Siglas de los casos: POS · AGENDA · DESINGSYTEM
+  Si un archivo no existe, ese bloque simplemente no se muestra.
 
 LOGOS DE CLIENTES/MARCAS (carrusel en loop bajo el reel en la home):
   Carpeta: src/assets/img/logos/

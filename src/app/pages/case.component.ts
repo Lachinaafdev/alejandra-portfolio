@@ -5,9 +5,11 @@ import { map } from 'rxjs';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
 /**
- * Página de caso con diagramación editorial: portada grande, columna
- * de lectura con barra lateral de datos e imágenes de la galería
- * intercaladas a todo lo ancho entre secciones.
+ * Página de caso con diagramación editorial. Cada caso usa 7 imágenes
+ * nombradas con las siglas del proyecto (llave "code" de projects):
+ *   <CODE>-portada · <CODE>-banner · <CODE>-cuadrada · <CODE>-1..4
+ * viven en assets/img/CASOS/ y se intentan como .png y luego .jpg.
+ * Si un archivo no existe, su bloque simplemente no se muestra.
  */
 @Component({
   selector: 'app-case',
@@ -23,11 +25,11 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           <h1>{{ c.title }}</h1>
         </header>
 
-        <!-- Portada a todo el ancho del contenedor -->
-        @if (portada(); as src) {
-          @if (!imgError.has(src)) {
-            <figure class="caso__hero">
-              <img [src]="src" [alt]="c.cover?.alt || c.title" (error)="imgError.add(src)" />
+        <!-- 1 · PORTADA a todo el ancho -->
+        @if (img('portada'); as base) {
+          @if (ext(base) !== 'none') {
+            <figure class="caso__portada">
+              <img [src]="base + '.' + ext(base)" [alt]="c.title" (error)="onImgError(base)" />
             </figure>
           }
         }
@@ -48,6 +50,15 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
             <section appReveal>
               <h2>{{ 'cases.labels.problem' | t }}</h2>
               <p>{{ c.problem }}</p>
+            </section>
+
+            <section appReveal>
+              <h2>{{ 'cases.labels.process' | t }}</h2>
+              <ol class="caso__proceso">
+                @for (paso of c.process; track $index) {
+                  <li>{{ paso }}</li>
+                }
+              </ol>
             </section>
           </div>
 
@@ -72,21 +83,11 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           </aside>
         </div>
 
-        <section class="caso__col" appReveal>
-          <h2>{{ 'cases.labels.process' | t }}</h2>
-          <ol class="caso__proceso">
-            @for (paso of c.process; track $index) {
-              <li>{{ paso }}</li>
-            }
-          </ol>
-        </section>
-
-        <!-- Primera imagen de la galería, a todo lo ancho -->
-        @if (galeria()[0]; as img) {
-          @if (!imgError.has(img.src)) {
-            <figure class="caso__figura caso__figura--ancha" appReveal>
-              <img [src]="img.src" [alt]="img.caption" loading="lazy" (error)="imgError.add(img.src)" />
-              <figcaption>{{ img.caption }}</figcaption>
+        <!-- 2 · BANNER apaisado -->
+        @if (img('banner'); as base) {
+          @if (ext(base) !== 'none') {
+            <figure class="caso__banner" appReveal>
+              <img [src]="base + '.' + ext(base)" [alt]="c.title" loading="lazy" (error)="onImgError(base)" />
             </figure>
           }
         }
@@ -96,12 +97,11 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           <p>{{ c.keyDecision }}</p>
         </section>
 
-        <!-- Segunda imagen de la galería, a todo lo ancho -->
-        @if (galeria()[1]; as img) {
-          @if (!imgError.has(img.src)) {
-            <figure class="caso__figura caso__figura--ancha" appReveal>
-              <img [src]="img.src" [alt]="img.caption" loading="lazy" (error)="imgError.add(img.src)" />
-              <figcaption>{{ img.caption }}</figcaption>
+        <!-- 3 · CUADRADA -->
+        @if (img('cuadrada'); as base) {
+          @if (ext(base) !== 'none') {
+            <figure class="caso__cuadrada" appReveal>
+              <img [src]="base + '.' + ext(base)" [alt]="c.title" loading="lazy" (error)="onImgError(base)" />
             </figure>
           }
         }
@@ -115,19 +115,18 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           </ul>
         </section>
 
-        <!-- Resto de la galería en rejilla -->
-        @if (resto().length) {
-          <div class="caso__galeria">
-            @for (img of resto(); track img.src) {
-              @if (!imgError.has(img.src)) {
+        <!-- 4 · REJILLA 1-4 -->
+        <div class="caso__galeria">
+          @for (n of [1, 2, 3, 4]; track n) {
+            @if (img(n); as base) {
+              @if (ext(base) !== 'none') {
                 <figure class="caso__figura" appReveal>
-                  <img [src]="img.src" [alt]="img.caption" loading="lazy" (error)="imgError.add(img.src)" />
-                  <figcaption>{{ img.caption }}</figcaption>
+                  <img [src]="base + '.' + ext(base)" [alt]="c.title" loading="lazy" (error)="onImgError(base)" />
                 </figure>
               }
             }
-          </div>
-        }
+          }
+        </div>
 
         <section class="caso__col" appReveal>
           <h2>{{ 'cases.labels.learning' | t }}</h2>
@@ -166,19 +165,33 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     }
     @media (prefers-reduced-motion: reduce) { .caso__head { animation: none; } }
 
-    /* Portada grande */
-    .caso__hero { margin: 0 0 3rem; }
-    .caso__hero img {
-      width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
-      display: block; border-radius: var(--radius-lg);
+    /* Imágenes: cada una con su proporción */
+    figure { margin: 0; }
+    figure img {
+      width: 100%; object-fit: cover; display: block;
+      border-radius: var(--radius-lg);
       background: var(--gray-light);
+    }
+    .caso__portada { margin-bottom: 3rem; }
+    .caso__portada img { aspect-ratio: 21 / 9; }
+    .caso__banner { margin: 3rem 0; }
+    .caso__banner img { aspect-ratio: 16 / 9; }
+    .caso__cuadrada { margin: 3rem auto; max-width: 720px; }
+    .caso__cuadrada img { aspect-ratio: 1 / 1; }
+    .caso__galeria {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem;
+      margin: 3rem 0;
+    }
+    .caso__galeria img { aspect-ratio: 4 / 3; }
+    @media (max-width: 700px) {
+      .caso__galeria { grid-template-columns: 1fr; }
+      .caso__portada img { aspect-ratio: 16 / 9; }
     }
 
     /* Texto + barra lateral de datos */
     .caso__cols {
       display: grid; grid-template-columns: minmax(0, 1fr) 240px;
       gap: 3.5rem; align-items: start;
-      margin-bottom: 3rem;
     }
     .caso__main { max-width: 68ch; }
     .caso__aside {
@@ -218,29 +231,6 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     .caso__proceso { padding-left: 1.2rem; display: grid; gap: 0.8rem; color: var(--arena-suave); }
     .caso__proceso li::marker { font-family: var(--mono); color: var(--teal-900); }
 
-    /* Imágenes: anchas entre secciones y en rejilla al final */
-    .caso__figura { margin: 0; }
-    .caso__figura img {
-      width: 100%; object-fit: cover; display: block;
-      border-radius: var(--radius-lg);
-      background: var(--gray-light);
-    }
-    .caso__figura--ancha { margin: 3rem 0; }
-    .caso__figura--ancha img { aspect-ratio: 16 / 9; }
-    .caso__galeria {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem;
-      margin: 3rem 0;
-    }
-    .caso__galeria .caso__figura img { aspect-ratio: 4 / 3; }
-    /* Una sola imagen suelta ocupa el ancho completo en vez de media columna */
-    .caso__galeria .caso__figura:only-child { grid-column: 1 / -1; }
-    .caso__galeria .caso__figura:only-child img { aspect-ratio: 16 / 9; }
-    @media (max-width: 700px) { .caso__galeria { grid-template-columns: 1fr; } }
-    .caso__figura figcaption {
-      font-size: 0.78rem; color: var(--arena-suave);
-      font-family: var(--mono); margin-top: 0.6rem;
-    }
-
     .caso__decision { border-left: 3px solid var(--coral); padding-left: 1.5rem; }
 
     .caso__resultados { list-style: none; display: grid; gap: 0.7rem; }
@@ -272,8 +262,9 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
   `]
 })
 export class CaseComponent {
-  imgError = new Set<string>();
   thumbError = false;
+  /** Extensión resuelta por imagen: se intenta .png y luego .jpg. */
+  private exts = new Map<string, 'png' | 'jpg' | 'none'>();
   private route = inject(ActivatedRoute);
   i18n = inject(TranslateService);
 
@@ -281,6 +272,7 @@ export class CaseComponent {
     this.route.paramMap.pipe(map(params => {
       window.scrollTo(0, 0);
       this.thumbError = false;
+      this.exts.clear();
       return params.get('slug');
     }))
   );
@@ -288,19 +280,28 @@ export class CaseComponent {
   /** Se recalcula al cambiar de ruta O de idioma. */
   caso = computed(() => this.i18n.cases().find(c => c.slug === this.slug()));
 
-  /** Portada: la imagen del grid de proyectos y, si no hay, la del caso. */
-  portada = computed(() => {
-    const c = this.caso();
-    if (!c) { return undefined; }
+  /** Siglas del proyecto (llave "code" en projects). */
+  private code = computed(() => this.project(this.slug())?.code);
+
+  /** Ruta base de una imagen del caso, sin extensión. */
+  img(name: string | number): string | undefined {
+    const code = this.code();
+    return code ? `assets/img/CASOS/${code}-${name}` : undefined;
+  }
+
+  ext(base: string): 'png' | 'jpg' | 'none' {
+    return this.exts.get(base) ?? 'png';
+  }
+
+  onImgError(base: string): void {
+    this.exts.set(base, this.ext(base) === 'png' ? 'jpg' : 'none');
+  }
+
+  private project(slug: string | null | undefined): any {
+    if (!slug) { return undefined; }
     const projects = this.i18n.t('projects');
-    const p = Array.isArray(projects) ? projects.find((x: any) => x.slug === c.slug) : undefined;
-    return p?.img ?? c.cover?.src;
-  });
-
-  galeria = computed(() => this.caso()?.gallery ?? []);
-
-  /** Las que no se muestran intercaladas van a la rejilla final. */
-  resto = computed(() => this.galeria().slice(2));
+    return Array.isArray(projects) ? projects.find((x: any) => x.slug === slug) : undefined;
+  }
 
   siguiente = computed(() => {
     const cases = this.i18n.cases();
@@ -310,13 +311,10 @@ export class CaseComponent {
     return cases[(i + 1) % cases.length];
   });
 
-  /** Miniatura del siguiente caso: la imagen del grid de proyectos
-      (llave "projects") y, si no hay, la portada del caseList. */
+  /** Miniatura del siguiente caso: la misma imagen del grid del home. */
   nextThumb = computed(() => {
     const s = this.siguiente();
     if (!s) { return undefined; }
-    const projects = this.i18n.t('projects');
-    const p = Array.isArray(projects) ? projects.find((x: any) => x.slug === s.slug) : undefined;
-    return p?.img ?? s.cover?.src;
+    return this.project(s.slug)?.img ?? s.cover?.src;
   });
 }
