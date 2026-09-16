@@ -92,15 +92,20 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
         @if (siguiente(); as s) {
           <a class="caso__next" [routerLink]="['/caso', s.slug]">
-            <span class="eyebrow">{{ 'cases.next' | t }}</span>
-            <span class="caso__next-title">{{ s.title }} →</span>
+            @if (nextThumb() && !thumbError) {
+              <img class="caso__next-thumb" [src]="nextThumb()" alt="" loading="lazy" (error)="thumbError = true" />
+            }
+            <span class="caso__next-text">
+              <span class="eyebrow">{{ 'cases.next' | t }}</span>
+              <span class="caso__next-title">{{ s.title }} →</span>
+            </span>
           </a>
         }
       </article>
     }
   `,
   styles: [`
-    .caso { padding-top: 4rem; max-width: 780px; }
+    .caso { padding-top: 4rem; padding-bottom: 6rem; max-width: 780px; }
     .caso__back { font-family: var(--mono); font-size: 0.82rem; }
     .caso__head h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.08; margin: 1rem 0 2rem; }
     .caso__head { animation: caseIn 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
@@ -175,7 +180,8 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     .caso__resultados li:hover { border-color: var(--teal-700); transform: translateX(6px); }
 
     .caso__next {
-      display: block; margin-top: 4rem; padding: 1.8rem;
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-top: 4rem; padding: 1.8rem;
       background: var(--white);
       border: 1px solid var(--border); border-radius: var(--radius-md);
       transition: border-color var(--duration-base) var(--ease-out),
@@ -183,10 +189,17 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
                   transform var(--duration-base) var(--ease-out);
     }
     .caso__next:hover { border-color: var(--teal-700); box-shadow: var(--shadow-md); transform: translateY(-4px); }
+    .caso__next-thumb {
+      width: 120px; height: 90px; object-fit: cover;
+      border-radius: var(--radius-lg); flex-shrink: 0;
+      background: var(--gray-light);
+    }
+    .caso__next-text { display: block; min-width: 0; }
     .caso__next-title {
       display: block; font-family: var(--display);
       font-size: 1.25rem; color: var(--arena); margin-top: 0.4rem;
     }
+    @media (max-width: 520px) { .caso__next { flex-direction: column; align-items: flex-start; } }
   `]
 })
 export class CaseComponent {
@@ -194,9 +207,12 @@ export class CaseComponent {
   private route = inject(ActivatedRoute);
   i18n = inject(TranslateService);
 
+  thumbError = false;
+
   private slug = toSignal(
     this.route.paramMap.pipe(map(params => {
       window.scrollTo(0, 0);
+      this.thumbError = false;
       return params.get('slug');
     }))
   );
@@ -210,5 +226,15 @@ export class CaseComponent {
     if (!c || cases.length === 0) { return undefined; }
     const i = cases.findIndex(x => x.slug === c.slug);
     return cases[(i + 1) % cases.length];
+  });
+
+  /** Miniatura del siguiente caso: la imagen del grid de proyectos
+      (llave "projects") y, si no hay, la portada del caseList. */
+  nextThumb = computed(() => {
+    const s = this.siguiente();
+    if (!s) { return undefined; }
+    const projects = this.i18n.t('projects');
+    const p = Array.isArray(projects) ? projects.find((x: any) => x.slug === s.slug) : undefined;
+    return p?.img ?? s.cover?.src;
   });
 }
