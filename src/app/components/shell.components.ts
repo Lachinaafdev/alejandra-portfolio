@@ -10,10 +10,10 @@ import { TranslateService, TranslatePipe } from '../i18n/i18n';
     <header class="header">
       <div class="wrap header__in">
         <a routerLink="/" class="header__logo">A·Fierro</a>
+        <!-- Metodología y Sobre mí fuera del nav a pedido; las páginas
+             /metodologia-ia y la sección #sobre-mi siguen existiendo. -->
         <nav class="header__nav">
           <a routerLink="/" fragment="casos">{{ 'nav.cases' | t }}</a>
-          <a routerLink="/metodologia-ia" class="header__hide-sm">{{ 'nav.method' | t }}</a>
-          <a routerLink="/" fragment="sobre-mi">{{ 'nav.about' | t }}</a>
           <button
             class="header__lang"
             type="button"
