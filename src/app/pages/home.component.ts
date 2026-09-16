@@ -201,12 +201,28 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
   styles: [`
     /* ---------- HERO ---------- */
     .hero { padding-top: 5.5rem; padding-bottom: 6rem; }
+    /* Título con degradado de marca EN LAS LETRAS (clip de texto),
+       en movimiento continuo. Se declara junto a la animación de
+       entrada (maskUp) porque esta regla pisa a la de .mask > *. */
     .hero h1 {
       font-size: clamp(3.2rem, 11.5vw, 10.5rem);
       font-weight: 700;
       line-height: 0.95;
       margin: 1.2rem 0 1.6rem;
-      color: var(--navy);
+      background: linear-gradient(90deg, var(--navy), var(--cenote), var(--coral), var(--cenote), var(--navy));
+      background-size: 260% 100%;
+      background-position: 0% 50%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation:
+        maskUp 1s var(--ease-mask) forwards,
+        heroGradient 7s ease-in-out infinite alternate;
+    }
+    @keyframes heroGradient {
+      from { background-position: 0% 50%; }
+      to { background-position: 100% 50%; }
     }
     .hero__sub { max-width: 66ch; color: var(--text-secondary); font-size: clamp(1rem, 1.4vw, 1.15rem); line-height: 1.75; }
     .hero__facts {
@@ -470,6 +486,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     /* ---------- REDUCED MOTION: todo estático ---------- */
     @media (prefers-reduced-motion: reduce) {
       .mask > * { transform: none; animation: none; }
+      .hero h1 { animation: none; }
       .reel-zone { height: auto; }
       .reel-sticky { position: static; background: #111; }
       .over { margin-top: 0; }
