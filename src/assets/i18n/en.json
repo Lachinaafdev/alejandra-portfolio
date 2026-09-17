@@ -100,39 +100,105 @@
       "code": "POS",
       "title": "Trafic POS: Tour sales",
       "category": "Mobile · SaaS",
-      "img": "assets/img/PROYECTOS/POS.png"
+      "img": "assets/img/PROYECTOS/POS.png",
+      "images": {
+        "portada": "assets/img/CASOS/POS-portada.png",
+        "banner": "assets/img/CASOS/POS-banner.png",
+        "cuadrada": "assets/img/CASOS/POS-cuadrada.png",
+        "grid": [
+          "assets/img/CASOS/POS-1.png",
+          "assets/img/CASOS/POS-2.png",
+          "assets/img/CASOS/POS-3.png",
+          "assets/img/CASOS/POS-4.png"
+        ]
+      }
     },
     {
       "slug": "agenda-digital",
       "code": "AGENDA",
       "title": "Agenda Digital",
       "category": "Web",
-      "img": "assets/img/PROYECTOS/AGENDA.png"
+      "img": "assets/img/PROYECTOS/AGENDA.png",
+      "images": {
+        "portada": "assets/img/CASOS/AGENDA-portada.png",
+        "banner": "assets/img/CASOS/AGENDA-banner.png",
+        "cuadrada": "assets/img/CASOS/AGENDA-cuadrada.png",
+        "grid": [
+          "assets/img/CASOS/AGENDA-1.png",
+          "assets/img/CASOS/AGENDA-2.png",
+          "assets/img/CASOS/AGENDA-3.png",
+          "assets/img/CASOS/AGENDA-4.png"
+        ]
+      }
     },
     {
       "slug": "design-system",
       "code": "DESINGSYTEM",
       "title": "Trafictours Design System",
       "category": "Web",
-      "img": "assets/img/PROYECTOS/DESINGSYTEM.png"
+      "img": "assets/img/PROYECTOS/DESINGSYTEM.png",
+      "images": {
+        "portada": "assets/img/CASOS/DESINGSYTEM-portada.png",
+        "banner": "assets/img/CASOS/DESINGSYTEM-banner.png",
+        "cuadrada": "assets/img/CASOS/DESINGSYTEM-cuadrada.png",
+        "grid": [
+          "assets/img/CASOS/DESINGSYTEM-1.png",
+          "assets/img/CASOS/DESINGSYTEM-2.png",
+          "assets/img/CASOS/DESINGSYTEM-3.png",
+          "assets/img/CASOS/DESINGSYTEM-4.png"
+        ]
+      }
     },
     {
       "code": "FLAYR",
       "title": "Flair Vacations",
       "category": "Mobile",
-      "img": "assets/img/PROYECTOS/FLAYR.png"
+      "img": "assets/img/PROYECTOS/FLAYR.png",
+      "images": {
+        "portada": "assets/img/CASOS/FLAYR-portada.png",
+        "banner": "assets/img/CASOS/FLAYR-banner.png",
+        "cuadrada": "assets/img/CASOS/FLAYR-cuadrada.png",
+        "grid": [
+          "assets/img/CASOS/FLAYR-1.png",
+          "assets/img/CASOS/FLAYR-2.png",
+          "assets/img/CASOS/FLAYR-3.png",
+          "assets/img/CASOS/FLAYR-4.png"
+        ]
+      }
     },
     {
       "code": "BROCHURE",
       "title": "Digital brochure",
       "category": "Web",
-      "img": "assets/img/PROYECTOS/BROCHURE.png"
+      "img": "assets/img/PROYECTOS/BROCHURE.png",
+      "images": {
+        "portada": "assets/img/CASOS/BROCHURE-portada.png",
+        "banner": "assets/img/CASOS/BROCHURE-banner.png",
+        "cuadrada": "assets/img/CASOS/BROCHURE-cuadrada.png",
+        "grid": [
+          "assets/img/CASOS/BROCHURE-1.png",
+          "assets/img/CASOS/BROCHURE-2.png",
+          "assets/img/CASOS/BROCHURE-3.png",
+          "assets/img/CASOS/BROCHURE-4.png"
+        ]
+      }
     },
     {
       "code": "E-TRAVEL",
       "title": "E-Travel Guide",
       "category": "Web",
-      "img": "assets/img/PROYECTOS/E-TRAVEL.png"
+      "img": "assets/img/PROYECTOS/E-TRAVEL.png",
+      "images": {
+        "portada": "assets/img/CASOS/E-TRAVEL-portada.png",
+        "banner": "assets/img/CASOS/E-TRAVEL-banner.png",
+        "cuadrada": "assets/img/CASOS/E-TRAVEL-cuadrada.png",
+        "grid": [
+          "assets/img/CASOS/E-TRAVEL-1.png",
+          "assets/img/CASOS/E-TRAVEL-2.png",
+          "assets/img/CASOS/E-TRAVEL-3.png",
+          "assets/img/CASOS/E-TRAVEL-4.png"
+        ]
+      }
     }
   ],
   "caseList": [

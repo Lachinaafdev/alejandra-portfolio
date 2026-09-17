@@ -1,15 +1,16 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, effect } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
+import { ScrollTrigger } from '../motion/motion';
 
 /**
- * Página de caso con diagramación editorial. Cada caso usa 7 imágenes
- * nombradas con las siglas del proyecto (llave "code" de projects):
- *   <CODE>-portada · <CODE>-banner · <CODE>-cuadrada · <CODE>-1..4
- * viven en assets/img/CASOS/ y se intentan como .png y luego .jpg.
- * Si un archivo no existe, su bloque simplemente no se muestra.
+ * Página de caso con diagramación editorial. Cada proyecto usa 7
+ * imágenes cuyas rutas viven en la llave "images" de projects
+ * (portada · banner · cuadrada · grid 1-4). Mientras un archivo no
+ * exista se muestra su espacio reservado con la ruta esperada, así
+ * la diagramación se lee completa desde el primer día.
  */
 @Component({
   selector: 'app-case',
@@ -25,13 +26,18 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           <h1>{{ c.title }}</h1>
         </header>
 
-        <!-- 1 · PORTADA a todo el ancho -->
-        @if (img('portada'); as base) {
-          @if (ext(base) !== 'none') {
-            <figure class="caso__portada">
-              <img [src]="base + '.' + ext(base)" [alt]="c.title" (error)="onImgError(base)" />
-            </figure>
-          }
+        <!-- 1 · PORTADA (21:9) -->
+        @if (imgs()?.portada; as src) {
+          <figure class="caso__marco caso__portada">
+            @if (!fallo.has(src)) {
+              <img [src]="src" [alt]="c.title" (error)="marcarFallo(src)" />
+            } @else {
+              <span class="caso__ph">
+                <span>{{ 'gallery.missing' | t }}</span>
+                <code>src/{{ src }}</code>
+              </span>
+            }
+          </figure>
         }
 
         <!-- Columna de lectura + barra lateral de datos -->
@@ -83,13 +89,18 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           </aside>
         </div>
 
-        <!-- 2 · BANNER apaisado -->
-        @if (img('banner'); as base) {
-          @if (ext(base) !== 'none') {
-            <figure class="caso__banner" appReveal>
-              <img [src]="base + '.' + ext(base)" [alt]="c.title" loading="lazy" (error)="onImgError(base)" />
-            </figure>
-          }
+        <!-- 2 · BANNER (16:9) -->
+        @if (imgs()?.banner; as src) {
+          <figure class="caso__marco caso__banner" appReveal>
+            @if (!fallo.has(src)) {
+              <img [src]="src" [alt]="c.title" loading="lazy" (error)="marcarFallo(src)" />
+            } @else {
+              <span class="caso__ph">
+                <span>{{ 'gallery.missing' | t }}</span>
+                <code>src/{{ src }}</code>
+              </span>
+            }
+          </figure>
         }
 
         <section class="caso__col caso__decision" appReveal>
@@ -97,13 +108,18 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           <p>{{ c.keyDecision }}</p>
         </section>
 
-        <!-- 3 · CUADRADA -->
-        @if (img('cuadrada'); as base) {
-          @if (ext(base) !== 'none') {
-            <figure class="caso__cuadrada" appReveal>
-              <img [src]="base + '.' + ext(base)" [alt]="c.title" loading="lazy" (error)="onImgError(base)" />
-            </figure>
-          }
+        <!-- 3 · CUADRADA (1:1) -->
+        @if (imgs()?.cuadrada; as src) {
+          <figure class="caso__marco caso__cuadrada" appReveal>
+            @if (!fallo.has(src)) {
+              <img [src]="src" [alt]="c.title" loading="lazy" (error)="marcarFallo(src)" />
+            } @else {
+              <span class="caso__ph">
+                <span>{{ 'gallery.missing' | t }}</span>
+                <code>src/{{ src }}</code>
+              </span>
+            }
+          </figure>
         }
 
         <section class="caso__col" appReveal>
@@ -115,18 +131,23 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
           </ul>
         </section>
 
-        <!-- 4 · REJILLA 1-4 -->
-        <div class="caso__galeria">
-          @for (n of [1, 2, 3, 4]; track n) {
-            @if (img(n); as base) {
-              @if (ext(base) !== 'none') {
-                <figure class="caso__figura" appReveal>
-                  <img [src]="base + '.' + ext(base)" [alt]="c.title" loading="lazy" (error)="onImgError(base)" />
-                </figure>
-              }
+        <!-- 4 · REJILLA 1-4 (4:3) -->
+        @if (imgs()?.grid?.length) {
+          <div class="caso__galeria">
+            @for (src of imgs()!.grid; track src) {
+              <figure class="caso__marco caso__figura" appReveal>
+                @if (!fallo.has(src)) {
+                  <img [src]="src" [alt]="c.title" loading="lazy" (error)="marcarFallo(src)" />
+                } @else {
+                  <span class="caso__ph">
+                    <span>{{ 'gallery.missing' | t }}</span>
+                    <code>src/{{ src }}</code>
+                  </span>
+                }
+              </figure>
             }
-          }
-        </div>
+          </div>
+        }
 
         <section class="caso__col" appReveal>
           <h2>{{ 'cases.labels.learning' | t }}</h2>
@@ -135,8 +156,10 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
         @if (siguiente(); as s) {
           <a class="caso__next" [routerLink]="['/caso', s.slug]">
-            @if (nextThumb() && !thumbError) {
-              <img class="caso__next-thumb" [src]="nextThumb()" alt="" loading="lazy" (error)="thumbError = true" />
+            @if (nextThumb(); as thumb) {
+              @if (!fallo.has(thumb)) {
+                <img class="caso__next-thumb" [src]="thumb" alt="" loading="lazy" (error)="marcarFallo(thumb)" />
+              }
             }
             <span class="caso__next-text">
               <span class="eyebrow">{{ 'cases.next' | t }}</span>
@@ -165,27 +188,34 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
     }
     @media (prefers-reduced-motion: reduce) { .caso__head { animation: none; } }
 
-    /* Imágenes: cada una con su proporción */
-    figure { margin: 0; }
-    figure img {
-      width: 100%; object-fit: cover; display: block;
+    /* Marco de imagen: fija la proporción con o sin archivo, para que
+       el espacio de cada imagen se vea aunque aún no exista. */
+    .caso__marco {
+      margin: 0; position: relative; overflow: hidden;
       border-radius: var(--radius-lg);
       background: var(--gray-light);
     }
-    .caso__portada { margin-bottom: 3rem; }
-    .caso__portada img { aspect-ratio: 21 / 9; }
-    .caso__banner { margin: 3rem 0; }
-    .caso__banner img { aspect-ratio: 16 / 9; }
-    .caso__cuadrada { margin: 3rem auto; max-width: 720px; }
-    .caso__cuadrada img { aspect-ratio: 1 / 1; }
-    .caso__galeria {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem;
-      margin: 3rem 0;
+    .caso__marco img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .caso__ph {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 0.4rem; text-align: center; padding: 1rem;
+      border: 1px dashed var(--border-strong); border-radius: var(--radius-lg);
+      color: var(--arena-suave); font-size: 0.72rem; font-family: var(--mono);
     }
-    .caso__galeria img { aspect-ratio: 4 / 3; }
+    .caso__ph code { color: var(--teal-900); font-size: 0.66rem; word-break: break-all; }
+
+    .caso__portada { aspect-ratio: 21 / 9; margin-bottom: 2.5rem; }
+    .caso__banner { aspect-ratio: 16 / 9; margin: 2.5rem 0; }
+    .caso__cuadrada { aspect-ratio: 1 / 1; margin: 2.5rem auto; max-width: 720px; }
+    .caso__galeria {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;
+      margin: 2.5rem 0;
+    }
+    .caso__figura { aspect-ratio: 4 / 3; }
     @media (max-width: 700px) {
       .caso__galeria { grid-template-columns: 1fr; }
-      .caso__portada img { aspect-ratio: 16 / 9; }
+      .caso__portada { aspect-ratio: 16 / 9; }
     }
 
     /* Texto + barra lateral de datos */
@@ -217,7 +247,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     /* Columna de lectura para las secciones a ancho completo */
     .caso__col { max-width: 68ch; }
-    section { margin: 3rem 0; }
+    section { margin: 2.5rem 0; }
     section h2 { font-size: 1.4rem; margin-bottom: 0.9rem; }
     section p { color: var(--arena-suave); }
 
@@ -242,7 +272,7 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 
     .caso__next {
       display: flex; align-items: center; gap: 1.5rem;
-      margin-top: 4rem; padding: 1.4rem;
+      margin-top: 3rem; padding: 1.4rem;
       background: var(--white);
       border: 1px solid var(--linea);
       transition: border-color var(--duration-base) var(--ease-out);
@@ -262,40 +292,39 @@ import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
   `]
 })
 export class CaseComponent {
-  thumbError = false;
-  /** Extensión resuelta por imagen: se intenta .png y luego .jpg. */
-  private exts = new Map<string, 'png' | 'jpg' | 'none'>();
+  /** Imágenes cuyo archivo no existe todavía: se muestra su espacio. */
+  fallo = new Set<string>();
   private route = inject(ActivatedRoute);
   i18n = inject(TranslateService);
 
   private slug = toSignal(
     this.route.paramMap.pipe(map(params => {
       window.scrollTo(0, 0);
-      this.thumbError = false;
-      this.exts.clear();
+      this.fallo.clear();
       return params.get('slug');
     }))
   );
 
+  constructor() {
+    // El contenido llega async del i18n y cambia la altura de la
+    // página: sin refrescar, los ScrollTrigger de los reveals quedan
+    // con posiciones viejas y algunas secciones nunca aparecen.
+    effect(() => {
+      this.caso();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    });
+  }
+
+  marcarFallo(src: string): void {
+    this.fallo.add(src);
+  }
+
   /** Se recalcula al cambiar de ruta O de idioma. */
   caso = computed(() => this.i18n.cases().find(c => c.slug === this.slug()));
 
-  /** Siglas del proyecto (llave "code" en projects). */
-  private code = computed(() => this.project(this.slug())?.code);
-
-  /** Ruta base de una imagen del caso, sin extensión. */
-  img(name: string | number): string | undefined {
-    const code = this.code();
-    return code ? `assets/img/CASOS/${code}-${name}` : undefined;
-  }
-
-  ext(base: string): 'png' | 'jpg' | 'none' {
-    return this.exts.get(base) ?? 'png';
-  }
-
-  onImgError(base: string): void {
-    this.exts.set(base, this.ext(base) === 'png' ? 'jpg' : 'none');
-  }
+  /** Las 7 rutas del caso, tal cual están en la llave "images". */
+  imgs = computed(() => this.project(this.slug())?.images as
+    { portada?: string; banner?: string; cuadrada?: string; grid?: string[] } | undefined);
 
   private project(slug: string | null | undefined): any {
     if (!slug) { return undefined; }
