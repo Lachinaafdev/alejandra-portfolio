@@ -43,10 +43,10 @@ import { ScrollTrigger } from '../motion/motion';
         <!-- Columna de lectura + barra lateral de datos -->
         <div class="caso__cols">
           <div class="caso__main">
-            <section class="caso__tldr" appReveal>
+            <!-- <section class="caso__tldr" appReveal>
               <p class="eyebrow">{{ 'cases.labels.summary' | t }}</p>
               <p>{{ c.tldr }}</p>
-            </section>
+            </section> -->
 
             <section appReveal>
               <h2>{{ 'cases.labels.context' | t }}</h2>
