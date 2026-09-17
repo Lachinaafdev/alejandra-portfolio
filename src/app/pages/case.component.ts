@@ -22,7 +22,7 @@ import { ScrollTrigger } from '../motion/motion';
         <a routerLink="/" class="caso__back">{{ 'cases.back' | t }}</a>
 
         <header class="caso__head">
-          <p class="eyebrow">{{ c.ticketNo }} · {{ c.period }}</p>
+          <p class="eyebrow">{{ c.ticketNo }}</p>
           <h1>{{ c.title }}</h1>
         </header>
 
@@ -72,6 +72,10 @@ import { ScrollTrigger } from '../motion/motion';
             <div>
               <strong>{{ 'cases.labels.role' | t }}</strong>
               <span>{{ c.role }}</span>
+            </div>
+            <div>
+              <strong>{{ 'cases.labels.period' | t }}</strong>
+              <span>{{ c.period }}</span>
             </div>
             <div>
               <strong>{{ 'cases.labels.tools' | t }}</strong>
@@ -177,10 +181,13 @@ import { ScrollTrigger } from '../motion/motion';
     .caso__back { font-family: var(--mono); font-size: 0.82rem; }
 
     .caso__head { animation: caseIn 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+    .caso__head .eyebrow { font-size: 0.68rem; color: var(--gray-medium); }
     .caso__head h1 {
-      font-size: clamp(2rem, 4.2vw, 3.2rem);
-      line-height: 1.08; margin: 1rem 0 2rem;
-      max-width: 22ch;
+      font-family: var(--body); font-weight: 500;
+      font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+      letter-spacing: -0.01em; line-height: 1.25;
+      margin: 0.8rem 0 1.8rem;
+      max-width: 30ch;
     }
     @keyframes caseIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -207,7 +214,7 @@ import { ScrollTrigger } from '../motion/motion';
 
     .caso__portada { aspect-ratio: 21 / 9; margin-bottom: 2.5rem; }
     .caso__banner { aspect-ratio: 16 / 9; margin: 2.5rem 0; }
-    .caso__cuadrada { aspect-ratio: 1 / 1; margin: 2.5rem auto; max-width: 720px; }
+    .caso__cuadrada { aspect-ratio: 3 / 2; margin: 2.5rem 0; }
     .caso__galeria {
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;
       margin: 2.5rem 0;
@@ -225,43 +232,53 @@ import { ScrollTrigger } from '../motion/motion';
     }
     .caso__main { max-width: 68ch; }
     .caso__aside {
-      display: grid; gap: 1.8rem;
+      display: grid; gap: 1.5rem;
       position: sticky; top: 6rem;
-      font-size: 0.85rem; color: var(--arena-suave);
+      font-size: 0.85rem; color: var(--text-primary);
     }
     .caso__aside strong {
-      display: block; font-family: var(--mono); font-weight: 500;
-      font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--gray-medium); margin-bottom: 0.5rem;
+      display: block; font-family: var(--body); font-weight: 400;
+      font-size: 0.75rem; letter-spacing: 0;
+      color: var(--gray-medium); margin-bottom: 0.25rem;
     }
-    .caso__aside ul { list-style: none; display: grid; gap: 0.2rem; }
+    .caso__aside ul { list-style: none; display: grid; gap: 0.15rem; }
     .caso__aside-metric {
-      display: block; font-family: var(--mono); font-weight: 500;
-      font-size: 1.6rem; letter-spacing: -0.02em;
-      color: var(--purple-500); margin-bottom: 0.2rem;
+      display: block; font-family: var(--body); font-weight: 500;
+      font-size: 1.3rem; letter-spacing: -0.01em;
+      color: var(--purple-500); margin-bottom: 0.1rem;
     }
     @media (max-width: 860px) {
       .caso__cols { grid-template-columns: 1fr; gap: 2.5rem; }
       .caso__aside { position: static; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
     }
 
-    /* Columna de lectura para las secciones a ancho completo */
+    /* Columna de lectura. Los encabezados son etiquetas discretas,
+       como en el mock: el peso visual lo llevan el texto y las fotos. */
     .caso__col { max-width: 68ch; }
-    section { margin: 2.5rem 0; }
-    section h2 { font-size: 1.4rem; margin-bottom: 0.9rem; }
-    section p { color: var(--arena-suave); }
+    section { margin: 2.2rem 0; }
+    section h2 {
+      font-family: var(--body); font-weight: 400;
+      font-size: 0.82rem; letter-spacing: 0;
+      color: var(--gray-medium);
+      margin-bottom: 0.7rem;
+    }
+    section p { color: var(--arena-suave); font-size: 0.95rem; line-height: 1.7; }
 
     .caso__tldr {
       background: var(--gray-light);
       border-left: 3px solid var(--cenote);
-      padding: 1.6rem 1.8rem; margin: 0 0 2.5rem;
+      padding: 1.5rem 1.6rem; margin: 0 0 2.2rem;
     }
+    .caso__tldr .eyebrow { font-size: 0.66rem; color: var(--gray-medium); }
     .caso__tldr p:last-child { margin-top: 0.6rem; }
 
-    .caso__proceso { padding-left: 1.2rem; display: grid; gap: 0.8rem; color: var(--arena-suave); }
-    .caso__proceso li::marker { font-family: var(--mono); color: var(--teal-900); }
+    .caso__proceso {
+      padding-left: 1.2rem; display: grid; gap: 0.7rem;
+      color: var(--arena-suave); font-size: 0.95rem; line-height: 1.7;
+    }
+    .caso__proceso li::marker { font-family: var(--mono); color: var(--gray-medium); font-size: 0.85em; }
 
-    .caso__decision { border-left: 3px solid var(--coral); padding-left: 1.5rem; }
+    .caso__decision { border-left: 3px solid var(--coral); padding-left: 1.4rem; }
 
     .caso__resultados { list-style: none; display: grid; gap: 0.7rem; }
     .caso__resultados li {
