@@ -45,7 +45,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
               [src]="url"
               title="Reel"
               frameborder="0"
-              allow="autoplay; encrypted-media; picture-in-picture"
+              allow="autoplay; fullscreen; picture-in-picture"
               referrerpolicy="strict-origin-when-cross-origin"></iframe>
           }
           <span class="reel__hint">{{ 'reel.hint' | t }}</span>
@@ -279,10 +279,10 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       position: absolute; inset: 0; z-index: 1;
       width: 100%; height: 100%; object-fit: cover;
     }
-    /* El iframe de YouTube no entiende object-fit: se escala a mano
-       para que SIEMPRE cubra el marco sin barras negras, sea cual sea
-       la proporción de la pantalla. Sin eventos para no robarse el
-       scroll ni abrir YouTube al hacer clic. */
+    /* El iframe del reproductor no entiende object-fit: se escala a
+       mano para que SIEMPRE cubra el marco sin barras negras, sea cual
+       sea la proporción de la pantalla. Sin eventos para no robarse el
+       scroll ni abrir el sitio del video al hacer clic. */
     .reel__yt {
       position: absolute; z-index: 1;
       top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -525,21 +525,21 @@ export class HomeComponent implements OnDestroy {
   i18n = inject(TranslateService);
   private sanitizer = inject(DomSanitizer);
 
-  /* Reel de YouTube: el id vive en la llave i18n reel.youtubeId.
-     Los parámetros lo vuelven un fondo en vivo — arranca solo (solo
-     se permite si va en silencio), repite en bucle y va sin controles
-     ni sugerencias al terminar. Con reduced-motion no arranca solo. */
+  /* Reel de Vimeo: el id vive en la llave i18n reel.vimeoId.
+     background=1 es el modo fondo de Vimeo — sin controles, sin
+     título ni logo, en bucle y en silencio (los navegadores solo
+     permiten arranque automático sin audio). Con reduced-motion
+     no arranca solo. */
   reelUrl = computed<SafeResourceUrl | null>(() => {
-    const id = String(this.i18n.t('reel.youtubeId') ?? '');
-    if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) { return null; }
+    const id = String(this.i18n.t('reel.vimeoId') ?? '');
+    if (!/^\d{6,15}$/.test(id)) { return null; }
     const auto = prefersReducedMotion() ? '0' : '1';
     const params = [
-      `autoplay=${auto}`, 'mute=1', 'loop=1', `playlist=${id}`,
-      'controls=0', 'rel=0', 'modestbranding=1', 'playsinline=1',
-      'iv_load_policy=3', 'disablekb=1', 'fs=0',
+      'background=1', `autoplay=${auto}`, 'loop=1', 'muted=1',
+      'autopause=0', 'dnt=1',
     ].join('&');
     return this.sanitizer.bypassSecurityTrustResourceUrl(
-      `https://www.youtube-nocookie.com/embed/${id}?${params}`
+      `https://player.vimeo.com/video/${id}?${params}`
     );
   });
 
