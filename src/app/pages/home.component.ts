@@ -2,6 +2,7 @@ import {
   Component, ElementRef, OnDestroy, afterNextRender, computed, effect, inject, viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TranslateService, TranslatePipe, RevealDirective } from '../i18n/i18n';
 import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 
@@ -38,7 +39,15 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
       <div class="reel-sticky" #reelSticky>
         <div class="reel" #reel>
           <div class="reel__fallback" aria-hidden="true"></div>
-          <video autoplay muted loop playsinline preload="auto" src="assets/video/reel.mp4"></video>
+          @if (reelUrl(); as url) {
+            <iframe
+              class="reel__yt"
+              [src]="url"
+              title="Reel"
+              frameborder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          }
           <span class="reel__hint">{{ 'reel.hint' | t }}</span>
         </div>
       </div>
@@ -269,6 +278,17 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
     .reel video {
       position: absolute; inset: 0; z-index: 1;
       width: 100%; height: 100%; object-fit: cover;
+    }
+    /* El iframe de YouTube no entiende object-fit: se escala a mano
+       para que SIEMPRE cubra el marco sin barras negras, sea cual sea
+       la proporción de la pantalla. Sin eventos para no robarse el
+       scroll ni abrir YouTube al hacer clic. */
+    .reel__yt {
+      position: absolute; z-index: 1;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 100vw; height: 56.25vw;      /* 16:9 a partir del ancho */
+      min-width: 177.78vh; min-height: 100vh; /* …o a partir del alto */
+      border: 0; pointer-events: none;
     }
     /* Mientras no exista el mp4, un gradiente animado "reproduce" algo */
     .reel__fallback {
@@ -503,6 +523,25 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from '../motion/motion';
 })
 export class HomeComponent implements OnDestroy {
   i18n = inject(TranslateService);
+  private sanitizer = inject(DomSanitizer);
+
+  /* Reel de YouTube: el id vive en la llave i18n reel.youtubeId.
+     Los parámetros lo vuelven un fondo en vivo — arranca solo (solo
+     se permite si va en silencio), repite en bucle y va sin controles
+     ni sugerencias al terminar. Con reduced-motion no arranca solo. */
+  reelUrl = computed<SafeResourceUrl | null>(() => {
+    const id = String(this.i18n.t('reel.youtubeId') ?? '');
+    if (!/^[A-Za-z0-9_-]{6,20}$/.test(id)) { return null; }
+    const auto = prefersReducedMotion() ? '0' : '1';
+    const params = [
+      `autoplay=${auto}`, 'mute=1', 'loop=1', `playlist=${id}`,
+      'controls=0', 'rel=0', 'modestbranding=1', 'playsinline=1',
+      'iv_load_policy=3', 'disablekb=1', 'fs=0',
+    ].join('&');
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.youtube-nocookie.com/embed/${id}?${params}`
+    );
+  });
 
   /* El eyebrow i18n ("Product Designer · Service Design · …") se parte:
      el primer segmento es el título gigante, el resto la línea meta. */
